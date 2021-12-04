@@ -1,4 +1,4 @@
-import Logo from "./component/logo.js";
+// import Logo from "./component/logo.js";
 
 const App = () => {
   return <h1>Good Morning App</h1>;
