@@ -1,53 +1,56 @@
-const users = {
-  mugiwara: [
-    {
-      handle: "mugiwara",
-      displayName: "Monkey D. Luffy",
-      avatarSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/luffy-avatar_ulpfwt.png",
-      bannerSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645774/onePiece/luffy-banner_w0yxyc.jpg",
-      location: "Grandline",
-      joined: "2016-02-02T12:00",
-      bio: "Power isn't determined by your size, but the size of your heart and dreams.",
-      followingIds: ["zoro"],
-      followerIds: ["zoro"],
-      likeIds: ["1212689921057665024"],
-    },
-  ],
-  zoro: [
-    {
-      handle: "zoro",
-      displayName: "Roronoa Zoro",
-      avatarSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/zoro-avatar_yclmfy.png",
-      bannerSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645774/onePiece/zoro-banner_hcpm2i.jpg",
-      location: "Grandline",
-      joined: "2016-10-12T12:00",
-      bio: "You need to accept the fact that you’re not the best and have all the will to strive to be better than anyone you face.",
-      followingIds: ["mugiwara", "blackleg"],
-      followerIds: ["mugiwara", "blackleg"],
-      likeIds: ["1209791721099411456"],
-    },
-  ],
-  blackleg: [
-    {
-      handle: "blackleg",
-      displayName: "Vinsmoke Sanji",
-      avatarSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/sanji-avatar_ndpfnw.png",
-      bannerSrc:
-        "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/sanji-banner_zdtvgq.jpg",
-      location: undefined,
-      joined: "2019-09-01T18:00",
-      bio: "Men who can't wipe away the tears from a women's eyes, aren't real men.",
-      followingIds: ["mugiwara"],
-      followerIds: ["mugiwara"],
-      likeIds: [],
-    },
-  ],
-};
+const users = [
+  {
+    _id: "0001",
+    handle: "mugiwara",
+    email: "pirateking@grandline.com",
+    password: "Password123",
+    displayName: "Monkey D. Luffy",
+    avatarSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/luffy-avatar_ulpfwt.png",
+    bannerSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645774/onePiece/luffy-banner_w0yxyc.jpg",
+    location: "Grandline",
+    joined: "2016-02-02T12:00",
+    bio: "Power isn't determined by your size, but the size of your heart and dreams.",
+    followingIds: ["zoro"],
+    followerIds: ["zoro"],
+    likeIds: ["1212689921057665024"],
+  },
+  {
+    _id: "0002",
+    handle: "zoro",
+    displayName: "Roronoa Zoro",
+    email: "threeswordsstyle@grandline.com",
+    password: "Password123",
+    avatarSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/zoro-avatar_yclmfy.png",
+    bannerSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645774/onePiece/zoro-banner_hcpm2i.jpg",
+    location: "Grandline",
+    joined: "2016-10-12T12:00",
+    bio: "You need to accept the fact that you’re not the best and have all the will to strive to be better than anyone you face.",
+    followingIds: ["mugiwara", "blackleg"],
+    followerIds: ["mugiwara", "blackleg"],
+    likeIds: ["1209791721099411456"],
+  },
+  {
+    _id: "0003",
+    handle: "blackleg",
+    displayName: "Vinsmoke Sanji",
+    email: "loverboy@grandline.com",
+    password: "Password123",
+    avatarSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/sanji-avatar_ndpfnw.png",
+    bannerSrc:
+      "https://res.cloudinary.com/dhj5ncbxs/image/upload/v1638645775/onePiece/sanji-banner_zdtvgq.jpg",
+    location: undefined,
+    joined: "2019-09-01T18:00",
+    bio: "Men who can't wipe away the tears from a women's eyes, aren't real men.",
+    followingIds: ["mugiwara"],
+    followerIds: ["mugiwara"],
+    likeIds: [],
+  },
+];
 
 const posts = [
   // Zoro
