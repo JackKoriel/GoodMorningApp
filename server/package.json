@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "file-system": "^2.2.2",
     "helmet": "^4.6.0",
+    "moment": "^2.29.1",
     "mongodb": "^4.2.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",

@@ -6,6 +6,7 @@ const morgan = require("morgan");
 
 // importing the routers
 const usersRouter = require("./routes/users");
+const postsRouter = require("./routes/posts");
 
 const PORT = 4000;
 
@@ -27,7 +28,10 @@ express()
   //   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
-  //using routers as middleware
+  //using routers as middleware for users
   .use(usersRouter)
+
+  //using routers as middleware for posts
+  .use(postsRouter)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
