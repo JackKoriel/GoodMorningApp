@@ -7,6 +7,9 @@ const { v4: uuidv4 } = require("uuid");
 //import moment to use with user creation
 const moment = require("moment");
 
+//to encrypt stuff
+const bcrypt = require("bcrypt");
+
 // importing standard stuff
 const { MongoClient } = require("mongodb");
 
@@ -103,15 +106,18 @@ const getUsersByEmail = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
+
     //find user in db based on email
     const user = await db.collection("users").findOne({ email });
+    // variable for passowrd validation
+    const validPassword = await bcrypt.compare(password, user.password);
     //verifications for provided user
     if (!user) {
       res.status(404).json({
         status: 404,
         data: "Incorrect user, please provide the correct email address.",
       });
-    } else if (user.password !== password) {
+    } else if (!validPassword) {
       res
         .status(404)
         .json({ status: 404, data: "Incorrect password, please try again." });
@@ -138,7 +144,7 @@ const getUsersByEmail = async (req, res) => {
 //***************************
 const addUser = async (req, res) => {
   //get user information form front end using POST
-  const { handle, email, password, displayName, birthDate, location } =
+  const { handle, email, password, displayName, birthDate, sign, location } =
     req.body;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
@@ -164,6 +170,11 @@ const addUser = async (req, res) => {
   }
   //try catch finally function
   try {
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    //add the hash to the password
+    const hashPassword = await bcrypt.hash(password, salt);
+
     //create an id using UUID
     const _id = uuidv4();
     //connect client
@@ -182,6 +193,7 @@ const addUser = async (req, res) => {
       const newUser = await db.collection("users").insertMany([
         {
           ...req.body,
+          password: hashPassword,
           _id,
           avatarSrc: "",
           bannerSrc: "",
@@ -190,6 +202,8 @@ const addUser = async (req, res) => {
           followingIds: [],
           followerIds: [],
           likeIds: [],
+          favorite: [],
+          readingList: [],
         },
       ]);
       res

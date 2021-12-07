@@ -6,6 +6,9 @@ server/node_modules
 /.pnp
 .pnp.js
 
+# dummy user data
+server/data.js
+
 # testing
 /coverage
 

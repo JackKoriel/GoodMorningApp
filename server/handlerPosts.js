@@ -37,7 +37,7 @@ const getPosts = async (req, res) => {
     // validations and user control
     posts
       ? res.status(200).json({ status: 200, data: posts })
-      : res.status(404).json({ status: 404, data: "Posts not found" });
+      : res.status(404).json({ status: 404, message: "Posts not found" });
   } catch (err) {
     res.status(500).json({
       status: 500,
@@ -72,7 +72,7 @@ const getUserPosts = async (req, res) => {
 
     userPosts
       ? res.status(200).json({ status: 200, data: userPosts })
-      : res.status(404).json({ status: 404, data: "Posts not found" });
+      : res.status(404).json({ status: 404, message: "Posts not found" });
   } catch (err) {
     res.status(500).json({
       status: 500,

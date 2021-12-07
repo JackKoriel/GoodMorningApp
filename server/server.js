@@ -7,6 +7,7 @@ const morgan = require("morgan");
 // importing the routers
 const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
+const apiRouter = require("./routes/api");
 
 const PORT = 4000;
 
@@ -33,5 +34,8 @@ express()
 
   //using routers as middleware for posts
   .use(postsRouter)
+
+  //using routers as middleware for APIs
+  .use(apiRouter)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
