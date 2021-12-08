@@ -126,6 +126,8 @@ const getUsersByEmail = async (req, res) => {
         .status(404)
         .json({ status: 404, data: "Incorrect username, please try again." });
     } else {
+      req.session.handle = handle;
+      console.log(req.session.user);
       res.status(200).json({ status: 200, data: user });
     }
   } catch (err) {
@@ -146,6 +148,7 @@ const addUser = async (req, res) => {
   //get user information form front end using POST
   const { handle, email, password, displayName, birthDate, sign, location } =
     req.body;
+
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");

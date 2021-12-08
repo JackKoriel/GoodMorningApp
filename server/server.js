@@ -8,6 +8,8 @@ const morgan = require("morgan");
 const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
 const apiRouter = require("./routes/api");
+const apiImage = require("./routes/image");
+const { sessions } = require("./sessions");
 
 const PORT = 4000;
 
@@ -23,6 +25,9 @@ express()
     );
     next();
   })
+  //using express session to save current user's handle
+  .use(sessions)
+
   .use(morgan("tiny"))
   //   .use(express.static("./server/assets"))
   .use(bodyParser.json())
@@ -37,5 +42,8 @@ express()
 
   //using routers as middleware for APIs
   .use(apiRouter)
+
+  //using routers as middleware for images
+  .use(apiImage)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
