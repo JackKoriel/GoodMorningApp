@@ -84,17 +84,26 @@ const getUserByHandle = async (req, res) => {
 };
 
 //***************************
-// GET user based on email at signin <<should add password>>
+// GET <<LOGIN>> user based on email at signin
 //***************************
 const getUsersByEmail = async (req, res) => {
   //get the body from frontend
   const { handle, email, password } = req.body;
-  //declair client in mongo
+
+  // already logged in
+  if (req.session.handle) {
+    return res.status(400).json({
+      status: 400,
+      data: "User already logged in.",
+    });
+  }
+
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
   //verifications of complete information
   if (!handle || !email || !password) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 400,
       message: "Some info is missing, please fill all fields.",
     });
@@ -109,6 +118,7 @@ const getUsersByEmail = async (req, res) => {
 
     //find user in db based on email
     const user = await db.collection("users").findOne({ email });
+    // console.log("user", user);
     // variable for passowrd validation
     const validPassword = await bcrypt.compare(password, user.password);
     //verifications for provided user
@@ -127,10 +137,12 @@ const getUsersByEmail = async (req, res) => {
         .json({ status: 404, data: "Incorrect username, please try again." });
     } else {
       req.session.handle = handle;
-      console.log(req.session.user);
+      req.session._id = user._id;
+      // console.log(req.session._id);
       res.status(200).json({ status: 200, data: user });
     }
   } catch (err) {
+    console.log(err.stack);
     res.status(500).json({
       status: 500,
       message: "Something went wrong, please try again later.",
@@ -139,6 +151,22 @@ const getUsersByEmail = async (req, res) => {
     client.close();
     console.log("Disconnected from Mongo");
   }
+};
+
+//***************************
+//LOG OUT the user from the session
+//***************************
+const logoutUser = async (req, res) => {
+  if (req.session.handle) {
+    req.session.destroy();
+    res.status(200).json({
+      status: 200,
+      data: `Logout was successful! Comeback soon!`,
+    });
+  } else {
+    res.status(400).json({ status: 400, data: "No user logged in." });
+  }
+  res.end();
 };
 
 //***************************
@@ -232,38 +260,33 @@ const updateUser = async (req, res) => {
   const { handle, email, password, displayName, birthDate } = req.body;
   //get user handle from prams
   const { _id } = req.params;
-  // let id = Number(_id);
-  //declaring a value variable which will contain my new values
-  let value;
 
-  //giving the user comfortability in not providing all information at once but only these to be changed
-  if (!handle) {
-    value = {
-      $set: { email, password, displayName, birthDate },
-    };
-  } else if (!email) {
-    value = {
-      $set: { handle, password, displayName, birthDate },
-    };
-  } else if (!password) {
-    value = {
-      $set: { handle, email, displayName, birthDate },
-    };
-  } else if (!displayName) {
-    value = {
-      $set: { handle, email, password, birthDate },
-    };
-  } else if (!birthDate) {
-    value = {
-      $set: { handle, email, password, displayName },
-    };
-  } else {
-    value = {
-      $set: { handle, email, password, displayName, birthDate },
-    };
+  //verify user updating their profile and not other usersr
+  if (req.session._id !== _id) {
+    return res.status(401).json({
+      status: 401,
+      data: "Not authorized to update other users' data.",
+    });
   }
-  //validating email
-  if (!email.includes("@")) {
+
+  let hashPassword;
+  if (password) {
+    // generate salt to hash password
+    const salt = await bcrypt.genSalt(10);
+    //add the hash to the password
+    hashPassword = await bcrypt.hash(password, salt);
+  }
+  //declaring a value to use later with $set while updating the user
+  let value = { handle, email, password: hashPassword, displayName, birthDate };
+  //the array will use foreach to check which element was provided by the user
+  let array = ["handle", "email", "password", "displayName", "birthDate"];
+  array.forEach((element) => {
+    if (!req.body[element]) {
+      delete value[element];
+    }
+  });
+  // validating email
+  if (value.email && !value.email?.includes("@")) {
     return res.status(400).json({
       status: 400,
       message: "Please provide a valid email address.",
@@ -271,7 +294,6 @@ const updateUser = async (req, res) => {
   }
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
-
   //try catch finally function
   try {
     //connect client
@@ -281,16 +303,18 @@ const updateUser = async (req, res) => {
     //validating the handle availability
     const userHandle = await db.collection("users").findOne({ handle });
     if (userHandle) {
-      res.status(409).json({
+      return res.status(409).json({
         status: 409,
         data: "Username already exist, please try a different username",
       });
     }
     //update the user with the provided values
-    const updatedUser = await db.collection("users").updateOne({ _id }, value);
-
+    const updatedUser = await db
+      .collection("users")
+      .updateOne({ _id }, { $set: { ...value } });
     res.status(200).json({ status: 200, message: "Sucess", data: updatedUser });
   } catch (err) {
+    console.log(err.stack);
     res.status(500).json({
       status: 500,
       message: "Something went wrong, please try again later.",
@@ -407,4 +431,5 @@ module.exports = {
   updateUser,
   addFollower,
   removeFolower,
+  logoutUser,
 };

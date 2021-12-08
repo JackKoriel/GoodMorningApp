@@ -14,7 +14,11 @@ const ImageUpload = () => {
   const handleChange = (event) => {
     setImageSelected(event.target.files[0]);
     setInputValue(event.target.value);
-    previewFile(event.target.files[0]);
+    if (event.target.files[0]) {
+      previewFile(event.target.files[0]);
+    } else {
+      setPreviewSource("");
+    }
   };
 
   const previewFile = (file) => {

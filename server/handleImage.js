@@ -29,10 +29,7 @@ const options = {
 const postImage = async (req, res) => {
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { imageURL, imageId } = req.body;
-  // const { image } = req.file.path;
-  // console.log("formdata", formdata);
-  // console.log("image", image);
-  // console.log("req.file", req.file);
+
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
