@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import styled from "styled-components";
 
 const ImageUpload = () => {
   const [imageSelected, setImageSelected] = useState(null);
@@ -69,8 +70,8 @@ const ImageUpload = () => {
   };
 
   return (
-    <>
-      <form>
+    <MasterContainer>
+      <Form>
         <input
           type="file"
           value={inputValue}
@@ -89,12 +90,24 @@ const ImageUpload = () => {
         >
           Confirm
         </button>
-      </form>
+      </Form>
       {previewSource && (
         <img src={previewSource} alt="chosen" style={{ height: "300px" }} />
       )}
-    </>
+    </MasterContainer>
   );
 };
 
+const MasterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+`;
 export default ImageUpload;

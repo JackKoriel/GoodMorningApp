@@ -53,6 +53,80 @@ const getUsers = async (req, res) => {
 };
 
 //***************************
+// GET current user
+//***************************
+const getUser = async (req, res) => {
+  //express session after signing in
+  let handle = req.session.handle;
+  // console.log(req.session);
+  // console.log(req.session.handle);
+  //declair client in mongo
+  const client = new MongoClient(MONGO_URI, options);
+  //try catch finally function
+  try {
+    //connect client
+    await client.connect();
+    //declair database in mongo
+    const db = client.db("GoodMorningApp");
+    //find current users
+    const user = await db.collection("users").findOne({ handle });
+    // validations and user control
+    // console.log(user);
+    user
+      ? res.status(200).json({ status: 200, data: user })
+      : res.status(404).json({ status: 404, data: "No users logged in" });
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "Something went wrong, please try again later.",
+    });
+  } finally {
+    client.close();
+    console.log("Disconnected from Mongo");
+  }
+};
+
+//***************************
+// GET friend list of the current user
+//***************************
+const getUserFriends = async (req, res) => {
+  //express session after signing in
+  let handle = req.session.handle;
+  // console.log(req.session);
+  // console.log(req.session.handle);
+  //declair client in mongo
+  const client = new MongoClient(MONGO_URI, options);
+  //try catch finally function
+  try {
+    //connect client
+    await client.connect();
+    //declair database in mongo
+    const db = client.db("GoodMorningApp");
+    //find current users
+    const user = await db.collection("users").findOne({ handle });
+
+    const friendsIdsArray = user.followingIds;
+    if (friendsIdsArray) {
+      const friendsObjectArray = await db
+        .collection("users")
+        .find({ handle: { $in: [friendsIdsArray] } })
+        .toArray();
+      res.status(200).json({ status: 200, data: friendsObjectArray });
+    } else {
+      res.status(404).json({ status: 404, data: "No users logged in" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "Something went wrong, please try again later.",
+    });
+  } finally {
+    client.close();
+    console.log("Disconnected from Mongo");
+  }
+};
+
+//***************************
 // GET user based on :handle
 //***************************
 const getUserByHandle = async (req, res) => {
@@ -170,7 +244,7 @@ const logoutUser = async (req, res) => {
 };
 
 //***************************
-// ADD a user in db
+// ADD a user in db <<sign up>>
 //***************************
 const addUser = async (req, res) => {
   //get user information form front end using POST
@@ -432,4 +506,6 @@ module.exports = {
   addFollower,
   removeFolower,
   logoutUser,
+  getUser,
+  getUserFriends,
 };

@@ -14,6 +14,8 @@ const {
   addFollower,
   removeFolower,
   logoutUser,
+  getUser,
+  getUserFriends,
 } = require("../handlerUser");
 
 /////////////////////////////////////////////////////////////////////////////
@@ -43,6 +45,12 @@ router.patch("/api/:_handle/profile/follow", authRequired, addFollower);
 
 // remove follower from followers list
 router.patch("/api/:_handle/profile/unfollow", authRequired, removeFolower);
+
+//get current user
+router.get("/api/user", getUser);
+
+// gets current user friends in db
+router.get("/api/friends/handle", getUserFriends);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////
