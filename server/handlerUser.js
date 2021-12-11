@@ -102,14 +102,14 @@ const getUserFriends = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
-    //find current users
+    //find current user
     const user = await db.collection("users").findOne({ handle });
-
+    //get user's friends array
     const friendsIdsArray = user.followingIds;
     if (friendsIdsArray) {
       const friendsObjectArray = await db
         .collection("users")
-        .find({ handle: { $in: [friendsIdsArray] } })
+        .find({ handle: { $in: friendsIdsArray } })
         .toArray();
       res.status(200).json({ status: 200, data: friendsObjectArray });
     } else {
@@ -212,6 +212,7 @@ const getUsersByEmail = async (req, res) => {
     } else {
       req.session.handle = handle;
       req.session._id = user._id;
+      req.session.email = email;
       // console.log(req.session._id);
       res.status(200).json({ status: 200, data: user });
     }

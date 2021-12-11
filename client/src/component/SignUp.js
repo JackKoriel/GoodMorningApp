@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 // import Navbar from "./Navbar";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
 // import backgroundImage from "../Images/facespace_bg.jpg";
 // import { UserContext } from "./UserContext";
 // import { useHistory } from "react-router";
@@ -66,10 +71,12 @@ const SignUp = () => {
     // setSubStatus("idle");
   };
 
-  const handleShowPassword = (ev) => {
+  const handleClickShowPassword = (ev) => {
     setShowPassword(!showPassword);
   };
-
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   const handleClick = (ev) => {
     // console.log("usename", username);
     ev.preventDefault();
@@ -121,19 +128,31 @@ const SignUp = () => {
           <TextField
             onChange={(ev) => handleChangeUsername(ev)}
             id="outlined-size-small"
-            placeholder="Your first name"
+            placeholder="Your username name"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
             value={username}
           />
-          <TextField
+          <OutlinedInput
             onChange={(ev) => handleChangePassword(ev)}
             type={showPassword ? "text" : "password"}
             value={password}
-            id="outlined-size-small"
+            id="outlined-adornment-password"
             placeholder="Your password"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
           <TextField
             onChange={(ev) => handleChangeEmail(ev)}
@@ -144,12 +163,20 @@ const SignUp = () => {
             value={email}
           />
           <TextField
-            onChange={(ev) => handleChangeBirthDate(ev)}
+            onChange={(ev) => handleChangeDisplayName(ev)}
             id="outlined-size-small"
-            placeholder="You Birthdate"
+            placeholder="Your DisplayName"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={username}
+            value={displayName}
+          />
+          <TextField
+            onChange={(ev) => handleChangeBirthDate(ev)}
+            id="outlined-size-small"
+            placeholder="Your Birthdate"
+            variant="outlined"
+            style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            value={birthDate}
           />
           <TextField
             onChange={(ev) => handleChangeLocation(ev)}
@@ -157,7 +184,7 @@ const SignUp = () => {
             placeholder="Your current location"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={username}
+            value={location}
           />
           <TextField
             onChange={(ev) => handleChangeSign(ev)}
@@ -165,7 +192,7 @@ const SignUp = () => {
             placeholder="Your zodiac sign"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={username}
+            value={sign}
           />
           <Button onClick={(ev) => handleClick(ev)}>
             {/* {subStatus === "pending" ? (
@@ -189,13 +216,13 @@ const Master = styled.div`
   align-items: center;
   max-height: 100vh;
 `;
-const Background = styled.img`
-  width: 100%;
-  height: auto;
-  z-index: -100;
-`;
+// const Background = styled.img`
+//   width: 100%;
+//   height: auto;
+//   z-index: -100;
+// `;
 const SignContainer = styled.div`
-  position: absolute;
+  /* position: absolute; */
   /* margin-top: -700px; */
   display: flex;
 

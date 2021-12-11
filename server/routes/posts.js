@@ -9,14 +9,22 @@ const {
   addLike,
   sharePost,
   deletePost,
+  getUserFriendsPosts,
+  getPostById,
 } = require("../handlerPosts");
 
 /////////////////////////////////////////////////////////////////////////////
 // gets all posts in db
 router.get("/api/posts", getPosts);
 
+// gets one post by ID
+router.get("/api/post/:_id", getPostById);
+
 //gets posts made by a user
 router.get("/api/:handle/feed", getUserPosts);
+
+//gets posts made by a user
+router.get("/api/:handle/friends-feed", getUserFriendsPosts);
 
 //add new postsmade by signedin user
 router.post("/api/post", addPost);

@@ -138,17 +138,12 @@ const getNews = async (req, res) => {
 // ADD horoscope to favority collection
 //***************************
 const addToFav = async (req, res) => {
+  // get user handle from express session
+  let handle = req.session.handle;
   //get horoscope information form horoscope page using POST
-  //try using express session for user handle
-  const {
-    color,
-    compatibility,
-    description,
-    lucky_number,
-    lucky_time,
-    mood,
-    handle: userHandle,
-  } = req.body;
+  const { dailyHoro, email } = req.body;
+  console.log("Daily for body", dailyHoro);
+  console.log("email body", email);
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -171,12 +166,8 @@ const addToFav = async (req, res) => {
     } else {
       //add the horoscope to the horoscope collection
       const newfavHoro = await db.collection("horoscope").insertOne({
-        color,
-        compatibility,
-        description,
-        lucky_number,
-        lucky_time,
-        mood,
+        ...dailyHoro,
+        email,
         date,
         _id: horoscopeId,
       });
@@ -185,8 +176,8 @@ const addToFav = async (req, res) => {
       const user = await db
         .collection("users")
         .updateOne(
-          { handle: userHandle },
-          { $addToSet: { favorite: horoscopeId } }
+          { handle },
+          { $addToSet: { favorite: dailyHoro.current_date } }
         );
       res.status(201).json({
         status: 201,
@@ -211,10 +202,12 @@ const addToFav = async (req, res) => {
 const removeFav = async (req, res) => {
   //get the horoscope id from the params when opening favorites page or horoscope details in favorit
   const { horoId } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  //or user express session
-  const { handle: userHandle } = req.body;
-  //declair client in mongo
+  // get user handle from express session
+  let handle = req.session.handle;
+
+  //the horoscopes originally didn't have an id so we use the current date instead
+  const { current_date } = req.body;
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
   //try catch finally function
@@ -226,7 +219,8 @@ const removeFav = async (req, res) => {
     //removing the horoscope id from user's fav array
     const user = await db
       .collection("users")
-      .updateOne({ handle: userHandle }, { $pull: { favorite: horoId } });
+      .updateOne({ handle }, { $pull: { favorite: current_date } });
+    // we provide an id using uuid for the favority collection so we can use the id to delete
     const removedHoro = await db
       .collection("horoscope")
       .deleteOne({ _id: horoId });
@@ -250,6 +244,8 @@ const removeFav = async (req, res) => {
 // GET all favs
 //***************************
 const getFav = async (req, res) => {
+  //get use's email from session
+  const email = req.session.email;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -259,7 +255,10 @@ const getFav = async (req, res) => {
     //declair database in mongo
     const db = client.db("GoodMorningApp");
     //find all favorites
-    const horoscopes = await db.collection("horoscope").find().toArray();
+    const horoscopes = await db
+      .collection("horoscope")
+      .find({ email })
+      .toArray();
     // validations and user control
     horoscopes.length > 0
       ? res.status(200).json({ status: 200, data: horoscopes })
@@ -278,26 +277,13 @@ const getFav = async (req, res) => {
 };
 
 //***************************
-// ADD horoscope to favority collection
+// ADD articles to reading list collection
 //***************************
 const addToReading = async (req, res) => {
-  //get news object form horoscope page using POST
-  //try using express session for user handle
-  const {
-    author,
-    clean_url,
-    country,
-    language,
-    link,
-    media,
-    published_date,
-    rights,
-    summary,
-    title,
-    topic,
-    _id,
-    handle: userHandle,
-  } = req.body;
+  // get user handle from express session
+  let handle = req.session.handle;
+  //get the article and email from front end
+  const { article, email } = req.body;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -308,7 +294,7 @@ const addToReading = async (req, res) => {
     const db = client.db("GoodMorningApp");
     // ------------------------------
     // find if the same news has already been added
-    const newsRL = await db.collection("news").findOne({ _id });
+    const newsRL = await db.collection("news").findOne({ _id: article._id });
     if (newsRL) {
       res.status(409).json({
         status: 409,
@@ -317,24 +303,14 @@ const addToReading = async (req, res) => {
     } else {
       //add the article to the news array in that user's data
       const newArctileReading = await db.collection("news").insertOne({
-        author,
-        clean_url,
-        country,
-        language,
-        link,
-        media,
-        published_date,
-        rights,
-        summary,
-        title,
-        topic,
-        _id,
+        ...article,
+        email,
       });
       //-------------------------------
       //updating the user's news array with the article ID
       const user = await db
         .collection("users")
-        .updateOne({ handle: userHandle }, { $addToSet: { readingList: _id } });
+        .updateOne({ handle }, { $addToSet: { readingList: article._id } });
       res.status(201).json({
         status: 201,
         message: "Article has been added to reading list.",
@@ -358,10 +334,9 @@ const addToReading = async (req, res) => {
 const removeArticleFromRL = async (req, res) => {
   //get the news id from the params
   const { _id } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  //or user express session
-  const { handle: userHandle } = req.body;
-  //declair client in mongo
+  // get user handle from express session
+  let handle = req.session.handle;
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
   //try catch finally function
@@ -373,7 +348,7 @@ const removeArticleFromRL = async (req, res) => {
     //removing the news id from user's reading list
     const user = await db
       .collection("users")
-      .updateOne({ handle: userHandle }, { $pull: { readingList: _id } });
+      .updateOne({ handle }, { $pull: { readingList: _id } });
     // remove the news object from the news collection
     const removedNews = await db.collection("news").deleteOne({ _id });
     res.status(200).json({
@@ -396,6 +371,8 @@ const removeArticleFromRL = async (req, res) => {
 // GET all reading list news articles
 //***************************
 const getRL = async (req, res) => {
+  //get use's email from session
+  const email = req.session.email;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -405,7 +382,7 @@ const getRL = async (req, res) => {
     //declair database in mongo
     const db = client.db("GoodMorningApp");
     //find all articles
-    const news = await db.collection("news").find().toArray();
+    const news = await db.collection("news").find({ email }).toArray();
     // validations and user control
     news.length > 0
       ? res.status(200).json({ status: 200, data: news })

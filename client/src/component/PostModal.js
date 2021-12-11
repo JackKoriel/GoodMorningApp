@@ -81,7 +81,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
           <TextareaAutosize
             maxRows={4}
             aria-label="maximum height"
-            multiline
+            // multiline
             placeholder="What's up!!!"
             value={value}
             onChange={handleChange}

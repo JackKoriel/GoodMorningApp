@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import { currentUserContext } from "./CurrentUserContext";
 import SuneriseLogo from "./SuneriseLogo";
 import { FiUser } from "react-icons/fi";
 import { BsStar } from "react-icons/bs";
@@ -10,6 +10,9 @@ import NavbarOptions from "./NavbarOptions";
 import styled from "styled-components";
 
 const SideNavbar = () => {
+  const {
+    user: { handle },
+  } = useContext(currentUserContext);
   return (
     <SidebarContainer>
       {/* site icon */}
@@ -18,7 +21,7 @@ const SideNavbar = () => {
       <NavbarOptions exact={true} to="/" Icon={FiHome} text="Home" />
       <NavbarOptions to="/favorite" Icon={BsStar} text="Favorite" />
       <NavbarOptions to="/reading-list" Icon={FaGlasses} text="Reading List" />
-      <NavbarOptions to="/profile" Icon={FiUser} text="Profile" />
+      <NavbarOptions to={`/${handle}`} Icon={FiUser} text="Profile" />
       {/* Button -> Tweet */}
       <Button>DOODLE-DOO</Button>
     </SidebarContainer>

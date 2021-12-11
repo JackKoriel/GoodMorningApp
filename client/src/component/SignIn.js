@@ -2,6 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 // import Navbar from "./Navbar";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
 // import backgroundImage from "../Images/facespace_bg.jpg";
 import { currentUserContext } from "./CurrentUserContext";
 import { useHistory } from "react-router";
@@ -9,10 +14,10 @@ import { useHistory } from "react-router";
 const SignIn = () => {
   let history = useHistory();
   const { user } = useContext(currentUserContext);
-
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user.status === "active") {
@@ -44,6 +49,13 @@ const SignIn = () => {
     // setSubStatus("idle");
   };
 
+  const handleClickShowPassword = (ev) => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const handleClick = (ev) => {
     // console.log("usename", username);
     ev.preventDefault();
@@ -62,6 +74,8 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log("login", json);
+        history.push("/");
         // console.log(json.user[0]);
         // const { status, error } = json;
         // if (status === "success") {
@@ -98,14 +112,26 @@ const SignIn = () => {
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
             value={username}
           />
-          <TextField
+          <OutlinedInput
             onChange={(ev) => handleChangePassword(ev)}
+            type={showPassword ? "text" : "password"}
+            value={password}
             id="outlined-size-small"
             placeholder="Your password"
             variant="outlined"
-            type="password"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={password}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
           <TextField
             onChange={(ev) => handleChangeEmail(ev)}
@@ -130,7 +156,7 @@ const SignIn = () => {
 };
 
 const Master = styled.div`
-  position: relative;
+  /* position: relative; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,10 +169,9 @@ const Background = styled.img`
   z-index: -100;
 `;
 const SignContainer = styled.div`
-  position: absolute;
+  /* position: absolute; */
   /* margin-top: -700px; */
   display: flex;
-
   flex-direction: column;
   justify-content: center;
   align-items: center;

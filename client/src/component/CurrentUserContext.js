@@ -15,6 +15,7 @@ function reducer(state, action) {
         ...state,
         status: "active",
         _id: action._id,
+        email: action.email,
         handle: action.handle,
         sign: action.sign,
         location: action.location,
@@ -43,7 +44,7 @@ function reducer(state, action) {
 
 export const CurrentUserProvider = ({ children }) => {
   const [user, dispatch] = useReducer(reducer, initialState);
-  console.log(user);
+  console.log(user.readingList);
   const [errorStatus, setErrorStatus] = useState(false);
 
   const checkingUserStatus = (data) => {
@@ -59,8 +60,12 @@ export const CurrentUserProvider = ({ children }) => {
     fetch("/api/user")
       .then((res) => res.json())
       .then((res) => {
-        checkingUserStatus(res.data);
-        console.log("res", res);
+        if (res.status === 200) {
+          checkingUserStatus(res.data);
+          console.log("res", res);
+        } else {
+          throw new Error(res.message);
+        }
       })
       .catch((err) => {
         setErrorStatus(true);

@@ -50,6 +50,37 @@ const getPosts = async (req, res) => {
 };
 
 //***************************
+// GET post by ID
+//***************************
+const getPostById = async (req, res) => {
+  //get post id from params with the patch
+  const { _id } = req.params;
+  //declair client in mongo
+  const client = new MongoClient(MONGO_URI, options);
+  //try catch finally function
+  try {
+    //connect client
+    await client.connect();
+    //declair database in mongo
+    const db = client.db("GoodMorningApp");
+    //find all users
+    const post = await db.collection("posts").findOne({ _id });
+    // validations and user control
+    post
+      ? res.status(200).json({ status: 200, data: post })
+      : res.status(404).json({ status: 404, message: "post not found" });
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "Something went wrong, please try again later.",
+    });
+  } finally {
+    client.close();
+    console.log("Disconnected from Mongo");
+  }
+};
+
+//***************************
 // GET posts by a specific user
 //***************************
 const getUserPosts = async (req, res) => {
@@ -67,6 +98,7 @@ const getUserPosts = async (req, res) => {
     const userPosts = await db
       .collection("posts")
       .find({ authorHandle: handle })
+      .sort({ timestamp: -1 })
       .toArray();
     // validations and user control
 
@@ -85,9 +117,55 @@ const getUserPosts = async (req, res) => {
 };
 
 //***************************
+// GET posts by the user's friends/following posts
+//***************************
+const getUserFriendsPosts = async (req, res) => {
+  //get a specific user handle from params >>> this fetch will happen at the user's feed
+  const { handle } = req.params;
+
+  //declair client in mongo
+  const client = new MongoClient(MONGO_URI, options);
+  //try catch finally function
+  try {
+    //connect client
+    await client.connect();
+    //declair database in mongo
+    const db = client.db("GoodMorningApp");
+    //find current user
+    const user = await db.collection("users").findOne({ handle });
+    console.log("friendsPost", user);
+    //get user's friends array
+    console.log(user);
+    const friendsIdsArray = user.followingIds;
+    //find all posts from friends the user follow
+    const friendsPosts = await db
+      .collection("posts")
+      .find({ authorHandle: { $in: friendsIdsArray } })
+      .sort({ timestamp: -1 })
+      .toArray();
+    // validations and user control
+    console.log(friendsPosts);
+
+    friendsPosts.length !== 0
+      ? res.status(200).json({ status: 200, data: friendsPosts })
+      : res.status(404).json({ status: 404, message: "Posts not found" });
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "Something went wrong, please try again later.",
+    });
+  } finally {
+    client.close();
+    console.log("Disconnected from Mongo");
+  }
+};
+
+//***************************
 // POST a new post from signed in user
 //***************************
 const addPost = async (req, res) => {
+  //express session after signing in
+  let handle = req.session.handle;
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { status } = req.body;
   //declair client in mongo
@@ -101,20 +179,28 @@ const addPost = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
-
+    //find current user
+    const user = await db.collection("users").findOne({ handle });
+    console.log("user", user);
     //create a new post by signed in user
     const newPost = await db.collection("posts").insertOne({
       ...req.body,
+      author: user,
       _id,
       //use express session to get the signedin user handle
       //   authorHandle: req.session.handle,
-      authorHandle: "",
+      authorHandle: handle,
       timestamp: moment().format(),
       sortedTimestamp: date,
       likedBy: [],
       retweetedBy: [],
       media: [],
+      isLiked: false,
+      isRetweeted: false,
+      numLikes: 0,
+      numRetweets: 0,
     });
+    console.log("post", newPost);
     res
       .status(201)
       .json({ status: 201, message: "New post created.", data: newPost });
@@ -133,11 +219,13 @@ const addPost = async (req, res) => {
 // PATCH likes on a specific post
 //***************************
 const addLike = async (req, res) => {
+  //express session after signing in
+  let handle = req.session.handle;
   //get post ID from params
   const { _id } = req.params;
   //get the user's handle after clicking on the add button when using POST with the body
   //I can use express session
-  const { handle: userHandle } = req.body;
+  const { like } = req.body;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -146,11 +234,15 @@ const addLike = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
+    //update the like status by the user
+    await db
+      .collection("posts")
+      .updateOne({ _id }, { $set: { isLiked: like } });
 
     //updating the user's liked array in the post
     const post = await db
       .collection("posts")
-      .updateOne({ _id }, { $addToSet: { likedBy: userHandle } });
+      .updateOne({ _id }, { $addToSet: { likedBy: handle } });
 
     res.status(200).json({ status: 200, message: "Post liked!", data: post });
   } catch (err) {
@@ -269,4 +361,6 @@ module.exports = {
   addLike,
   sharePost,
   deletePost,
+  getUserFriendsPosts,
+  getPostById,
 };

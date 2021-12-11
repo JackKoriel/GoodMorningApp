@@ -1,31 +1,165 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { currentUserContext } from "./CurrentUserContext";
+import styled from "styled-components";
+import { FiStar } from "react-icons/fi";
+
+const dummyData = {
+  date_range: "Sep 23 - Oct 22",
+  current_date: "December 10, 2021",
+  description:
+    "Anything that begins now won't be going anywhere -- so if you're not interested, don't turn on that lethal charm. This stuff is easier to get going than to shut down.",
+  compatibility: "Aquarius",
+  mood: "Tolerance",
+  color: "Purple",
+  lucky_number: "12",
+  lucky_time: "6pm",
+};
 
 const Horoscope = () => {
-  const [dailyHoro, setDailyHoro] = useState([]);
-  console.log("dailyhoro", dailyHoro);
+  const {
+    user: { sign, email, favorite },
+  } = useContext(currentUserContext);
+  console.log("horoscope fav", favorite);
 
-  useEffect(() => {
-    fetch("/api/horoscope", {
+  const [dailyHoro, setDailyHoro] = useState(dummyData);
+  console.log("dailyhoro current date", dailyHoro.current_date);
+  console.log("dailyHoro ", dailyHoro);
+
+  const handleClickFavorite = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    fetch(`/api/favorite`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify({
-        day: "today",
-        sign: "aquarius",
+        dailyHoro,
+        email,
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        setDailyHoro(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+      .then((data) => {});
+  };
 
-  return <div>Horscope page</div>;
+  // useEffect(() => {
+  //   fetch("/api/horoscope", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       day: "today",
+  //       sign: sign,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("horo data", data);
+  //       setDailyHoro(data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
+  return (
+    <MasterContainer>
+      <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639173158/692599_astrology-backgrounds-wallpapers-zone_1299x1122_h_n7s4aa.jpg" />
+      <Desc>{dailyHoro.description}</Desc>
+      Lucky number of the day: <strong>{dailyHoro.lucky_number}</strong>
+      <LuckyNum></LuckyNum>
+      Lucky time of the day: <strong>{dailyHoro.lucky_number}</strong>
+      <LuckyTime></LuckyTime>
+      Compatible with: <strong>{dailyHoro.compatibility}</strong>
+      <Compat></Compat>
+      Lucky color of the day:{" "}
+      <strong>
+        <Span color={dailyHoro.color}>{dailyHoro.color}</Span>
+      </strong>
+      <LuckyColor></LuckyColor>
+      <StarFav
+        onClick={(ev) => {
+          handleClickFavorite(ev);
+        }}
+      >
+        {favorite.includes(dailyHoro.current_date) ? (
+          <FiStar style={FavStyleActive} />
+        ) : (
+          <FiStar />
+        )}
+      </StarFav>
+    </MasterContainer>
+  );
 };
+
+const MasterContainer = styled.div`
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  /* background-color: lightyellow; */
+  align-items: center;
+  /* border-top: 2px solid var(--morning-background); */
+  border: 2px solid var(--morning-background);
+  /* padding: 10px 0; */
+  flex: 0.3;
+  /* color: white; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+`;
+
+const StarFav = styled.button`
+  position: absolute;
+  background: transparent;
+  border: none;
+  color: white;
+  bottom: 10px;
+  right: 10px;
+  font-size: 30px;
+  transition: all 400ms ease-in-out;
+  &:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+`;
+
+const FavStyleActive = {
+  fill: "yellow",
+};
+
+const Background = styled.img`
+  position: absolute;
+  width: inherit;
+  height: 100%;
+  z-index: -100;
+  opacity: 0.9;
+  /* background: rgba(0, 0, 0, 0.6);
+  opacity: 0; */
+  border-radius: 5px;
+`;
+
+const Desc = styled.div`
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-align: center;
+`;
+
+const LuckyTime = styled.div``;
+
+const LuckyNum = styled.div``;
+
+const Compat = styled.div``;
+
+const LuckyColor = styled.div``;
+
+const Span = styled.span`
+  color: ${({ color }) => {
+    return color;
+  }};
+`;
 
 export default Horoscope;
