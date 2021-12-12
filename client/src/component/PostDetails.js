@@ -14,9 +14,7 @@ const PostDetails = () => {
   const [status, setStatus] = useState(false);
   const [postData, setPostData] = useState({});
   const [errorStatus, setErrorStatus] = useState(false);
-  // console.log(tweetData.author.handle);
-  // let ProfileHandle = tweetData.author.handle;
-  // console.log(ProfileHandle);
+
   useEffect(() => {
     fetch(`/api/post/${postId}`)
       .then((res) => res.json())
@@ -69,67 +67,48 @@ const PostDetails = () => {
           <CircularProgress /> Loading...
         </Progress>
       ) : (
-        <div>
-          <APost>
-            <>
-              <TopLine>
-                <Status>
-                  <Img src={postData.author.avatarSrc} />
-                  <NameHandle
-                    onClick={(ev) => {
-                      let ProfileHandle = postData.author.handle;
-                      handleClickProfile(ev, ProfileHandle);
-                      // console.log(handleProfile);
-                    }}
-                  >
-                    {postData.author.displayName}
-                    <Span>@{postData.author.handle}</Span>
-                  </NameHandle>
-                </Status>
-                <TweetStatus>{postData.status}</TweetStatus>
-              </TopLine>
-            </>
-            {postData.media !== undefined && (
-              <ImgBig src={postData.media[0]?.url} />
-            )}
-            <Time>
-              {moment(postData.timestamp).format("h:mm A · MMM D YYYY")} ·{" "}
-              Doodle-do web app
-            </Time>
-            <ActionBar
-              postId={postId}
-              isLiked={postData.isLiked}
-              isRetweeted={postData.isRetweeted}
-              numLikes={postData.numLikes}
-              numRetweets={postData.numRetweets}
-            />
-          </APost>
-        </div>
+        <APost>
+          <PostObj>
+            <ImageBigContainer>
+              <Img src={postData.author.avatarSrc} alt="profile" />
+              {postData.media !== undefined && (
+                <ImgBig src={postData.media[0]?.url} />
+              )}
+              <ActionBar
+                postId={postData._id}
+                isLiked={postData.isLiked}
+                isRetweeted={postData.isRetweeted}
+                numLikes={postData.numLikes}
+                numRetweets={postData.numRetweets}
+              />
+            </ImageBigContainer>
+            <Status>
+              <NameHandl
+                onClick={(ev) => {
+                  let ProfileHandle = postData.author.handle;
+                  handleClickProfile(ev, ProfileHandle);
+                  // console.log(handleProfile);
+                }}
+              >
+                {postData.author.displayName}
+              </NameHandl>
+              <PostStatus>{postData.status}</PostStatus>
+              <Span>
+                @{postData.author.handle} ·{" "}
+                {moment(postData.timestamp).format(" MMM Do")}
+              </Span>
+            </Status>
+          </PostObj>
+          <Time style={{ paddingLeft: "15px" }}>
+            {moment(postData.timestamp).format("h:mm A · MMM D YYYY")} · Good
+            Morning web app
+          </Time>
+        </APost>
       )}
     </>
   );
 };
 
-const Span = styled.span`
-  color: rgb(101, 119, 134);
-  font-size: 14px;
-`;
-
-const TweetStatus = styled.p`
-  font-weight: 400;
-  font-size: 18px;
-  margin-bottom: 10px;
-  max-width: 700px;
-  word-break: break-all;
-`;
-
-const ImgBig = styled.img`
-  border-radius: 10px;
-  /* width: 500px; */
-  max-width: 70%;
-  height: auto;
-  /* margin-left: 60px; */
-`;
 const Progress = styled.div`
   display: flex;
   flex-direction: row;
@@ -142,58 +121,83 @@ const Progress = styled.div`
   margin-top: 200px;
   /* margin-left: 200px; */
 `;
+const PostObj = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
+const APost = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--yellow-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 15px;
+  padding: 0 5px;
+  transition: all 300ms ease-out;
+  padding-bottom: 15px;
+`;
+const ImageBigContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 25px;
+  margin-right: 15px;
+`;
 const Img = styled.img`
+  /* position: relative; */
+  /* left: 20px;
+  top: 25px; */
   border-radius: 50px;
+  border: 3px solid white;
   width: 50px;
+  height: auto;
+  margin: 0;
+  z-index: 10;
+`;
+const ImgBig = styled.img`
+  position: relative;
+  top: -30px;
+  left: 5px;
+  border-radius: 10px;
+  max-width: 300px;
   height: auto;
 `;
 
-const TopLine = styled.div`
+const NameHandl = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  /* align-items: center; */
-  justify-content: flex-start;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  line-height: 20px;
-`;
-const NameHandle = styled.div`
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-weight: 700;
-  transition: all 400ms ease-in-out;
+  transition: all 300ms ease-out;
   &:hover {
-    transform: scale(1.2);
-    background: #ffe8f1;
+    transform: scale(1.05);
+    background: var(--gold-color);
     border-radius: 10px;
     cursor: pointer;
   }
 `;
 
-const APost = styled.div`
-  /* display: flex; */
-  margin-bottom: 25px;
-  border-bottom: 1px solid var(--twitter-background);
-  padding-bottom: 20px;
-  padding-left: 20px;
-  /* text-align: wrap; */
-  /* max-width: 600px; */
+const Status = styled.div`
+  margin: 15px 0;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
 
-const Status = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  align-items: center;
+const Span = styled.span`
+  color: rgb(101, 119, 134);
+  font-size: 14px;
+`;
+
+const PostStatus = styled.p`
+  font-weight: 400;
   word-break: break-word;
 `;
-
 const Time = styled.div`
   color: #625b55;
   font-weight: 700;
   margin-top: 20px;
   /* margin-bottom: 10px; */
 `;
+
 export default PostDetails;

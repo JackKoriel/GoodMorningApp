@@ -10,17 +10,28 @@ html, body, div,
     /* font-family: sans-serif, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; */
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif; 
   }
-
   html, body {
     max-width: 100vw;
+    
+  }
+  body {
+    background-image: url("https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639278758/43618390-vector-black-contours-of-weather-symbols-clouds-sun-and-rain-_cr2zez.jpg");
+  background-repeat: repeat;
+  /* opacity: 0.8; */
+  z-index: -100;
+  background-position: 50% 0;
+  /* background: var(--beige-color); */
   }
 button {
   cursor: pointer;
 }
   :root {
---morning-color: #50b7f5;
---morning-background: #e6ecf0;
+    --blue-color: #324597;
+--yellow-color: #eec962;
+--gold-color: #feffd6;
 --primary: hsl(258deg, 100%, 50%);
+--beige-color: #eddcbe;
+--brown-color: #e2dad0;
   }
 
   html, body, div, span, applet, object, iframe,

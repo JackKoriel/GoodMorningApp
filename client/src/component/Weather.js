@@ -87,8 +87,8 @@ const MasterContainer = styled.div`
   flex-direction: column;
   /* background-color: lightgreen; */
   align-items: center;
-  border: 2px solid var(--morning-background);
-  /* border-bottom: 2px solid var(--morning-background); */
+  border: 2px solid var(--yellow-color);
+
   /* padding: 10px 0; */
   flex: 0.2;
   border-radius: 5px;
@@ -99,7 +99,7 @@ const Background = styled.img`
   position: absolute;
   width: inherit;
   height: 100%;
-  z-index: -100;
+  z-index: 1;
   opacity: 0.9;
   /* background: rgba(0, 0, 0, 0.6);
   opacity: 0; */
@@ -109,6 +109,7 @@ const Background = styled.img`
 const Title = styled.div`
   margin-top: 15px;
   font-size: 15px;
+  z-index: 2;
 `;
 const Rep = styled.div`
   display: flex;
@@ -117,6 +118,7 @@ const Rep = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  z-index: 2;
 `;
 const Text = styled.div`
   font-weight: 700;
@@ -128,6 +130,7 @@ const Temp = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
+  z-index: 2;
 `;
 const Actual = styled.div`
   font-weight: 700;

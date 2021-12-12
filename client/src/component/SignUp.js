@@ -241,7 +241,7 @@ const Button = styled.button`
   width: 100%;
   padding: 15px 0;
   color: white;
-  background-color: var(--primary-color);
+  background-color: var(--blue-color);
   font-weight: 900;
   font-size: 23;
   border: none;
@@ -255,9 +255,9 @@ const ErrorMsg = styled.div`
   display: flex;
   position: absolute;
   margin-top: 300px;
-  color: var(--primary-color);
+  color: var(--blue-color);
   background: white;
-  border: 4px solid var(--primary-color);
+  border: 4px solid var(--blue-color);
   text-align: center;
   justify-content: center;
   align-items: center;

@@ -194,10 +194,6 @@ const News = () => {
   return (
     <MasterContainer>
       {topNews.map((article, index) => {
-        // console.log(article.isReadingList);
-        // if (!topNews.isReadingList || topNews.isReadingList === false) {
-        //   setReadingL(false);
-        // }
         return (
           <AnArticle key={article._id} lastArticle={index === 4}>
             <Background src={article.media} />
@@ -230,9 +226,7 @@ const MasterContainer = styled.div`
   /* background-color: black;
   opacity: 0.2; */
   align-items: center;
-  /* border: 2px solid var(--morning-background); */
-  /* border-bottom: 2px solid var(--morning-background); */
-  /* padding: 10px 0; */
+
   flex: 0.5;
   color: white;
   border-radius: 5px;
@@ -245,7 +239,7 @@ const AnArticle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--morning-background);
+  border-bottom: 1px solid var(--yellow-color);
   /* padding: 5px 0; */
   width: 100%;
   height: 100%;
@@ -267,6 +261,7 @@ const Filter = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 5px;
+  z-index: 2;
 `;
 const BookmarkButton = styled.button`
   position: absolute;
@@ -289,7 +284,7 @@ const Background = styled.img`
   position: absolute;
   width: inherit;
   height: inherit;
-  z-index: -100;
+  z-index: 1;
   opacity: 0.9;
   /* background: rgba(0, 0, 0, 0.6);
   opacity: 0; */

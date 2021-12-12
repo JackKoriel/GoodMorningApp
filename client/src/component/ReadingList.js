@@ -78,7 +78,9 @@ const ReadingList = () => {
                   }}
                 >
                   <FiXCircle
-                    onMouseOver={({ target }) => (target.style.fill = "pink")}
+                    onMouseOver={({ target }) =>
+                      (target.style.fill = "var(--blue-color)")
+                    }
                     onMouseOut={({ target }) => (target.style.fill = "white")}
                   />
                 </ButtonRemove>
@@ -87,7 +89,6 @@ const ReadingList = () => {
           })}
         </MasterContainer>
       )}
-      ;
     </>
   );
 };
@@ -125,7 +126,7 @@ const Article = styled.a`
   text-decoration: none;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid var(--morning-background);
+  border-bottom: 1px solid var(--yellow-color);
   justify-content: center;
   align-items: center;
   transition: all 300ms ease-out;

@@ -22,6 +22,9 @@ const Master = styled.div`
   align-items: center;
   gap: 10px;
   width: 100%;
+  background-color: var(--brown-color);
+  padding-right: 25px;
+  padding-left: 25px;
 `;
 
 export default Widgets;

@@ -5,56 +5,96 @@ import { FiUser } from "react-icons/fi";
 import { BsStar } from "react-icons/bs";
 import { FiHome } from "react-icons/fi";
 import { FaGlasses } from "react-icons/fa";
-
+import PostBox from "./PostBox";
 import NavbarOptions from "./NavbarOptions";
 import styled from "styled-components";
+import { PostContext } from "./PostContext";
 
 const SideNavbar = () => {
   const {
-    user: { handle },
+    user: { handle, avatarSrc },
   } = useContext(currentUserContext);
+
+  const { setModalStatus } = useContext(PostContext);
+
+  const onClickVisiblityHandle = () => {
+    setModalStatus(true);
+  };
+
   return (
     <SidebarContainer>
       {/* site icon */}
       <SuneriseLogo />
+      <PostBox avatarSrc={avatarSrc} />
       {/* sidebarOptions */}
       <NavbarOptions exact={true} to="/" Icon={FiHome} text="Home" />
       <NavbarOptions to="/favorite" Icon={BsStar} text="Favorite" />
       <NavbarOptions to="/reading-list" Icon={FaGlasses} text="Reading List" />
       <NavbarOptions to={`/${handle}`} Icon={FiUser} text="Profile" />
       {/* Button -> Tweet */}
-      <Button>DOODLE-DOO</Button>
+      <Button onClick={onClickVisiblityHandle}>DOODLE-DOO</Button>
     </SidebarContainer>
   );
 };
 
 const SidebarContainer = styled.div`
   min-width: 210px;
+  height: 100vh;
   /* margin-left: 100px;
   margin-top: 30px; */
   /* border: 1px solid red; */
-  border-right: 1px solid var(--morning-background);
-  margin-top: 20px;
-  margin-left: 20px;
-  padding-right: 5px;
+  border-right: 1px solid var(--yellow-color);
+  /* margin-top: 20px; */
+  /* margin-left: 20px; */
+  padding-right: 25px;
+  padding-left: 25px;
   /* flex: 1 0.5 0px; */
   flex: 0.25;
+  background-color: var(--brown-color);
 `;
 
 const Button = styled.button`
-  padding: 15px 20px;
-  /* width: 160px; */
-  width: 100%;
+  margin-top: 40px;
+  background-color: var(--blue-color);
+  border: 0 solid #e5e7eb;
+  box-sizing: border-box;
   color: white;
-  border: none;
-  border-radius: 30px;
-  background-color: var(--primary);
-  /* margin-left: 20px; */
-  margin-top: 20px;
+  display: flex;
+  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
   font-weight: 700;
-  transition: all 300ms ease-out;
-  &&:active {
-    transform: scale(0.8);
+  justify-content: center;
+  line-height: 1.75rem;
+  padding: 0.75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  &&:focus {
+    outline: 0;
+  }
+  &&:hover:after {
+    bottom: 2px;
+    left: 2px;
+  }
+  &&:after {
+    content: "";
+    position: absolute;
+    border: 1px solid #000000;
+    bottom: 4px;
+    left: 4px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
   }
 `;
 
@@ -63,3 +103,59 @@ const Button = styled.button`
 // `;
 
 export default SideNavbar;
+
+// <!-- HTML !-->
+// <button class="button-53" role="button">Button 53</button>
+
+// /* CSS */
+// .button-53 {
+//   background-color: #3DD1E7;
+//   border: 0 solid #E5E7EB;
+//   box-sizing: border-box;
+//   color: #000000;
+//   display: flex;
+//   font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+//   font-size: 1rem;
+//   font-weight: 700;
+//   justify-content: center;
+//   line-height: 1.75rem;
+//   padding: .75rem 1.65rem;
+//   position: relative;
+//   text-align: center;
+//   text-decoration: none #000000 solid;
+//   text-decoration-thickness: auto;
+//   width: 100%;
+//   max-width: 460px;
+//   position: relative;
+//   cursor: pointer;
+//   transform: rotate(-2deg);
+//   user-select: none;
+//   -webkit-user-select: none;
+//   touch-action: manipulation;
+// }
+
+// .button-53:focus {
+//   outline: 0;
+// }
+
+// .button-53:after {
+//   content: '';
+//   position: absolute;
+//   border: 1px solid #000000;
+//   bottom: 4px;
+//   left: 4px;
+//   width: calc(100% - 1px);
+//   height: calc(100% - 1px);
+// }
+
+// .button-53:hover:after {
+//   bottom: 2px;
+//   left: 2px;
+// }
+
+// @media (min-width: 768px) {
+//   .button-53 {
+//     padding: .75rem 3rem;
+//     font-size: 1.25rem;
+//   }
+// }

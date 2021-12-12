@@ -12,23 +12,14 @@ const FeedRendering = ({ handle, name }) => {
   let history = useHistory();
 
   const [posts, setPosts] = useState();
-  //   const [tweetsId, setTweetsId] = useState();
   const [postStatus, setPostStatus] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
-  // console.log("posts", posts);
-
-  // const {
-  //   state: { statusTweet, tweetsById, tweetId },
-  //   errorStatus,
-  // } = useContext(TweetContext);
 
   useEffect(() => {
     fetch(`/api/${handle}/feed`)
       .then((res) => res.json())
       .then((data) => {
         setPosts(data.data);
-        // setTweetsId(data.tweetIds);
-        // console.log("posts data", data);
         setPostStatus(true);
       })
       .catch((err) => {
@@ -83,55 +74,46 @@ const FeedRendering = ({ handle, name }) => {
         <div>
           {posts !== undefined &&
             posts.map((post) => {
-              // console.log("one post", post);
               let handleProfile = post.author.handle;
-              //   console.log(handleProfile);
-              //   const date = tweet.timestamp;
-              //   console.log(tweet);
               return (
                 <APost
+                  tabIndex="0"
                   key={post._id}
                   onClick={(ev) => {
                     handleClickPost(ev, post._id);
                   }}
                 >
-                  <div>
-                    <UpperLine>
-                      {post.isRetweeted && (
-                        <Posted>
-                          <AiOutlineRetweet /> <Span>{name} Redoodled</Span>
-                        </Posted>
-                      )}
-                      <TopLine>
-                        <Img src={post.author.avatarSrc} alt="profile" />
-                        <Status>
-                          <div
-                            onClick={(ev) => {
-                              handleClickProfile(ev, handleProfile);
-                              // console.log(handleProfile);
-                            }}
-                          >
-                            {post.author.displayName}{" "}
-                            <Span>
-                              @{post.author.handle} ·{" "}
-                              {moment(post.timestamp).format(" MMM Do")}
-                            </Span>
-                          </div>
-                          <PostStatus>{post.status}</PostStatus>
-                        </Status>
-                      </TopLine>
-                    </UpperLine>
-                  </div>
-                  {post.media?.map((src, index) => {
-                    return <ImgBig key={index} src={src.url} alt="postImage" />;
-                  })}
-                  <ActionBar
-                    postId={post._id}
-                    isLiked={post.isLiked}
-                    isRetweeted={post.isRetweeted}
-                    numLikes={post.numLikes}
-                    numRetweets={post.numRetweets}
-                  />
+                  <ImageBigContainer>
+                    <Img src={post.author.avatarSrc} alt="profile" />
+                    {post.media?.map((src, index) => {
+                      return (
+                        <ImgBig key={index} src={src.url} alt="postImage" />
+                      );
+                    })}
+                    <ActionBar
+                      tweetId={post._id}
+                      isLiked={post.isLiked}
+                      isRetweeted={post.isRetweeted}
+                      numLikes={post.numLikes}
+                      numRetweets={post.numRetweets}
+                    />
+                  </ImageBigContainer>
+
+                  <Status>
+                    <NameHandl
+                      onClick={(ev) => {
+                        handleClickProfile(ev, handleProfile);
+                        // console.log(handleProfile);
+                      }}
+                    >
+                      {post.author.displayName}
+                    </NameHandl>
+                    <PostStatus>{post.status}</PostStatus>
+                    <Span>
+                      @{post.author.handle} ·{" "}
+                      {moment(post.timestamp).format(" MMM Do")}
+                    </Span>
+                  </Status>
                 </APost>
               );
             })}
@@ -153,64 +135,70 @@ const Progress = styled.div`
   margin-top: 200px;
   /* margin-left: 200px; */
 `;
-const UpperLine = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Posted = styled.div`
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  margin-left: 20px;
-  margin-top: 10px;
-  font-size: 14px;
-  margin-bottom: -10px;
-`;
-
-const Img = styled.img`
-  border-radius: 50px;
-  width: 50px;
-  height: auto;
-`;
-const ImgBig = styled.img`
-  border-radius: 10px;
-  /* width: 500px; */
-  max-width: 70%;
-  height: auto;
-  margin-left: 60px;
-`;
-
-const TopLine = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  line-height: 25px;
-`;
 
 const APost = styled.div`
-  /* display: flex; */
-  margin-bottom: 25px;
-  border-bottom: 1px solid var(--morning-background);
-  padding-bottom: 20px;
-  padding-left: 20px;
-  /* text-align: wrap; */
-  /* max-width: 600px; */
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--yellow-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  gap: 20px;
+  /* align-items: center; */
+  margin: 15px;
+  padding: 0 5px;
   transition: all 300ms ease-out;
   &:hover {
     transform: scale(1.02);
-    background: var(--morning-background);
+    background: var(--yellow-color);
     border-radius: 20px;
+    cursor: pointer;
+  }
+`;
+const ImageBigContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 25px;
+  margin-right: 15px;
+`;
+const Img = styled.img`
+  /* position: relative; */
+  /* left: 20px;
+  top: 25px; */
+  border-radius: 50px;
+  border: 3px solid white;
+  width: 50px;
+  height: auto;
+  margin: 0;
+  z-index: 10;
+`;
+const ImgBig = styled.img`
+  position: relative;
+  top: -30px;
+  left: 5px;
+  border-radius: 10px;
+  max-width: 300px;
+  height: auto;
+`;
+
+const NameHandl = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-weight: 700;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.05);
+    background: var(--gold-color);
+    border-radius: 10px;
     cursor: pointer;
   }
 `;
 
 const Status = styled.div`
+  margin: 15px 0;
   font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
 
 const Span = styled.span`
@@ -218,9 +206,9 @@ const Span = styled.span`
   font-size: 14px;
 `;
 
-const PostStatus = styled.div`
+const PostStatus = styled.p`
   font-weight: 400;
-  color: #000000;
+  word-break: break-word;
 `;
 
 export default FeedRendering;

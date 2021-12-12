@@ -179,7 +179,7 @@ const Avatar = styled.img`
 
 const FollowButton = styled.button`
   display: flex;
-  color: var(--primary);
+  color: var(--blue-color);
   font-weight: 900;
   font-size: 14px;
   background-color: ${({ followingText }) => {

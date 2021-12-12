@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { BiMessageRounded } from "react-icons/bi";
-import { IoShareOutline } from "react-icons/io5";
+import { FiPlusSquare } from "react-icons/fi";
 import { FiHeart } from "react-icons/fi";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
@@ -88,31 +88,6 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
 
   return (
     <Master>
-      <div>
-        <UnstyledActionButton>
-          <BiMessageRounded />
-        </UnstyledActionButton>
-      </div>
-      <Repost
-      // onClick={(ev) => {
-      //   handleClickRepost(ev);
-      // }}
-      >
-        <UnstyledActionButton>
-          <RepostIcon
-            onClick={(ev) => {
-              handleClickRepost(ev);
-            }}
-          >
-            {reposts ? (
-              <AiOutlineRetweet style={repostStyleActive} />
-            ) : (
-              <AiOutlineRetweet />
-            )}
-          </RepostIcon>
-        </UnstyledActionButton>
-        <div>{repostsNum}</div>
-      </Repost>
       <Heart
         onClick={(ev) => {
           handleClickLike(ev);
@@ -120,17 +95,19 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
       >
         <UnstyledActionButton>
           <LittleHeart>
-            {likes ? <FiHeart style={heartStyleActive} /> : <FiHeart />}
+            {likes ? (
+              <FiHeart style={heartStyleActive} />
+            ) : (
+              <FiHeart style={heartStyleInactive} />
+            )}
           </LittleHeart>
-          {/* <Background /> */}
         </UnstyledActionButton>
-        <div>{likesNum}</div>
       </Heart>
-      <div>
+      <Share>
         <UnstyledActionButton>
-          <IoShareOutline />
+          <FiPlusSquare style={shareStyleActive} />
         </UnstyledActionButton>
-      </div>
+      </Share>
     </Master>
   );
 };
@@ -138,63 +115,46 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
 const Master = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  margin-left: 60px;
-  gap: 110px;
-  align-items: center;
-  margin-top: 10px;
+  justify-content: space-between;
 `;
 
-const Heart = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
+const Heart = styled.div``;
 const LittleHeart = styled.div`
   z-index: 10;
   &:active {
     color: red;
   }
 `;
-// const Background = styled.div`
-//   border-radius: 50%;
-//   width: 50px;
-//   background: pink;
-//   z-index: -1;
-// `;
+
 const heartStyleActive = {
   fill: "red",
   color: "red",
 };
 
-const Repost = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
-const RepostIcon = styled.div`
-  &:active {
-    color: green;
-  }
-`;
-const repostStyleActive = {
-  // fill: "red",
-  color: "green",
+const heartStyleInactive = {
+  fill: "white",
+  color: "black",
 };
 
 const UnstyledActionButton = styled.button`
   background: transparent;
   border: none;
-  color: black;
+  color: white;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
+  font-size: 25px;
   transition: all 300ms ease-out;
   &&:active {
     transform: scale(0.8);
   }
 `;
+
+const Share = styled.div``;
+
+const shareStyleActive = {
+  textShadow: "10px 10px 10px blue",
+  fill: "white",
+  color: "black",
+};
 
 export default ActionBar;

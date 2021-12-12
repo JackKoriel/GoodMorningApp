@@ -122,7 +122,6 @@ const getUserPosts = async (req, res) => {
 const getUserFriendsPosts = async (req, res) => {
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { handle } = req.params;
-
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -135,8 +134,11 @@ const getUserFriendsPosts = async (req, res) => {
     const user = await db.collection("users").findOne({ handle });
     console.log("friendsPost", user);
     //get user's friends array
-    console.log(user);
-    const friendsIdsArray = user.followingIds;
+    let friendsIdsArray = user.followingIds;
+    console.log("friendsIdsArray", friendsIdsArray);
+    //add the user id to the array
+    let userAndFriendsArray = friendsIdsArray.push(handle);
+    console.log("after push", friendsIdsArray);
     //find all posts from friends the user follow
     const friendsPosts = await db
       .collection("posts")
@@ -144,7 +146,7 @@ const getUserFriendsPosts = async (req, res) => {
       .sort({ timestamp: -1 })
       .toArray();
     // validations and user control
-    console.log(friendsPosts);
+    // console.log(friendsPosts);
 
     friendsPosts.length !== 0
       ? res.status(200).json({ status: 200, data: friendsPosts })
@@ -167,7 +169,7 @@ const addPost = async (req, res) => {
   //express session after signing in
   let handle = req.session.handle;
   //get a specific user handle from params >>> this fetch will happen at the user's feed
-  const { status } = req.body;
+  const { status, imageURL } = req.body;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -181,26 +183,22 @@ const addPost = async (req, res) => {
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
-    console.log("user", user);
+    // console.log("user", user);
     //create a new post by signed in user
     const newPost = await db.collection("posts").insertOne({
-      ...req.body,
+      status,
       author: user,
+      media: [{ type: "img", url: imageURL }],
       _id,
-      //use express session to get the signedin user handle
-      //   authorHandle: req.session.handle,
       authorHandle: handle,
       timestamp: moment().format(),
       sortedTimestamp: date,
       likedBy: [],
-      retweetedBy: [],
-      media: [],
-      isLiked: false,
-      isRetweeted: false,
+      sharedBy: [],
       numLikes: 0,
-      numRetweets: 0,
+      numReshares: 0,
     });
-    console.log("post", newPost);
+    // console.log("post", newPost);
     res
       .status(201)
       .json({ status: 201, message: "New post created.", data: newPost });
@@ -262,9 +260,8 @@ const addLike = async (req, res) => {
 const sharePost = async (req, res) => {
   //get post ID from params
   const { postId } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  //I can use express session
-  const { handle: userHandle } = req.body;
+  //express session after signing in
+  let handle = req.session.handle;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -276,25 +273,28 @@ const sharePost = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
-
+    //find current user
+    const user = await db.collection("users").findOne({ handle });
+    // console.log("user", user);
     // find the post data by looking up its ID
     const friendPostData = await db
       .collection("posts")
       .findOne({ _id: postId });
-    console.log(friendPostData);
-    //updating the friend's retweet array in the post
+    // console.log(friendPostData);
+    //updating the friend's reshare array in the post
     const friendPostUpdate = await db
       .collection("posts")
-      .updateOne({ _id: postId }, { $addToSet: { retweetedBy: userHandle } });
+      .updateOne({ _id: postId }, { $addToSet: { resharedBy: handle } });
 
     //add the shared post under the current user's name
     const newPostUser = await db.collection("posts").insertOne({
+      author: user,
       _id,
-      authorHandle: userHandle,
+      authorHandle: handle,
       timestamp: moment().format(),
       sortedTimestamp: date,
       likedBy: [],
-      retweetOf: postId,
+      reshareOf: postId,
       status: friendPostData.status,
       media: friendPostData.media,
     });
@@ -318,7 +318,7 @@ const sharePost = async (req, res) => {
 const deletePost = async (req, res) => {
   //get post ID from params
   const { postId } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
@@ -326,9 +326,9 @@ const deletePost = async (req, res) => {
     await client.connect();
     //declare database in mongo
     const db = client.db("GoodMorningApp");
-    //update all retweets with new message stating the original post was deleted
+    //update all reshares with new message stating the original post was deleted
     const sharedPostsUpdate = await db.collection("posts").updateMany(
-      { retweetOf: postId },
+      { reshareOf: postId },
       {
         $set: {
           status: "The original post has been deleted by the user",

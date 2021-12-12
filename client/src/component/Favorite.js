@@ -75,8 +75,7 @@ const Favorite = () => {
 
                 <LuckyTime>
                   {" "}
-                  Lucky time of the day:{" "}
-                  <strong>{horoscope.lucky_number}</strong>
+                  Lucky time of the day: <strong>{horoscope.lucky_time}</strong>
                 </LuckyTime>
 
                 <Compat>
@@ -95,7 +94,9 @@ const Favorite = () => {
                   }}
                 >
                   <FiXCircle
-                    onMouseOver={({ target }) => (target.style.fill = "pink")}
+                    onMouseOver={({ target }) =>
+                      (target.style.fill = "var(--gold-color)")
+                    }
                     onMouseOut={({ target }) => (target.style.fill = "white")}
                   />
                 </ButtonRemove>
@@ -137,25 +138,34 @@ const MasterContainer = styled.div`
   /* overflow: scroll; */
   /* margin: 20px 0; */
   /* text-decoration: none; */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const Background = styled.img`
   position: relative;
   width: inherit;
   height: inherit;
-  z-index: -100;
+  z-index: 1;
   opacity: 0.8;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const HoroContainer = styled.div`
-  padding: 10px 0;
+  margin: 30px 0;
+  padding: 10px 20px;
   position: absolute;
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid var(--morning-background);
+  border-bottom: 2px solid var(--yellow-color);
   justify-content: center;
   align-items: center;
+  line-height: 35px;
+  z-index: 1;
 `;
 
 const ButtonRemove = styled.button`

@@ -16,12 +16,13 @@ const NavbarOptions = ({ to, exact, text, Icon }) => {
 };
 
 const SidebarIcons = styled(NavLink)`
-  margin: 0;
+  margin-top: 15px;
   display: flex;
   align-items: center;
   cursor: pointer;
   text-decoration: none;
   color: black;
+  border-bottom: 1px solid var(--blue-color);
 
   &&:hover {
     background-color: #e8f5fe;

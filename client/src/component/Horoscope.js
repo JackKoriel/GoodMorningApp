@@ -70,17 +70,21 @@ const Horoscope = () => {
     <MasterContainer>
       <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639173158/692599_astrology-backgrounds-wallpapers-zone_1299x1122_h_n7s4aa.jpg" />
       <Desc>{dailyHoro.description}</Desc>
-      Lucky number of the day: <strong>{dailyHoro.lucky_number}</strong>
-      <LuckyNum></LuckyNum>
-      Lucky time of the day: <strong>{dailyHoro.lucky_number}</strong>
-      <LuckyTime></LuckyTime>
-      Compatible with: <strong>{dailyHoro.compatibility}</strong>
-      <Compat></Compat>
-      Lucky color of the day:{" "}
-      <strong>
-        <Span color={dailyHoro.color}>{dailyHoro.color}</Span>
-      </strong>
-      <LuckyColor></LuckyColor>
+      <LuckyNum>
+        Lucky number of the day: <strong>{dailyHoro.lucky_number}</strong>
+      </LuckyNum>
+      <LuckyTime>
+        Lucky time of the day: <strong>{dailyHoro.lucky_time}</strong>
+      </LuckyTime>
+      <Compat>
+        Compatible with: <strong>{dailyHoro.compatibility}</strong>
+      </Compat>
+      <LuckyColor>
+        Lucky color of the day:{" "}
+        <strong>
+          <Span color={dailyHoro.color}>{dailyHoro.color}</Span>
+        </strong>
+      </LuckyColor>
       <StarFav
         onClick={(ev) => {
           handleClickFavorite(ev);
@@ -103,8 +107,8 @@ const MasterContainer = styled.div`
   flex-direction: column;
   /* background-color: lightyellow; */
   align-items: center;
-  /* border-top: 2px solid var(--morning-background); */
-  border: 2px solid var(--morning-background);
+
+  border: 2px solid var(--yellow-color);
   /* padding: 10px 0; */
   flex: 0.3;
   /* color: white; */
@@ -121,6 +125,7 @@ const StarFav = styled.button`
   right: 10px;
   font-size: 30px;
   transition: all 400ms ease-in-out;
+  z-index: 2;
   &:hover {
     transform: scale(1.2);
     cursor: pointer;
@@ -135,7 +140,7 @@ const Background = styled.img`
   position: absolute;
   width: inherit;
   height: 100%;
-  z-index: -100;
+  z-index: 1;
   opacity: 0.9;
   /* background: rgba(0, 0, 0, 0.6);
   opacity: 0; */
@@ -146,15 +151,24 @@ const Desc = styled.div`
   font-weight: 900;
   margin-bottom: 10px;
   text-align: center;
+  z-index: 2;
 `;
 
-const LuckyTime = styled.div``;
+const LuckyTime = styled.div`
+  z-index: 2;
+`;
 
-const LuckyNum = styled.div``;
+const LuckyNum = styled.div`
+  z-index: 2;
+`;
 
-const Compat = styled.div``;
+const Compat = styled.div`
+  z-index: 2;
+`;
 
-const LuckyColor = styled.div``;
+const LuckyColor = styled.div`
+  z-index: 2;
+`;
 
 const Span = styled.span`
   color: ${({ color }) => {

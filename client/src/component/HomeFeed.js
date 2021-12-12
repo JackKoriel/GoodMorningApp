@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import PostBox from "./PostBox";
+// import PostBox from "./PostBox";
 import PostModal from "./PostModal";
 import { currentUserContext } from "./CurrentUserContext";
 import { PostContext } from "./PostContext";
@@ -16,28 +16,24 @@ const HomeFeed = () => {
   const {
     user: { status, avatarSrc, handle },
   } = useContext(currentUserContext);
-  console.log("user handle", handle);
+  // console.log("user handle", handle);
 
   const {
     posts: { data },
+    modalStatus,
+    setModalStatus,
   } = useContext(PostContext);
   // console.log("posts object", posts);
-
-  const [modalStatus, setModalStatus] = useState(false);
 
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
     ev.stopPropagation();
     // console.log("Profile:", handleProfile);
   };
-  const handleClickTweet = (ev, _id) => {
+  const handleClickPost = (ev, _id) => {
     history.push(`/post/${_id}`);
     // console.log("hello");
   };
-  // let postsArray;
-  // useEffect(() => {
-  //   postsArray = Object.values(posts);
-  // }, [posts.status]);
 
   // console.log("the array", postsArray);
   console.log("home feed data", data);
@@ -50,8 +46,13 @@ const HomeFeed = () => {
       ) : (
         <MasterContainer>
           <Header>
-            <TitleHome>Home</TitleHome>
-            <PostBox setModalStatus={setModalStatus} avatarSrc={avatarSrc} />
+            <Video
+              src="https://res.cloudinary.com/dhj5ncbxs/video/upload/ac_none/v1639268660/video-3_nfxgfx.mp4"
+              autoPlay
+              loop
+              muted
+            />
+            <Text>GOOD MORNINGS START HERE</Text>
           </Header>
           <PostModal
             modalStatus={modalStatus}
@@ -60,52 +61,46 @@ const HomeFeed = () => {
           <div>
             {data !== undefined &&
               data.map((post) => {
-                // console.log("post after map", data);
                 let handleProfile = post.author.handle;
-                // console.log(handleProfile);
-                // const date = tweet.timestamp;
-                // console.log(tweet);
                 return (
-                  // <div>{handleProfile}</div>
                   <APost
                     tabIndex="0"
                     key={post._id}
                     onClick={(ev) => {
-                      handleClickTweet(ev, post._id);
+                      handleClickPost(ev, post._id);
                     }}
                   >
-                    <div>
-                      <TopLine>
-                        <Img src={post.author.avatarSrc} alt="profile" />
-                        <Status>
-                          <NameHandl
-                            onClick={(ev) => {
-                              handleClickProfile(ev, handleProfile);
-                              // console.log(handleProfile);
-                            }}
-                          >
-                            {post.author.displayName}{" "}
-                            <Span>
-                              @{post.author.handle} ·{" "}
-                              {moment(post.timestamp).format(" MMM Do")}
-                            </Span>
-                          </NameHandl>
-                          <TweetStatus>{post.status}</TweetStatus>
-                        </Status>
-                      </TopLine>
-                    </div>
-                    {post.media?.map((src, index) => {
-                      return (
-                        <ImgBig key={index} src={src.url} alt="postImage" />
-                      );
-                    })}
-                    <ActionBar
-                      tweetId={post._id}
-                      isLiked={post.isLiked}
-                      isRetweeted={post.isRetweeted}
-                      numLikes={post.numLikes}
-                      numRetweets={post.numRetweets}
-                    />
+                    <ImageBigContainer>
+                      <Img src={post.author.avatarSrc} alt="profile" />
+                      {post.media?.map((src, index) => {
+                        return (
+                          <ImgBig key={index} src={src.url} alt="postImage" />
+                        );
+                      })}
+                      <ActionBar
+                        postId={post._id}
+                        isLiked={post.isLiked}
+                        isRetweeted={post.isRetweeted}
+                        numLikes={post.numLikes}
+                        numRetweets={post.numRetweets}
+                      />
+                    </ImageBigContainer>
+
+                    <Status>
+                      <NameHandl
+                        onClick={(ev) => {
+                          handleClickProfile(ev, handleProfile);
+                          // console.log(handleProfile);
+                        }}
+                      >
+                        {post.author.displayName}
+                      </NameHandl>
+                      <PostStatus>{post.status}</PostStatus>
+                      <Span>
+                        @{post.author.handle} ·{" "}
+                        {moment(post.timestamp).format(" MMM Do")}
+                      </Span>
+                    </Status>
                   </APost>
                 );
               })}
@@ -117,8 +112,10 @@ const HomeFeed = () => {
 };
 
 const MasterContainer = styled.div`
-  flex: 0.5;
-  border-right: 1px solid var(--morning-background);
+  display: flex;
+  flex-direction: column;
+  /* flex: 0.5; */
+  border-right: 1px solid var(--yellow-color);
   min-width: fit-content;
   overflow-y: scroll;
   height: auto;
@@ -131,17 +128,38 @@ const MasterContainer = styled.div`
 `;
 
 const Header = styled.div`
-  /* position: sticky; */
-  top: 0;
-  background-color: white;
-  z-index: 100;
-  border: 1px solid var(--morning-background);
-  padding: 10px 20px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+
+  z-index: 1;
 `;
-const TitleHome = styled.h2`
-  margin-left: 20px;
-  margin-bottom: 20px;
+
+const Video = styled.video`
+  /* position: relative; */
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  /* position: fixed; */
+  z-index: 2;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
 `;
+const Text = styled.h1`
+  position: relative;
+  top: -150px;
+  color: white;
+  font-weight: 900;
+  text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
+    -1px -1px 0 #000;
+  font-size: 35px;
+  font-style: italic;
+  z-index: 3;
+`;
+
 const Progress = styled.div`
   display: flex;
   flex-direction: row;
@@ -150,69 +168,74 @@ const Progress = styled.div`
   font-weight: 700;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
   margin-top: 200px;
-  /* margin-left: 200px; */
-`;
-
-const Img = styled.img`
-  border-radius: 50px;
-  width: 50px;
-  height: auto;
-`;
-const ImgBig = styled.img`
-  border-radius: 3px;
-  /* width: 500px; */
-  max-width: 70%;
-  height: auto;
-  margin-left: 60px;
-`;
-const Master = styled.div`
-  /* border: 1px solid pink; */
-  max-width: 100vw;
-`;
-
-const TopLine = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  line-height: 25px;
 `;
 
 const APost = styled.div`
-  /* display: flex; */
-  margin-bottom: 25px;
-  border-bottom: 1px solid var(--morning-background);
-  padding-bottom: 20px;
-  padding-left: 20px;
-  /* text-align: wrap; */
-  /* max-width: 600px; */
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--yellow-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  gap: 20px;
+  /* align-items: center; */
+  margin: 15px;
+  /* margin-top: -15px; */
+  padding: 5px 5px;
   transition: all 300ms ease-out;
   &:hover {
     transform: scale(1.02);
-    background: var(--morning-background);
+    background: var(--yellow-color);
     border-radius: 20px;
     cursor: pointer;
   }
 `;
+const ImageBigContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 25px;
+  margin-right: 15px;
+`;
+const Img = styled.img`
+  /* position: relative; */
+  /* left: 20px;
+  top: 25px; */
+  border-radius: 50px;
+  border: 3px solid white;
+  width: 50px;
+  height: auto;
+  margin: 0;
+  z-index: 2;
+`;
+const ImgBig = styled.img`
+  position: relative;
+  top: -30px;
+  left: 5px;
+  border-radius: 10px;
+  max-width: 300px;
+  height: auto;
+  z-index: 1;
+`;
+
 const NameHandl = styled.div`
+  display: flex;
+  flex-direction: row;
   font-weight: 700;
-  width: 350px;
   transition: all 300ms ease-out;
   &:hover {
     transform: scale(1.05);
-    background: #ffe8f1;
+    background: var(--gold-color);
     border-radius: 10px;
     cursor: pointer;
   }
 `;
 
 const Status = styled.div`
+  margin: 15px 0;
   font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
 
 const Span = styled.span`
@@ -220,9 +243,9 @@ const Span = styled.span`
   font-size: 14px;
 `;
 
-const TweetStatus = styled.p`
+const PostStatus = styled.p`
   font-weight: 400;
-  word-break: break-all;
+  word-break: break-word;
 `;
 
 export default HomeFeed;
