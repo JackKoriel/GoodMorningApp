@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-// import Navbar from "./Navbar";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { currentUserContext } from "./CurrentUserContext";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -14,12 +12,13 @@ import Horoscope from "./Horoscope";
 import { GiRayGun } from "react-icons/gi";
 import Axios from "axios";
 import { useHistory } from "react-router";
-// import { UserContext } from "./UserContext";
 
-const SignUp = () => {
+const Settings = () => {
   let history = useHistory();
-  //   let history = useHistory();
-  //   const { setUserNow } = useContext(UserContext);
+  const {
+    user: { _id, handle },
+  } = useContext(currentUserContext);
+  // console.log(_id);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -116,10 +115,6 @@ const SignUp = () => {
     event.preventDefault();
   };
 
-  const handleClickSignin = () => {
-    history.push("/signin");
-  };
-
   const handleClick = (ev) => {
     // console.log("usename", username);
     ev.preventDefault();
@@ -145,7 +140,7 @@ const SignUp = () => {
       ).then((json) => {
         // console.log("files from couldinary ", res, json);
 
-        fetch("/api/signup", {
+        fetch(`/api/profile/${_id}`, {
           method: "POST",
           body: JSON.stringify({
             handle: username,
@@ -166,8 +161,8 @@ const SignUp = () => {
           .then((resP) => resP.json())
           .then((jsonP) => {
             console.log(jsonP.data);
-            if (jsonP.status === 201) {
-              history.push("/signin");
+            if (jsonP.status === 200) {
+              history.push(`/${handle}`);
             }
             // console.log(json.user[0]);
             // const { status, error } = json;
@@ -198,14 +193,11 @@ const SignUp = () => {
   };
 
   return (
-    <Master>
-      <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639348302/1165336_krjkkd.jpg" />
+    <MasterContainer>
+      <Header>
+        <h1>Edit profile information:</h1>
+      </Header>
       <SignContainer>
-        <SuneriseLogo style={{ marginTop: "25px" }} />
-        <h1>
-          Join the Good Morning Web App today and share your mood with your
-          friends
-        </h1>
         <div
           style={{
             width: "100%",
@@ -358,33 +350,38 @@ const SignUp = () => {
           {/* {subStatus === "pending" ? (
               <i className="fa fa-circle-o-notch fa-spin" />
             ) : ( */}
-          Submit
+          Confirm
           {/* )} */}
         </Button>
-        <div style={{ marginTop: "25px" }}>
-          <h3>Already have an account?</h3>
-          <Button onClick={handleClickSignin}>Sign in</Button>
-        </div>
       </SignContainer>
-      {/* {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>} */}
-    </Master>
+    </MasterContainer>
   );
 };
 
-const Master = styled.div`
+const MasterContainer = styled.div`
+  background: var(--beige-color);
+  max-width: 700px;
+  height: auto;
   display: flex;
-  height: 100vh;
-  width: 100vw;
-  flex-direction: row;
-  justify-content: center;
-  /* flex: 0.5; */
+  flex-direction: column;
+  padding: 20px 10px;
+  overflow: scroll;
+  -ms-overflow-style: none; /*for IE*/
+  scrollbar-width: none; /*for Firefox*/
+  /*for Chrome*/
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
-const Background = styled.img`
-  z-index: 1;
+
+const Header = styled.div`
+  font-size: 20px;
+  font-weight: 900;
+  margin-left: 20px;
+  margin-top: 50px;
 `;
 const SignContainer = styled.div`
   /* width: 100%; */
-  border-left: 2px solid var(--gold-color);
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -392,7 +389,7 @@ const SignContainer = styled.div`
   align-items: center;
   gap: 5px;
   background: var(--beige-color);
-  padding: 100px 150px;
+  padding: 50px 100px;
 `;
 
 const AvatarInput = styled.div`
@@ -438,20 +435,6 @@ const lableStyle = {
   paddingLeft: "15px",
 };
 
-const Button = styled.button`
-  width: 100%;
-  padding: 15px 0;
-  color: white;
-  background-color: var(--blue-color);
-  font-weight: 900;
-  font-size: 17px;
-  border: none;
-  border-radius: 5px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const SelectStyle = {
   width: "100%",
   background: "white",
@@ -461,23 +444,49 @@ const SelectStyle = {
   border: "1px solid lightgray",
 };
 
-const ErrorMsg = styled.div`
+const Button = styled.button`
+  margin-top: 40px;
+  background-color: var(--blue-color);
+  border: 0 solid #e5e7eb;
+  box-sizing: border-box;
+  color: white;
   display: flex;
-  position: absolute;
-  margin-top: 300px;
-  color: var(--blue-color);
-  background: white;
-  border: 4px solid var(--blue-color);
-  text-align: center;
+  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 700;
   justify-content: center;
-  align-items: center;
-  /* border: none; */
-  padding: 20 px;
-  width: 250px;
-  height: 70px;
-  border-radius: 10px;
-  font-size: 20px;
-  font-weight: 900;
-  font-family: var(--heading-font-family);
+  line-height: 1.75rem;
+  padding: 0.75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  &&:focus {
+    outline: 0;
+  }
+  &&:hover:after {
+    bottom: 2px;
+    left: 2px;
+  }
+  &&:after {
+    content: "";
+    position: absolute;
+    border: 1px solid #000000;
+    bottom: 4px;
+    left: 4px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
+  }
 `;
-export default SignUp;
+
+export default Settings;

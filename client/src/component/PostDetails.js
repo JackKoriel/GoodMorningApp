@@ -127,6 +127,9 @@ const PostObj = styled.div`
 `;
 
 const APost = styled.div`
+  max-width: 700px;
+  background: var(--beige-color);
+  height: auto;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--yellow-color);

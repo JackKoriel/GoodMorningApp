@@ -114,11 +114,23 @@ const Progress = styled.div`
 `;
 
 const MasterContainer = styled.div`
+  background: var(--beige-color);
+  max-width: 700px;
+  height: auto;
   display: flex;
   flex-direction: column;
   /* overflow: scroll; */
-  margin: 20px 0;
+  padding: 20px 10px;
+  /* margin: 15px; */
+  gap: 20px;
   /* text-decoration: none; */
+  overflow: scroll;
+  -ms-overflow-style: none; /*for IE*/
+  scrollbar-width: none; /*for Firefox*/
+  /*for Chrome*/
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Article = styled.a`
@@ -130,8 +142,15 @@ const Article = styled.a`
   justify-content: center;
   align-items: center;
   transition: all 300ms ease-out;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  padding: 5px 5px;
+  transition: all 300ms ease-out;
   &:hover {
     transform: scale(1.02);
+    background: var(--yellow-color);
+    border-radius: 20px;
     cursor: pointer;
   }
 `;

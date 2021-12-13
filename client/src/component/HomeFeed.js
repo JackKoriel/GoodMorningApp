@@ -115,8 +115,9 @@ const MasterContainer = styled.div`
   display: flex;
   flex-direction: column;
   /* flex: 0.5; */
+  max-width: 700px;
   border-right: 1px solid var(--yellow-color);
-  min-width: fit-content;
+  /* min-width: fit-content; */
   overflow-y: scroll;
   height: auto;
   -ms-overflow-style: none; /*for IE*/
@@ -125,6 +126,9 @@ const MasterContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  border-left: 1px solid var(--twitter-background);
+  border-right: 1px solid var(--twitter-background);
+  background-color: var(--beige-color);
 `;
 
 const Header = styled.div`

@@ -154,8 +154,20 @@ const Profile = () => {
 };
 
 const Master = styled.div`
-  max-width: 1200px;
-  min-width: 700px;
+  background: var(--beige-color);
+  max-width: 700px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+  gap: 20px;
+  overflow: scroll;
+  -ms-overflow-style: none; /*for IE*/
+  scrollbar-width: none; /*for Firefox*/
+  /*for Chrome*/
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const TextSection = styled.div`
   padding-left: 20px;

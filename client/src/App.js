@@ -19,6 +19,8 @@ import Favorite from "./component/Favorite";
 import Widgets from "./component/Widgets";
 import SignIn from "./component/SignIn";
 import SignUp from "./component/SignUp";
+import LogOut from "./component/LogOut";
+import Settings from "./component/Settings";
 import PostDetails from "./component/PostDetails";
 import { currentUserContext } from "./component/CurrentUserContext";
 import { PostContext } from "./component/PostContext";
@@ -33,44 +35,50 @@ const App = () => {
       <Router>
         <MasterContainer>
           {user.status === "active" && <SideNavbar />}
-          <Sections>
-            <Switch>
-              <Route path="/" exact>
-                {user.status === "idle" ? (
-                  <Redirect to="/signin" />
-                ) : (
-                  <HomeFeed />
-                )}
-              </Route>
-              <Route path="/signin">
-                {user.status === "active" ? <Redirect to="/" /> : <SignIn />}
-              </Route>
-              <Route path="/signup">
-                <SignUp />
-              </Route>
-              <Route path="/favorite">
-                <Favorite />
-              </Route>
-              <Route path="/reading-list">
-                <ReadingList />
-              </Route>
-              <Route path="/post/:postId">
-                <PostDetails />
-              </Route>
-              <Route path="/:profileId">
-                <Profile />
-              </Route>
-              <Route path="/horoscope">
-                <Horoscope />
-              </Route>
-              <Route path="/weather">
-                <Weather />
-              </Route>
-              <Route path="/news">
-                <News />
-              </Route>
-            </Switch>
-          </Sections>
+          {/* <Sections> */}
+          <Switch>
+            <Route path="/" exact>
+              {user.status === "idle" ? (
+                <Redirect to="/signup" />
+              ) : (
+                <HomeFeed />
+              )}
+            </Route>
+            <Route path="/signin">
+              {user.status === "active" ? <Redirect to="/" /> : <SignIn />}
+            </Route>
+            <Route path="/signup">
+              <SignUp />
+            </Route>
+            <Route path="/logout">
+              <LogOut />
+            </Route>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+            <Route path="/favorite">
+              <Favorite />
+            </Route>
+            <Route path="/reading-list">
+              <ReadingList />
+            </Route>
+            <Route path="/post/:postId">
+              <PostDetails />
+            </Route>
+            <Route path="/:profileId">
+              <Profile />
+            </Route>
+            <Route path="/horoscope">
+              <Horoscope />
+            </Route>
+            <Route path="/weather">
+              <Weather />
+            </Route>
+            <Route path="/news">
+              <News />
+            </Route>
+          </Switch>
+          {/* </Sections> */}
           {/* Widgest */}
           {user.status === "active" && <Widgets />}
         </MasterContainer>
@@ -82,12 +90,14 @@ const App = () => {
 const MasterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  max-width: 1500px;
+  justify-content: center;
+  /* max-width: 1500px; */
   height: 100vh;
+  /* width: 100vw; */
   margin-left: auto;
   margin-right: auto;
   /* padding: 0 10px; */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
   /* background-color: var(--lightBlue-color); */
 `;
 
@@ -96,7 +106,7 @@ const Sections = styled.div`
   height: 100vh;
   margin-top: 0px;
   /* margin-left: 30px; */
-  flex: 0.7;
+  /* flex: 0.7; */
   border-left: 1px solid var(--twitter-background);
   padding-left: 0px;
   border-right: 1px solid var(--twitter-background);

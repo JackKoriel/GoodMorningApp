@@ -15,7 +15,7 @@ const Widgets = () => {
 };
 
 const Master = styled.div`
-  flex: 0.25;
+  flex: 0.3;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -25,6 +25,7 @@ const Master = styled.div`
   background-color: var(--brown-color);
   padding-right: 25px;
   padding-left: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 export default Widgets;

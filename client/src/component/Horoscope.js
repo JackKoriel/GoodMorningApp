@@ -121,7 +121,7 @@ const StarFav = styled.button`
   background: transparent;
   border: none;
   color: white;
-  bottom: 10px;
+  bottom: 5px;
   right: 10px;
   font-size: 30px;
   transition: all 400ms ease-in-out;
@@ -148,6 +148,8 @@ const Background = styled.img`
 `;
 
 const Desc = styled.div`
+  padding: 0 10px;
+  margin-top: 10px;
   font-weight: 900;
   margin-bottom: 10px;
   text-align: center;

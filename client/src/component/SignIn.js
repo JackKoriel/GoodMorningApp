@@ -74,6 +74,7 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((json) => {
+        //put an if condition for success
         console.log("login", json);
         history.push("/");
         // console.log(json.user[0]);
@@ -99,89 +100,82 @@ const SignIn = () => {
     return <div>Loading</div>;
   }
   return (
-    <>
-      {/* <Navbar /> */}
-      <Master>
-        {/* <Background src={backgroundImage} /> */}
-        <SignContainer>
-          <TextField
-            onChange={(ev) => handleChangeUsername(ev)}
-            id="outlined-size-small"
-            placeholder="Your first name"
-            variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={username}
-          />
-          <OutlinedInput
-            onChange={(ev) => handleChangePassword(ev)}
-            type={showPassword ? "text" : "password"}
-            value={password}
-            id="outlined-size-small"
-            placeholder="Your password"
-            variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <TextField
-            onChange={(ev) => handleChangeEmail(ev)}
-            id="outlined-size-small"
-            placeholder="Your email"
-            variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
-            value={email}
-          />
-          <Button onClick={(ev) => handleClick(ev)}>
-            {/* {subStatus === "pending" ? (
+    <Master>
+      {/* <Background src={backgroundImage} /> */}
+      <SignContainer>
+        <TextField
+          onChange={(ev) => handleChangeUsername(ev)}
+          id="outlined-size-small"
+          placeholder="Your first name"
+          variant="outlined"
+          style={{ width: "100%", background: "white", borderRadius: "5px" }}
+          value={username}
+        />
+        <OutlinedInput
+          onChange={(ev) => handleChangePassword(ev)}
+          type={showPassword ? "text" : "password"}
+          value={password}
+          id="outlined-size-small"
+          placeholder="Your password"
+          variant="outlined"
+          style={{ width: "100%", background: "white", borderRadius: "5px" }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+        <TextField
+          onChange={(ev) => handleChangeEmail(ev)}
+          id="outlined-size-small"
+          placeholder="Your email"
+          variant="outlined"
+          style={{ width: "100%", background: "white", borderRadius: "5px" }}
+          value={email}
+        />
+        <Button onClick={(ev) => handleClick(ev)}>
+          {/* {subStatus === "pending" ? (
               <i className="fa fa-circle-o-notch fa-spin" />
             ) : ( */}
-            "Submit"
-            {/* )} */}
-          </Button>
-        </SignContainer>
-        {/* {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>} */}
-      </Master>
-    </>
+          Sign in
+          {/* )} */}
+        </Button>
+      </SignContainer>
+      {/* {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>} */}
+    </Master>
   );
 };
 
 const Master = styled.div`
-  /* position: relative; */
   display: flex;
-  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
   justify-content: center;
   align-items: center;
-  max-height: 100vh;
+  background-image: url("https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639365072/wp5784428_ryak7y.jpg");
 `;
-const Background = styled.img`
-  width: 100%;
-  height: auto;
-  z-index: -100;
-`;
+
 const SignContainer = styled.div`
-  /* position: absolute; */
-  /* margin-top: -700px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 100px 30px;
-  width: 350px;
-  height: 150px;
   gap: 5px;
-  /* border: 1px red solid; */
-  background-color: rgb(220, 220, 220, 0.5);
+  background: var(--beige-color);
   border-radius: 5px;
+  padding: 50px;
+  border-radius: 10px;
+  border: 2px solid var(--gold-color);
+  width: 25%;
+  height: 25%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 const Button = styled.button`
   width: 100%;
@@ -189,10 +183,12 @@ const Button = styled.button`
   color: white;
   background-color: var(--blue-color);
   font-weight: 900;
-  font-size: 23;
+  font-size: 20px;
   border: none;
   border-radius: 5px;
+  transition: all 300ms ease-out;
   &:hover {
+    transform: scale(1.02);
     cursor: pointer;
   }
 `;

@@ -11,9 +11,9 @@ const SuneriseLogo = () => {
 };
 
 const Logo = styled.img`
-  width: 50%;
+  width: 30%;
   min-width: 100px;
-  margin-left: 20px;
+  /* margin-left: 20px; */
 `;
 
 export default SuneriseLogo;

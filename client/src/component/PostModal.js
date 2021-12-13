@@ -87,7 +87,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
       "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
       formData
     ).then((res) => {
-      console.log("files from couldinary ", res);
+      // console.log("files from couldinary ", res);
       //send image url with status to backend
       fetch("/api/post", {
         method: "POST",

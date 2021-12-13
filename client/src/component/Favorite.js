@@ -95,8 +95,9 @@ const Favorite = () => {
                 >
                   <FiXCircle
                     onMouseOver={({ target }) =>
-                      (target.style.fill = "var(--gold-color)")
+                      (target.style.fill = "var(--blue-color)")
                     }
+                    style={{ fill: "white" }}
                     onMouseOut={({ target }) => (target.style.fill = "white")}
                   />
                 </ButtonRemove>
@@ -114,6 +115,7 @@ const Empty = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+  max-width: 700px;
 `;
 
 const Progress = styled.div`
@@ -130,22 +132,29 @@ const Progress = styled.div`
 `;
 
 const MasterContainer = styled.div`
-  /* border: 1px solid red; */
+  background: var(--beige-color);
+  max-width: 700px;
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  /* overflow: scroll; */
-  /* margin: 20px 0; */
-  /* text-decoration: none; */
+  height: auto;
+  /* padding: 20px 10px; */
   margin-top: 5px;
   margin-bottom: 5px;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  overflow: scroll;
+  -ms-overflow-style: none; /*for IE*/
+  scrollbar-width: none; /*for Firefox*/
+  /*for Chrome*/
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Background = styled.img`
-  position: relative;
+  /* position: relative; */
+  background-repeat: repeat-y;
   width: inherit;
   height: inherit;
   z-index: 1;
@@ -155,9 +164,10 @@ const Background = styled.img`
 `;
 
 const HoroContainer = styled.div`
-  margin: 30px 0;
+  /* margin: 10px 0; */
   padding: 10px 20px;
-  position: absolute;
+  position: relative;
+  top: -990px;
   text-decoration: none;
   display: flex;
   flex-direction: column;

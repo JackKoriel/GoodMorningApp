@@ -249,10 +249,19 @@ const logoutUser = async (req, res) => {
 //***************************
 const addUser = async (req, res) => {
   //get user information form front end using POST
-  const { handle, email, password, displayName, birthDate, sign, location } =
-    req.body;
-
-  //declair client in mongo
+  const {
+    handle,
+    email,
+    password,
+    displayName,
+    city,
+    sign,
+    country,
+    avatarSrc,
+    bannerSrc,
+  } = req.body;
+  // console.log(req.body);
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
   //some validations for provided information
@@ -261,8 +270,11 @@ const addUser = async (req, res) => {
     !password ||
     !email ||
     !displayName ||
-    !birthDate ||
-    !location
+    !city ||
+    !country ||
+    !sign ||
+    !avatarSrc ||
+    !bannerSrc
   ) {
     return res.status(400).json({
       status: 400,
@@ -272,6 +284,11 @@ const addUser = async (req, res) => {
     return res.status(400).json({
       status: 400,
       message: "Please provide a valid email address.",
+    });
+  } else if (country.length > 2) {
+    return res.status(400).json({
+      status: 400,
+      message: "Please provide only the country code, example: Canada = CA.",
     });
   }
   //try catch finally function
@@ -292,7 +309,7 @@ const addUser = async (req, res) => {
     if (user) {
       res.status(409).json({
         status: 409,
-        data: "Username already exist, please try a different username",
+        data: "Username already exists, please try a different username",
       });
     } else {
       //create the new user
@@ -301,8 +318,6 @@ const addUser = async (req, res) => {
           ...req.body,
           password: hashPassword,
           _id,
-          avatarSrc: "",
-          bannerSrc: "",
           joined: date,
           bio: "",
           followingIds: [],
@@ -332,10 +347,21 @@ const addUser = async (req, res) => {
 //***************************
 const updateUser = async (req, res) => {
   //get user information form front end using POST
-  const { handle, email, password, displayName, birthDate } = req.body;
+  const {
+    handle,
+    email,
+    password,
+    country,
+    city,
+    sign,
+    avatarSrc,
+    bannerSrc,
+    displayName,
+  } = req.body;
+  console.log("body", req.body);
   //get user handle from prams
   const { _id } = req.params;
-
+  console.log("param", _id);
   //verify user updating their profile and not other usersr
   if (req.session._id !== _id) {
     return res.status(401).json({
@@ -352,9 +378,30 @@ const updateUser = async (req, res) => {
     hashPassword = await bcrypt.hash(password, salt);
   }
   //declaring a value to use later with $set while updating the user
-  let value = { handle, email, password: hashPassword, displayName, birthDate };
+  let value = {
+    handle,
+    email,
+    password: hashPassword,
+    city,
+    sign,
+    country,
+    avatarSrc,
+    bannerSrc,
+    displayName,
+  };
   //the array will use foreach to check which element was provided by the user
-  let array = ["handle", "email", "password", "displayName", "birthDate"];
+  let array = [
+    "handle",
+    "email",
+    "password",
+    "displayName",
+    "city",
+    "sign",
+    "country",
+    "avatarSrc",
+    "bannerSrc",
+    "displayName",
+  ];
   array.forEach((element) => {
     if (!req.body[element]) {
       delete value[element];
