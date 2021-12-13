@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ImSad } from "react-icons/im";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-
+import { currentUserContext } from "./CurrentUserContext";
 const LogOut = () => {
   let history = useHistory();
+  const {
+    actions: { logoutUserStatus },
+  } = useContext(currentUserContext);
 
   const handleClickNo = () => {
     history.push("/");
@@ -16,6 +19,7 @@ const LogOut = () => {
       .then((res) => {
         console.log(res.data);
         history.push("/signup");
+        logoutUserStatus();
       })
       .catch((err) => {
         console.log(err);

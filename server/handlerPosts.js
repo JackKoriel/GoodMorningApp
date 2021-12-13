@@ -284,7 +284,7 @@ const sharePost = async (req, res) => {
     //updating the friend's reshare array in the post
     const friendPostUpdate = await db
       .collection("posts")
-      .updateOne({ _id: postId }, { $addToSet: { resharedBy: handle } });
+      .updateOne({ _id: postId }, { $addToSet: { sharedBy: handle } });
 
     //add the shared post under the current user's name
     const newPostUser = await db.collection("posts").insertOne({

@@ -8,11 +8,11 @@ import { FiHeart } from "react-icons/fi";
 // import { GiWizardFace } from "react-icons/gi";
 import { PostContext } from "./PostContext";
 
-const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
+const ActionBar = ({ postId, isLiked, isShared, numLikes, numShares }) => {
   const { setIsUpdating, isUpdating } = useContext(PostContext);
   const [likes, setLikes] = useState(isLiked);
   const [likesNum, setLikesNum] = useState(numLikes);
-  const [reposts, setRepost] = useState(false);
+  const [shared, setShared] = useState(isShared);
   const [repostsNum, setRepostsNum] = useState(0);
   // const [heartColor, setHeartColor] = useState("");
   // const [errorStatus, setErrorStatus] = useState(false);
@@ -47,6 +47,33 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
       });
   };
 
+  const handleClickShare = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    fetch(`/api/post/${postId}/share`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        shared: !shared,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          setShared(!shared);
+          setIsUpdating(true);
+        }
+      })
+      .catch((err) => {
+        // setErrorStatus(true);
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (likes) {
       setLikesNum(1);
@@ -57,18 +84,13 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
     }
   }, [likes]);
 
-  const handleClickRepost = (ev) => {
-    ev.stopPropagation();
-    setRepost(!reposts);
-  };
-
-  useEffect(() => {
-    if (reposts) {
-      setRepostsNum(1);
-    } else if (!reposts) {
-      setRepostsNum(0);
-    }
-  }, [reposts]);
+  // useEffect(() => {
+  //   if (reposts) {
+  //     setRepostsNum(1);
+  //   } else if (!reposts) {
+  //     setRepostsNum(0);
+  //   }
+  // }, [reposts]);
 
   // if (errorStatus) {
   //   return (
@@ -103,9 +125,19 @@ const ActionBar = ({ postId, isLiked, isRetweeted, numLikes, numRetweets }) => {
           </LittleHeart>
         </UnstyledActionButton>
       </Heart>
-      <Share>
+      <Share
+        onClick={(ev) => {
+          handleClickShare(ev);
+        }}
+      >
         <UnstyledActionButton>
-          <FiPlusSquare style={shareStyleActive} />
+          <LittleShare>
+            {shared ? (
+              <FiPlusSquare style={shareStyleActive} />
+            ) : (
+              <FiPlusSquare style={shareStyleInactive} />
+            )}
+          </LittleShare>
         </UnstyledActionButton>
       </Share>
     </Master>
@@ -123,6 +155,13 @@ const LittleHeart = styled.div`
   z-index: 10;
   &:active {
     color: red;
+  }
+`;
+
+const LittleShare = styled.div`
+  z-index: 10;
+  &:active {
+    color: blue;
   }
 `;
 
@@ -154,6 +193,11 @@ const Share = styled.div``;
 const shareStyleActive = {
   textShadow: "10px 10px 10px blue",
   fill: "white",
+  color: "black",
+};
+
+const shareStyleInactive = {
+  fill: "green",
   color: "black",
 };
 

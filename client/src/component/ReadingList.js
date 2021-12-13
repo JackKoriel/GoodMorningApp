@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import moment from "moment";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FiXCircle } from "react-icons/fi";
 import { FiBookOpen } from "react-icons/fi";
+import { currentUserContext } from "./CurrentUserContext";
+import { PostContext } from "./PostContext";
 
 const ReadingList = () => {
+  const { update, setUpdate } = useContext(currentUserContext);
+  const { newsStatus } = useContext(PostContext);
   const [readingList, setReadingList] = useState([]);
   const [status, setStatus] = useState("idle");
 
@@ -20,7 +24,7 @@ const ReadingList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [status]);
+  }, [status, newsStatus]);
 
   const handleRemove = (ev, _id) => {
     ev.preventDefault();
@@ -36,6 +40,7 @@ const ReadingList = () => {
       .then((res) => res.json())
       .then((data) => {
         setStatus("deleted");
+        setUpdate(!update);
       })
       .catch((err) => {
         console.log(err);
@@ -96,8 +101,12 @@ const ReadingList = () => {
 const Empty = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+  align-items: start;
+  margin-top: 0;
+  max-width: 700px;
+  width: 700px;
+  background-color: var(--beige-color);
+  padding: 100px 15px;
 `;
 
 const Progress = styled.div`

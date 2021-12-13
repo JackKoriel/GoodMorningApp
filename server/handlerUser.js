@@ -357,6 +357,7 @@ const updateUser = async (req, res) => {
     avatarSrc,
     bannerSrc,
     displayName,
+    bio,
   } = req.body;
   console.log("body", req.body);
   //get user handle from prams
@@ -388,6 +389,7 @@ const updateUser = async (req, res) => {
     avatarSrc,
     bannerSrc,
     displayName,
+    bio,
   };
   //the array will use foreach to check which element was provided by the user
   let array = [
@@ -401,6 +403,7 @@ const updateUser = async (req, res) => {
     "avatarSrc",
     "bannerSrc",
     "displayName",
+    "bio",
   ];
   array.forEach((element) => {
     if (!req.body[element]) {
@@ -448,14 +451,13 @@ const updateUser = async (req, res) => {
 };
 
 //***************************
-// ADD friend/follower
+// ADD friend/follow a friend
 //***************************
 const addFollower = async (req, res) => {
   //get the friend's handle from the params when in the friend's profile
-  const { _handle: friendHandle } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  //I can use express session
-  const { handle: userHandle } = req.body;
+  const { handle: friendHandle } = req.params;
+  //express session after signing in
+  let userHandle = req.session.handle;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
@@ -498,9 +500,9 @@ const addFollower = async (req, res) => {
 //***************************
 const removeFolower = async (req, res) => {
   //get the friend's handle from the params when in the friend's profile
-  const { _handle: friendHandle } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  const { handle: userHandle } = req.body;
+  const { handle: friendHandle } = req.params;
+  //express session after signing in
+  let userHandle = req.session.handle;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
 

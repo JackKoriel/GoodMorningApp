@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiBookmark } from "react-icons/fi";
+import { PostContext } from "./PostContext";
 
 const dummyData = [
   {
@@ -130,8 +131,12 @@ const dummyData = [
 ];
 
 const News = () => {
+  const { newsStatus, setNewsStatus } = useContext(PostContext);
+
   const {
     user: { location, email, readingList },
+    update,
+    setUpdate,
   } = useContext(currentUserContext);
 
   const [topNews, setTopNews] = useState(dummyData);
@@ -158,6 +163,8 @@ const News = () => {
       .then((data) => {
         if (data.status === 201) {
           setReadingL(true);
+          setUpdate(!update);
+          setNewsStatus(!newsStatus);
         }
       });
   };

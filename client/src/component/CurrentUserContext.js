@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState, useReducer } from "react";
 export const currentUserContext = createContext(null);
 
 const initialState = {
-  status: "idle",
+  status: "loading",
   handle: null,
   avatarSrc: null,
 };
@@ -18,8 +18,8 @@ function reducer(state, action) {
         email: action.email,
         handle: action.handle,
         sign: action.sign,
-        location: action.location,
-        birthDate: action.birthDate,
+        country: action.country,
+        city: action.city,
         avatarSrc: action.avatarSrc,
         bannerSrc: action.bannerSrc,
         joined: action.joined,
@@ -34,7 +34,13 @@ function reducer(state, action) {
     case "no-user-found": {
       return {
         ...state,
-        status: "error",
+        status: "idle",
+      };
+    }
+    case "log-out": {
+      return {
+        ...initialState,
+        status: "idle",
       };
     }
     default:
@@ -46,6 +52,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [user, dispatch] = useReducer(reducer, initialState);
   console.log(user.readingList);
   const [errorStatus, setErrorStatus] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   const checkingUserStatus = (data) => {
     dispatch({ type: "received-user-status", ...data });
@@ -53,6 +60,10 @@ export const CurrentUserProvider = ({ children }) => {
 
   const noAvailableUserStatus = () => {
     dispatch({ type: "no-user-found" });
+  };
+
+  const logoutUserStatus = () => {
+    dispatch({ type: "log-out" });
   };
 
   // fetch user info based on session
@@ -72,11 +83,17 @@ export const CurrentUserProvider = ({ children }) => {
         console.log(err);
         noAvailableUserStatus();
       });
-  }, []);
+  }, [update]);
 
   return (
     <currentUserContext.Provider
-      value={{ errorStatus, user, actions: { checkingUserStatus } }}
+      value={{
+        errorStatus,
+        user,
+        actions: { checkingUserStatus, logoutUserStatus },
+        update,
+        setUpdate,
+      }}
     >
       {children}
     </currentUserContext.Provider>

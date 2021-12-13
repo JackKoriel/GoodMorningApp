@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
+import { PostContext } from "./PostContext";
 
 const dummyData = {
   date_range: "Sep 23 - Oct 22",
@@ -16,8 +17,11 @@ const dummyData = {
 };
 
 const Horoscope = () => {
+  const { horoStatus, setHoroStatus } = useContext(PostContext);
   const {
     user: { sign, email, favorite },
+    update,
+    setUpdate,
   } = useContext(currentUserContext);
   console.log("horoscope fav", favorite);
 
@@ -41,7 +45,12 @@ const Horoscope = () => {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {});
+      .then((data) => {
+        if (data.status === 201) {
+          setUpdate(!update);
+          setHoroStatus(!horoStatus);
+        }
+      });
   };
 
   // useEffect(() => {

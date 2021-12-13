@@ -77,9 +77,9 @@ const PostDetails = () => {
               <ActionBar
                 postId={postData._id}
                 isLiked={postData.isLiked}
-                isRetweeted={postData.isRetweeted}
+                isShared={postData.isShared}
                 numLikes={postData.numLikes}
-                numRetweets={postData.numRetweets}
+                numShares={postData.numShares}
               />
             </ImageBigContainer>
             <Status>

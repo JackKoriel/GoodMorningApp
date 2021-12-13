@@ -41,10 +41,10 @@ router.post("/api/signup", addUser);
 router.post("/api/profile/:_id", authRequired, updateUser);
 
 // add follower to followers list
-router.patch("/api/:_handle/profile/follow", authRequired, addFollower);
+router.patch("/api/:handle/profile/follow", authRequired, addFollower);
 
 // remove follower from followers list
-router.patch("/api/:_handle/profile/unfollow", authRequired, removeFolower);
+router.patch("/api/:handle/profile/unfollow", authRequired, removeFolower);
 
 //get current user
 router.get("/api/user", getUser);

@@ -2,26 +2,56 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Avatar } from "@material-ui/core";
 import { currentUserContext } from "./CurrentUserContext";
-import { PostContext } from "./PostContext";
+import { useHistory } from "react-router";
 
 const PostBox = () => {
+  let history = useHistory();
   const {
-    user: { status, avatarSrc, handle },
+    user: { status, avatarSrc, handle, _id },
   } = useContext(currentUserContext);
+  const [userBio, setUserBio] = useState("");
   let placeholderText = `How is your mood today ${handle}?`;
-  // const onClickVisiblityHandle = () => {
-  //   setModalStatus(true);
-  // };
+
+  const handleChangeUserBio = (ev) => {
+    setUserBio(ev.target.value);
+  };
+
+  const handleClickUserBio = (ev) => {
+    ev.preventDefault();
+
+    fetch(`/api/profile/${_id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        bio: userBio,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resP) => resP.json())
+      .then((jsonP) => {
+        console.log(jsonP.data);
+        if (jsonP.status === 200) {
+          history.push(`/${handle}`);
+        }
+      });
+  };
 
   return (
     <MasterContainer>
       <Form>
         <AvatarContainer>
           <Avatar src={avatarSrc} />
-          <Input placeholder={placeholderText} type="text" />
+          <Input
+            placeholder={placeholderText}
+            type="text"
+            onChange={(ev) => handleChangeUserBio(ev)}
+            value={userBio}
+          />
         </AvatarContainer>
 
-        <Button>Mood-on!</Button>
+        <Button onClick={(ev) => handleClickUserBio(ev)}>Mood-on!</Button>
       </Form>
     </MasterContainer>
   );

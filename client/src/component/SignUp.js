@@ -300,7 +300,7 @@ const SignUp = () => {
           onChange={(ev) => handleChangeSign(ev)}
           style={SelectStyle}
         >
-          <option value="" disabled selected hidden>
+          <option value="" disabled hidden>
             Choose your zodiac sign
           </option>
           {horoscpes.map((horosope, index) => {
@@ -381,6 +381,7 @@ const Master = styled.div`
 `;
 const Background = styled.img`
   z-index: 1;
+  max-width: 50%;
 `;
 const SignContainer = styled.div`
   /* width: 100%; */
@@ -392,7 +393,7 @@ const SignContainer = styled.div`
   align-items: center;
   gap: 5px;
   background: var(--beige-color);
-  padding: 100px 150px;
+  padding: 2% 2%;
 `;
 
 const AvatarInput = styled.div`

@@ -5,41 +5,91 @@ import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import FeedRendering from "./FeedRendering";
 import styled from "styled-components";
+import { GiSpellBook } from "react-icons/gi";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 
 const Profile = () => {
-  const { profileId } = useParams();
+  const { handle } = useParams();
+
+  const { user, errorStatus, update, setUpdate } =
+    useContext(currentUserContext);
+  // console.log("userProfile", user.handle);
+  // console.log("userObject", user);
+
   const [userData, setUserData] = useState({});
   // const [location, setLocation] = useState(true);
   const [status, setStatus] = useState(false);
   const [errorStatusProfiles, setErrorStatusProfiles] = useState(false);
-  const [followingText, setFollowingText] = useState(true);
-  let handle = profileId;
-  // console.log("handle", handle);
-  // console.log(profileId);
+  const [followingText, setFollowingText] = useState(null);
+
+  useEffect(() => {
+    if (user.followingIds?.includes(handle)) {
+      setFollowingText(true);
+    }
+  }, [update]);
 
   useEffect(() => {
     fetch(`/api/users/${handle}`)
       .then((res) => res.json())
       .then((data) => {
         setUserData(data.data);
-        console.log("profile data", data);
+        // console.log("profile data", data);
         setStatus(true);
       })
       .catch((err) => {
         setErrorStatusProfiles(true);
-        console.log(err);
+        console.log(err.stack);
       });
-  }, []);
+  }, [handle, update]);
 
   const followingButtonHandle = (ev) => {
-    setFollowingText(!followingText);
+    ev.preventDefault();
+
+    if (followingText) {
+      fetch(`/api/${handle}/profile/unfollow`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        // body: JSON.stringify({
+        //   current_date,
+        // }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFollowingText(false);
+          setUpdate(!update);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      fetch(`/api/${handle}/profile/follow`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        // body: JSON.stringify({
+        //   current_date,
+        // }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFollowingText(true);
+          setUpdate(!update);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   let followingFinalText;
   followingText
     ? (followingFinalText = "Following")
-    : (followingFinalText = "Unfollowed");
+    : (followingFinalText = "Not following");
   // useEffect(() => {
   //   if (!userData.hasOwnProperty("location")) {
   //     setLocation(false);
@@ -47,16 +97,12 @@ const Profile = () => {
   // }, []);
   // console.log(location);
 
-  const { user, errorStatus } = useContext(currentUserContext);
-  // console.log("state", state.handle);
-  // console.log(state.userData.handle);
-  console.log("userProfile", user.handle);
-  console.log("userObject", user);
-
   let userProfile = {};
   handle === user.handle ? (userProfile = user) : (userProfile = userData);
-  console.log(userProfile.handle);
-  console.log(handle);
+  // console.log(userProfile.handle);
+  // console.log(handle);
+  console.log(user.followingIds);
+
   // if (errorStatus || errorStatusProfiles) {
   //   return (
   //     <div
@@ -88,11 +134,10 @@ const Profile = () => {
         <CircularProgress />
       ) : (
         <Master>
-          {/* top container for profile pic and background */}
           <div>
             <Banner src={userProfile?.bannerSrc} />
             <Avatar src={userProfile?.avatarSrc} />
-            {userProfile?.isFollowingYou && (
+            {userProfile?.handle !== user?.handle && (
               <FollowButton
                 followingText={followingText}
                 onClick={(ev) => followingButtonHandle(ev)}
@@ -123,30 +168,43 @@ const Profile = () => {
             <UnderStatus>
               <LocationTime>
                 <Location>
-                  <i className="fas fa-map-marker-alt"></i>{" "}
-                  {userData.location
-                    ? userProfile?.location
-                    : "Location Unknown"}
+                  <i className="fas fa-map-marker-alt"></i> Location{" "}
+                  {userData.country ? (
+                    <strong>
+                      {userProfile?.city + "," + " " + userProfile?.country}
+                    </strong>
+                  ) : (
+                    <strong>Unknown</strong>
+                  )}
                 </Location>
                 <Time>
                   <i className="far fa-calendar-alt"></i> Joined{" "}
-                  {moment(userProfile?.joined).format(" MMMM YYYY")}
+                  <strong>{userProfile?.joined}</strong>
                 </Time>
+                <Horoscope>
+                  <GiSpellBook style={{ fontSize: "22px" }} /> Sign{" "}
+                  <strong>{userProfile?.sign}</strong>
+                </Horoscope>
               </LocationTime>
 
               {/* do it later after you fix the BE  */}
 
               <Followers>
                 <div>
-                  <Span>{userProfile?.numFollowing}</Span> following
+                  following <Span>{userProfile?.followingIds.length}</Span>
                 </div>
                 <div>
-                  <Span>{userProfile?.numFollowers}</Span> followers
+                  followers <Span>{userProfile?.followerIds.length}</Span>
                 </div>
               </Followers>
             </UnderStatus>
           </TextSection>
-          <FeedRendering handle={handle} name={userProfile.displayName} />
+          <FeedRendering
+            handle={handle}
+            name={userProfile.displayName}
+            friend={userProfile.handle}
+            currentUser={user.handle}
+          />
         </Master>
       )}
     </>
@@ -176,8 +234,9 @@ const TextSection = styled.div`
 
 const Banner = styled.img`
   margin-top: 0;
-  height: 200px;
+  height: 250px;
   width: 100%;
+  border-radius: 10px;
 `;
 
 const Avatar = styled.img`
@@ -277,10 +336,16 @@ const UnderStatus = styled.div`
 
 const LocationTime = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: row;
   gap: 30px;
 `;
 
+const Horoscope = styled.div`
+  /* display: flex;
+  flex-direction: row;
+  gap: 30px; */
+`;
 const Location = styled.div``;
 
 const Time = styled.div``;

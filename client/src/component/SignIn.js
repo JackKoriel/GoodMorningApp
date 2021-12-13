@@ -13,7 +13,10 @@ import { useHistory } from "react-router";
 
 const SignIn = () => {
   let history = useHistory();
-  const { user } = useContext(currentUserContext);
+  const {
+    user,
+    actions: { checkingUserStatus },
+  } = useContext(currentUserContext);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,6 +79,7 @@ const SignIn = () => {
       .then((json) => {
         //put an if condition for success
         console.log("login", json);
+        checkingUserStatus(json.data);
         history.push("/");
         // console.log(json.user[0]);
         // const { status, error } = json;

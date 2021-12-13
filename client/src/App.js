@@ -29,6 +29,7 @@ const App = () => {
   const { user } = useContext(currentUserContext);
   const { posts, modalStatus, setModalStatus } = useContext(PostContext);
   // console.log(posts);
+  console.log("status: ", user.status);
   return (
     <>
       <GlobalStyles />
@@ -65,7 +66,7 @@ const App = () => {
             <Route path="/post/:postId">
               <PostDetails />
             </Route>
-            <Route path="/:profileId">
+            <Route path="/:handle">
               <Profile />
             </Route>
             <Route path="/horoscope">

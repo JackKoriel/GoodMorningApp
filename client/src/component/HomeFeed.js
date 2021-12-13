@@ -8,6 +8,7 @@ import ActionBar from "./ActionBar";
 import moment from "moment";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useHistory } from "react-router-dom";
+import SearchBar from "./SearchBar";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 
@@ -45,6 +46,7 @@ const HomeFeed = () => {
         </Progress>
       ) : (
         <MasterContainer>
+          <SearchBar />
           <Header>
             <Video
               src="https://res.cloudinary.com/dhj5ncbxs/video/upload/ac_none/v1639268660/video-3_nfxgfx.mp4"
@@ -80,9 +82,9 @@ const HomeFeed = () => {
                       <ActionBar
                         postId={post._id}
                         isLiked={post.isLiked}
-                        isRetweeted={post.isRetweeted}
+                        isShared={post.isShared}
                         numLikes={post.numLikes}
-                        numRetweets={post.numRetweets}
+                        numShares={post.numShares}
                       />
                     </ImageBigContainer>
 

@@ -37,6 +37,9 @@ export const PostProvider = ({ children }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
+  const [newsStatus, setNewsStatus] = useState(false);
+  const [horoStatus, setHoroStatus] = useState(false);
+
   const checkingPosts = (data) => {
     dispatch({ type: "received-tweets", data });
   };
@@ -67,6 +70,10 @@ export const PostProvider = ({ children }) => {
         setIsUpdating,
         modalStatus,
         setModalStatus,
+        newsStatus,
+        setNewsStatus,
+        horoStatus,
+        setHoroStatus,
       }}
     >
       {children}

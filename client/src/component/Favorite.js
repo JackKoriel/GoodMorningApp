@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FiXCircle } from "react-icons/fi";
 import { FiMeh } from "react-icons/fi";
+import { currentUserContext } from "./CurrentUserContext";
+import { PostContext } from "./PostContext";
 
 const Favorite = () => {
+  const { update, setUpdate } = useContext(currentUserContext);
+  const { horoStatus } = useContext(PostContext);
   const [favList, setFavList] = useState([]);
   const [status, setStatus] = useState("idle");
   console.log("favlist", favList);
@@ -20,7 +24,7 @@ const Favorite = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [status]);
+  }, [status, horoStatus]);
 
   const handleRemove = (ev, _id, current_date) => {
     ev.preventDefault();
@@ -39,6 +43,7 @@ const Favorite = () => {
       .then((res) => res.json())
       .then((data) => {
         setStatus("deleted");
+        setUpdate(!update);
       })
       .catch((err) => {
         console.log(err);
@@ -113,9 +118,12 @@ const Favorite = () => {
 const Empty = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+  align-items: start;
+  margin-top: 0;
   max-width: 700px;
+  width: 650px;
+  background-color: var(--beige-color);
+  padding: 100px 15px;
 `;
 
 const Progress = styled.div`

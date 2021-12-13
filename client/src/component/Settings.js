@@ -17,6 +17,8 @@ const Settings = () => {
   let history = useHistory();
   const {
     user: { _id, handle },
+    update,
+    setUpdate,
   } = useContext(currentUserContext);
   // console.log(_id);
   const [username, setusername] = useState("");
@@ -162,6 +164,7 @@ const Settings = () => {
           .then((jsonP) => {
             console.log(jsonP.data);
             if (jsonP.status === 200) {
+              setUpdate(!update);
               history.push(`/${handle}`);
             }
             // console.log(json.user[0]);

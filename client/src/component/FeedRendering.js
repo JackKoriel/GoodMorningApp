@@ -4,11 +4,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
 import ActionBar from "./ActionBar";
+import { FiXCircle } from "react-icons/fi";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
-import { AiOutlineRetweet } from "react-icons/ai";
 
-const FeedRendering = ({ handle, name }) => {
+const FeedRendering = ({ handle, name, currentUser, friend }) => {
   let history = useHistory();
 
   const [posts, setPosts] = useState();
@@ -26,17 +26,36 @@ const FeedRendering = ({ handle, name }) => {
         setErrorStatus(true);
         // console.log(err);
       });
-  }, []);
+  }, [handle]);
 
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
     ev.stopPropagation();
+
     // console.log("Profile:", handleProfile);
   };
 
   const handleClickPost = (ev, _id) => {
     history.push(`/post/${_id}`);
     // console.log("hello");
+  };
+
+  const handleRemove = (ev, _id) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    fetch(`/api/post/${_id}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {})
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //   if (errorStatus) {
@@ -93,9 +112,9 @@ const FeedRendering = ({ handle, name }) => {
                     <ActionBar
                       tweetId={post._id}
                       isLiked={post.isLiked}
-                      isRetweeted={post.isRetweeted}
+                      isShared={post.isShared}
                       numLikes={post.numLikes}
-                      numRetweets={post.numRetweets}
+                      numShares={post.numShares}
                     />
                   </ImageBigContainer>
 
@@ -114,6 +133,23 @@ const FeedRendering = ({ handle, name }) => {
                       {moment(post.timestamp).format(" MMM Do")}
                     </Span>
                   </Status>
+                  {friend === currentUser && (
+                    <ButtonRemove
+                      onClick={(ev) => {
+                        handleRemove(ev, post._id);
+                      }}
+                    >
+                      <FiXCircle
+                        onMouseOver={({ target }) =>
+                          (target.style.fill = "var(--blue-color)")
+                        }
+                        style={{ fill: "white" }}
+                        onMouseOut={({ target }) =>
+                          (target.style.fill = "white")
+                        }
+                      />
+                    </ButtonRemove>
+                  )}
                 </APost>
               );
             })}
@@ -137,6 +173,7 @@ const Progress = styled.div`
 `;
 
 const APost = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   border: 1px solid var(--yellow-color);
@@ -211,4 +248,17 @@ const PostStatus = styled.p`
   word-break: break-word;
 `;
 
+const ButtonRemove = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border: none;
+  background: none;
+  font-size: 30px;
+  &:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+    fill: red;
+  }
+`;
 export default FeedRendering;
