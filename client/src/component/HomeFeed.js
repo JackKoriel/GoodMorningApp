@@ -31,6 +31,11 @@ const HomeFeed = () => {
     ev.stopPropagation();
     // console.log("Profile:", handleProfile);
   };
+
+  const handleSharedClick = (ev, shareId) => {
+    ev.stopPropagation();
+    history.push(`/post/${shareId}`);
+  };
   const handleClickPost = (ev, _id) => {
     history.push(`/post/${_id}`);
     // console.log("hello");
@@ -85,23 +90,43 @@ const HomeFeed = () => {
                         isShared={post.isShared}
                         numLikes={post.numLikes}
                         numShares={post.numShares}
+                        sharedArray={post.sharedBy}
                       />
                     </ImageBigContainer>
 
                     <Status>
-                      <NameHandl
-                        onClick={(ev) => {
-                          handleClickProfile(ev, handleProfile);
-                          // console.log(handleProfile);
-                        }}
-                      >
-                        {post.author.displayName}
-                      </NameHandl>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <NameHandl
+                          onClick={(ev) => {
+                            handleClickProfile(ev, handleProfile);
+                            // console.log(handleProfile);
+                          }}
+                        >
+                          {post.author.displayName}
+                        </NameHandl>
+                        {post.reshareOf && (
+                          <SharedFrom
+                            onClick={(ev) => {
+                              handleSharedClick(ev, post.reshareOf);
+                            }}
+                          >
+                            {" "}
+                            shared a post by @{post.originalAuthor}
+                          </SharedFrom>
+                        )}
+                      </div>
                       <PostStatus>{post.status}</PostStatus>
-                      <Span>
-                        @{post.author.handle} ·{" "}
-                        {moment(post.timestamp).format(" MMM Do")}
-                      </Span>
+                      {post.reshareOf ? (
+                        <Span>
+                          @{post.originalAuthor} ·{" "}
+                          {moment(post.originalTimeStamp).format(" MMM Do")}
+                        </Span>
+                      ) : (
+                        <Span>
+                          @{post.author.handle} ·{" "}
+                          {moment(post.timestamp).format(" MMM Do")}
+                        </Span>
+                      )}
                     </Status>
                   </APost>
                 );
@@ -233,6 +258,21 @@ const NameHandl = styled.div`
     background: var(--gold-color);
     border-radius: 10px;
     cursor: pointer;
+    padding-left: 5px;
+  }
+`;
+
+const SharedFrom = styled.div`
+  font-weight: 700;
+  color: rgb(101, 119, 134);
+  font-size: 14px;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.05);
+    background: var(--gold-color);
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 5px;
   }
 `;
 

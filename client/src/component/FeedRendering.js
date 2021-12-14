@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
 import ActionBar from "./ActionBar";
 import { FiXCircle } from "react-icons/fi";
+import { currentUserContext } from "./CurrentUserContext";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 
 const FeedRendering = ({ handle, name, currentUser, friend }) => {
   let history = useHistory();
 
+  const {
+    user: { update, setUpdate },
+  } = useContext(currentUserContext);
   const [posts, setPosts] = useState();
   const [postStatus, setPostStatus] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
@@ -31,8 +35,12 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
     ev.stopPropagation();
-
     // console.log("Profile:", handleProfile);
+  };
+
+  const handleSharedClick = (ev, shareId) => {
+    ev.stopPropagation();
+    history.push(`/post/${shareId}`);
   };
 
   const handleClickPost = (ev, _id) => {
@@ -40,7 +48,7 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
     // console.log("hello");
   };
 
-  const handleRemove = (ev, _id) => {
+  const handleRemove = (ev, _id, originId) => {
     ev.preventDefault();
     ev.stopPropagation();
 
@@ -50,11 +58,16 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        originId,
+      }),
     })
       .then((res) => res.json())
-      .then((data) => {})
+      .then((data) => {
+        // setUpdate(!update);
+      })
       .catch((err) => {
-        console.log(err);
+        console.log(err.stack);
       });
   };
 
@@ -115,28 +128,48 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
                       isShared={post.isShared}
                       numLikes={post.numLikes}
                       numShares={post.numShares}
+                      sharedArray={post.sharedBy}
                     />
                   </ImageBigContainer>
 
                   <Status>
-                    <NameHandl
-                      onClick={(ev) => {
-                        handleClickProfile(ev, handleProfile);
-                        // console.log(handleProfile);
-                      }}
-                    >
-                      {post.author.displayName}
-                    </NameHandl>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <NameHandl
+                        onClick={(ev) => {
+                          handleClickProfile(ev, handleProfile);
+                          // console.log(handleProfile);
+                        }}
+                      >
+                        {post.author.displayName}
+                      </NameHandl>
+                      {post.reshareOf && (
+                        <SharedFrom
+                          onClick={(ev) => {
+                            handleSharedClick(ev, post.reshareOf);
+                          }}
+                        >
+                          {" "}
+                          shared a post by @{post.originalAuthor}
+                        </SharedFrom>
+                      )}
+                    </div>
                     <PostStatus>{post.status}</PostStatus>
-                    <Span>
-                      @{post.author.handle} ·{" "}
-                      {moment(post.timestamp).format(" MMM Do")}
-                    </Span>
+                    {post.reshareOf ? (
+                      <Span>
+                        @{post.originalAuthor} ·{" "}
+                        {moment(post.originalTimeStamp).format(" MMM Do")}
+                      </Span>
+                    ) : (
+                      <Span>
+                        @{post.author.handle} ·{" "}
+                        {moment(post.timestamp).format(" MMM Do")}
+                      </Span>
+                    )}
                   </Status>
                   {friend === currentUser && (
                     <ButtonRemove
                       onClick={(ev) => {
-                        handleRemove(ev, post._id);
+                        handleRemove(ev, post._id, post.reshareOf);
                       }}
                     >
                       <FiXCircle
@@ -227,6 +260,20 @@ const NameHandl = styled.div`
     background: var(--gold-color);
     border-radius: 10px;
     cursor: pointer;
+    padding-left: 5px;
+  }
+`;
+const SharedFrom = styled.div`
+  font-weight: 700;
+  color: rgb(101, 119, 134);
+  font-size: 14px;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.05);
+    background: var(--gold-color);
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 5px;
   }
 `;
 

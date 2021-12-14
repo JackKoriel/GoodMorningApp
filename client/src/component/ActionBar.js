@@ -8,16 +8,19 @@ import { FiHeart } from "react-icons/fi";
 // import { GiWizardFace } from "react-icons/gi";
 import { PostContext } from "./PostContext";
 
-const ActionBar = ({ postId, isLiked, isShared, numLikes, numShares }) => {
+const ActionBar = ({
+  postId,
+  isLiked,
+  isShared,
+  numLikes,
+  numShares,
+  sharedArray,
+}) => {
   const { setIsUpdating, isUpdating } = useContext(PostContext);
   const [likes, setLikes] = useState(isLiked);
   const [likesNum, setLikesNum] = useState(numLikes);
-  const [shared, setShared] = useState(isShared);
-  const [repostsNum, setRepostsNum] = useState(0);
-  // const [heartColor, setHeartColor] = useState("");
-  // const [errorStatus, setErrorStatus] = useState(false);
-  // console.log(numLikes);
-  // console.log(isLiked);
+  const [shared, setShared] = useState(sharedArray?.length > 0 ? true : false);
+  // console.log(shared);
 
   const handleClickLike = (ev) => {
     ev.preventDefault();
@@ -64,7 +67,7 @@ const ActionBar = ({ postId, isLiked, isShared, numLikes, numShares }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          setShared(!shared);
+          setShared(sharedArray?.length > 0 ? true : false);
           setIsUpdating(true);
         }
       })
@@ -192,12 +195,12 @@ const Share = styled.div``;
 
 const shareStyleActive = {
   textShadow: "10px 10px 10px blue",
-  fill: "white",
+  fill: "lightblue",
   color: "black",
 };
 
 const shareStyleInactive = {
-  fill: "green",
+  fill: "white",
   color: "black",
 };
 

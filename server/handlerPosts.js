@@ -63,7 +63,7 @@ const getPostById = async (req, res) => {
     await client.connect();
     //declair database in mongo
     const db = client.db("GoodMorningApp");
-    //find all users
+    //find user's post
     const post = await db.collection("posts").findOne({ _id });
     // validations and user control
     post
@@ -221,8 +221,7 @@ const addLike = async (req, res) => {
   let handle = req.session.handle;
   //get post ID from params
   const { _id } = req.params;
-  //get the user's handle after clicking on the add button when using POST with the body
-  //I can use express session
+  //getting the boolean value from FE to use for keeping the button colored
   const { like } = req.body;
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
@@ -237,10 +236,18 @@ const addLike = async (req, res) => {
       .collection("posts")
       .updateOne({ _id }, { $set: { isLiked: like } });
 
+    //declare post outside the condition
+    let post;
     //updating the user's liked array in the post
-    const post = await db
-      .collection("posts")
-      .updateOne({ _id }, { $addToSet: { likedBy: handle } });
+    if (like === false) {
+      post = await db
+        .collection("posts")
+        .updateOne({ _id }, { $pull: { likedBy: handle } });
+    } else {
+      post = await db
+        .collection("posts")
+        .updateOne({ _id }, { $addToSet: { likedBy: handle } });
+    }
 
     res.status(200).json({ status: 200, message: "Post liked!", data: post });
   } catch (err) {
@@ -258,10 +265,13 @@ const addLike = async (req, res) => {
 // PATCH reshare posts in the user's feed
 //***************************
 const sharePost = async (req, res) => {
-  //get post ID from params
-  const { postId } = req.params;
   //express session after signing in
   let handle = req.session.handle;
+  //get post ID from params
+  const { postId } = req.params;
+  //getting the boolean value from FE to use for keeping the button colored
+  const { shared } = req.body;
+
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -281,8 +291,12 @@ const sharePost = async (req, res) => {
       .collection("posts")
       .findOne({ _id: postId });
     // console.log(friendPostData);
+    //update the share status by the user
+    await db
+      .collection("posts")
+      .updateOne({ _id: postId }, { $set: { isShared: shared } });
     //updating the friend's reshare array in the post
-    const friendPostUpdate = await db
+    await db
       .collection("posts")
       .updateOne({ _id: postId }, { $addToSet: { sharedBy: handle } });
 
@@ -297,6 +311,8 @@ const sharePost = async (req, res) => {
       reshareOf: postId,
       status: friendPostData.status,
       media: friendPostData.media,
+      originalAuthor: friendPostData.author.handle,
+      originalTimeStamp: friendPostData.timestamp,
     });
     res
       .status(200)
@@ -316,8 +332,13 @@ const sharePost = async (req, res) => {
 // DELETE a post fron user's feed
 //***************************
 const deletePost = async (req, res) => {
+  //express session after signing in
+  let handle = req.session.handle;
   //get post ID from params
   const { postId } = req.params;
+  //get original post ID from FE if this was a shared post
+  const { originId } = req.body;
+
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -336,8 +357,19 @@ const deletePost = async (req, res) => {
         },
       }
     );
+    //update original post if the deleted post was shared from it
+    if (originId !== undefined) {
+      await db
+        .collection("posts")
+        .updateOne({ _id: originId }, { $pull: { sharedBy: handle } });
+
+      await db
+        .collection("posts")
+        .updateOne({ _id: originId }, { $set: { isShared: false } });
+    }
 
     const deletedPost = await db.collection("posts").deleteOne({ _id: postId });
+    // console.log(deletedPost);
     res.status(200).json({
       status: 200,
       data: deletedPost,

@@ -11,8 +11,10 @@ import PostBox from "./PostBox";
 import NavbarOptions from "./NavbarOptions";
 import styled from "styled-components";
 import { PostContext } from "./PostContext";
+import { useHistory } from "react-router-dom";
 
 const SideNavbar = () => {
+  let history = useHistory();
   const {
     user: { handle, avatarSrc },
   } = useContext(currentUserContext);
@@ -21,6 +23,7 @@ const SideNavbar = () => {
 
   const onClickVisiblityHandle = () => {
     setModalStatus(true);
+    history.push(`/`);
   };
 
   return (
@@ -44,15 +47,9 @@ const SideNavbar = () => {
 const SidebarContainer = styled.div`
   min-width: 210px;
   height: 100vh;
-  /* margin-left: 100px;
-  margin-top: 30px; */
-  /* border: 1px solid red; */
   border-right: 1px solid var(--yellow-color);
-  /* margin-top: 20px; */
-  /* margin-left: 20px; */
   padding-right: 25px;
   padding-left: 25px;
-  /* flex: 1 0.5 0px; */
   flex: 0.3;
   background-color: var(--brown-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
