@@ -132,7 +132,7 @@ const getUserFriendsPosts = async (req, res) => {
     //get user's friends array
     let friendsIdsArray = user.followingIds;
     //add the user id to the array
-    let userAndFriendsArray = friendsIdsArray.push(handle);
+    friendsIdsArray.push(handle);
     //find all posts from friends the user follow
     const friendsPosts = await db
       .collection("posts")
@@ -140,8 +140,21 @@ const getUserFriendsPosts = async (req, res) => {
       .sort({ timestamp: -1 })
       .toArray();
     // validations and user control
-    friendsPosts.length !== 0
-      ? res.status(200).json({ status: 200, data: friendsPosts })
+
+    const updatedFriendsPosts = await Promise.all(
+      friendsPosts.map(async (post) => {
+        const updatedUser = await db
+          .collection("users")
+          .findOne({ _id: post.author._id });
+        console.log(updatedUser);
+        post.author = updatedUser;
+        return post;
+      })
+    );
+
+    console.log(updatedFriendsPosts);
+    updatedFriendsPosts.length !== 0
+      ? res.status(200).json({ status: 200, data: updatedFriendsPosts })
       : res.status(404).json({ status: 404, message: "Posts not found" });
   } catch (err) {
     res.status(500).json({

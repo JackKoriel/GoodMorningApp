@@ -33,7 +33,7 @@ const PostDetails = () => {
         setErrorStatus(true);
         console.log(err);
       });
-  }, []);
+  }, [postId]);
 
   const handleClickProfile = (ev, ProfileHandle) => {
     history.push(`/${ProfileHandle}`);

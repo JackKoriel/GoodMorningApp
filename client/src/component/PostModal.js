@@ -25,6 +25,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
   const [counterColor, setCounterColor] = useState("");
   const [buttonState, setButtonState] = useState();
   const [buttonStateImage, setButtonStateImage] = useState(true);
+  const [buttonStatePost, setButtonStatePost] = useState(true);
 
   //change counter color for the status update
   useEffect(() => {
@@ -60,6 +61,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
     //use Axios to send the image to cloudinary
 
     if (event.target.files[0] !== undefined) {
+      //set the button state so the user doesn't submit before the URL is returned
       setButtonStateImage(false);
       Axios.post(
         "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
@@ -94,6 +96,8 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
   };
 
   const handleSubmitPost = (ev) => {
+    //set button state for the loading animations on the button
+    setButtonStatePost(false);
     //prevent page from refresh
     ev.preventDefault();
     //send image url with status to backend
@@ -114,6 +118,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
         setStatusValue("");
         setInputValue("");
         setIsUpdatingPost(!isUpdatingPost);
+        setButtonStatePost(true);
       })
       .catch((err) => {
         // setPostStatusError(true);
@@ -166,8 +171,11 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
               handleSubmitPost(ev);
             }}
           >
-            {/* {isUpdating ? <i className="fa fa-spinner fa-spin" /> : "Mewo"} */}
-            POST
+            {!buttonStateImage || !buttonStatePost ? (
+              <i className="fas fa-palette fa-spin" />
+            ) : (
+              "POST"
+            )}
           </Button>
         </ButtonContainer>
         {previewSource && (
@@ -225,7 +233,7 @@ const Form = styled.form`
   border: 3px solid var(--gold-color);
   border-radius: 10px;
   height: 50%;
-  width: 50%;
+  width: 40%;
   min-width: 500px;
   display: flex;
   justify-content: start;
@@ -244,7 +252,8 @@ const PostInput = styled.div`
 
 const inputField = {
   width: "100%",
-  // paddingBottom: "80px",
+  borderRadius: "10px",
+  padding: "5px",
 };
 
 const ButtonContainer = styled.div`

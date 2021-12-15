@@ -9,6 +9,7 @@ import moment from "moment";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useHistory } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import { HeartSpinner } from "react-spinners-kit";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 
@@ -19,7 +20,7 @@ const HomeFeed = () => {
   } = useContext(currentUserContext);
 
   const {
-    posts: { data },
+    posts: { data, statusPost },
     modalStatus,
     setModalStatus,
   } = useContext(PostContext);
@@ -39,7 +40,7 @@ const HomeFeed = () => {
 
   return (
     <>
-      {status === "idle" ? (
+      {status === "loading" ? (
         <Progress>
           <CircularProgress /> Loading...
         </Progress>
@@ -55,78 +56,85 @@ const HomeFeed = () => {
             />
             <Text>GOOD MORNINGS START HERE</Text>
           </Header>
+
           <PostModal
             modalStatus={modalStatus}
             setModalStatus={setModalStatus}
           />
-          <div>
-            {data !== undefined &&
-              data.map((post) => {
-                let handleProfile = post.author.handle;
-                return (
-                  <APost
-                    tabIndex="0"
-                    key={post._id}
-                    onClick={(ev) => {
-                      handleClickPost(ev, post._id);
-                    }}
-                  >
-                    <ImageBigContainer>
-                      <Img src={post.author.avatarSrc} alt="profile" />
-                      {post.media?.map((src, index) => {
-                        if (src.url) {
-                          return (
+          {statusPost === "idle" ? (
+            <Progress>
+              <HeartSpinner color="var(--blue-color)" /> Loading...
+            </Progress>
+          ) : (
+            <div>
+              {data !== undefined &&
+                data.map((post) => {
+                  let handleProfile = post.author.handle;
+                  return (
+                    <APost
+                      tabIndex="0"
+                      key={post._id}
+                      onClick={(ev) => {
+                        handleClickPost(ev, post._id);
+                      }}
+                    >
+                      <ImageBigContainer>
+                        <Img src={post.author.avatarSrc} alt="profile" />
+                        {post.media?.map((src, index) =>
+                          src.url ? (
                             <ImgBig key={index} src={src.url} alt="postImage" />
-                          );
-                        }
-                      })}
-                      <ActionBar
-                        postId={post._id}
-                        isLiked={post.isLiked}
-                        isShared={post.isShared}
-                        numLikes={post.numLikes}
-                        numShares={post.numShares}
-                        sharedArray={post.sharedBy}
-                      />
-                    </ImageBigContainer>
+                          ) : null
+                        )}
+                        <ActionBar
+                          postId={post._id}
+                          isLiked={post.isLiked}
+                          isShared={post.isShared}
+                          numLikes={post.numLikes}
+                          numShares={post.numShares}
+                          sharedArray={post.sharedBy}
+                        />
+                      </ImageBigContainer>
 
-                    <Status>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <NameHandl
-                          onClick={(ev) => {
-                            handleClickProfile(ev, handleProfile);
-                          }}
+                      <Status>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
                         >
-                          {post.author.displayName}
-                        </NameHandl>
-                        {post.reshareOf && (
-                          <SharedFrom
+                          <NameHandl
                             onClick={(ev) => {
-                              handleSharedClick(ev, post.reshareOf);
+                              handleClickProfile(ev, handleProfile);
                             }}
                           >
-                            {" "}
-                            shared a post by @{post.originalAuthor}
-                          </SharedFrom>
+                            {post.author.displayName}
+                          </NameHandl>
+                          {post.reshareOf && (
+                            <SharedFrom
+                              onClick={(ev) => {
+                                handleSharedClick(ev, post.reshareOf);
+                              }}
+                            >
+                              {" "}
+                              shared a post by @{post.originalAuthor}
+                            </SharedFrom>
+                          )}
+                        </div>
+                        <PostStatus>{post.status}</PostStatus>
+                        {post.reshareOf ? (
+                          <Span>
+                            @{post.originalAuthor} ·{" "}
+                            {moment(post.originalTimeStamp).format(" MMM Do")}
+                          </Span>
+                        ) : (
+                          <Span>
+                            @{post.author.handle} ·{" "}
+                            {moment(post.timestamp).format(" MMM Do")}
+                          </Span>
                         )}
-                      </div>
-                      <PostStatus>{post.status}</PostStatus>
-                      {post.reshareOf ? (
-                        <Span>
-                          @{post.originalAuthor} ·{" "}
-                          {moment(post.originalTimeStamp).format(" MMM Do")}
-                        </Span>
-                      ) : (
-                        <Span>
-                          @{post.author.handle} ·{" "}
-                          {moment(post.timestamp).format(" MMM Do")}
-                        </Span>
-                      )}
-                    </Status>
-                  </APost>
-                );
-              })}
-          </div>
+                      </Status>
+                    </APost>
+                  );
+                })}
+            </div>
+          )}
         </MasterContainer>
       )}
     </>
@@ -148,8 +156,6 @@ const MasterContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  border-left: 1px solid var(--twitter-background);
-  border-right: 1px solid var(--twitter-background);
   background-color: var(--beige-color);
 `;
 

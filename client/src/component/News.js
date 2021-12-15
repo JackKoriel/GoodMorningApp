@@ -229,14 +229,11 @@ const MasterContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  /* background-color: black;
-  opacity: 0.2; */
   align-items: center;
-
   flex: 0.5;
   color: white;
   border-radius: 5px;
-  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+  gap: 5px;
 `;
 
 const AnArticle = styled.div`
@@ -259,6 +256,8 @@ const AnArticle = styled.div`
     transform: scale(1.02);
     cursor: pointer;
     border-radius: 5px;
+    border: 1px solid var(--gold-color);
+    z-index: 3;
   }
 `;
 const Filter = styled.div`

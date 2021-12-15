@@ -29,7 +29,7 @@ const SideNavbar = () => {
   return (
     <SidebarContainer>
       {/* site icon */}
-      <div style={{ marginLeft: "25%" }}>
+      <div style={{ marginLeft: "calc(50% - (30% / 2))" }}>
         <SuneriseLogo />
       </div>
       <PostBox avatarSrc={avatarSrc} />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import moment from "moment";
-import CircularProgress from "@mui/material/CircularProgress";
+import { HeartSpinner } from "react-spinners-kit";
 import { FiXCircle } from "react-icons/fi";
 import { FiBookOpen } from "react-icons/fi";
 import { currentUserContext } from "./CurrentUserContext";
@@ -59,7 +59,7 @@ const ReadingList = () => {
     <>
       {status === "idle" ? (
         <Progress>
-          <CircularProgress /> Loading...
+          <HeartSpinner color="var(--blue-color)" /> Loading...
         </Progress>
       ) : (
         <MasterContainer>
@@ -109,6 +109,8 @@ const Empty = styled.div`
 `;
 
 const Progress = styled.div`
+  background-color: var(--beige-color);
+  width: 650px;
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -116,9 +118,6 @@ const Progress = styled.div`
   font-weight: 700;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
-  margin-top: 200px;
-  /* margin-left: 200px; */
 `;
 
 const MasterContainer = styled.div`

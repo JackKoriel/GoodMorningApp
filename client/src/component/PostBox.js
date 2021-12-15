@@ -8,8 +8,11 @@ const PostBox = () => {
   let history = useHistory();
   const {
     user: { avatarSrc, handle, _id },
+    update,
+    setUpdate,
   } = useContext(currentUserContext);
   const [userBio, setUserBio] = useState("");
+  const [moodButtonStatus, setMoodButtonStatus] = useState(true);
   let placeholderText = `How is your mood today ${handle}?`;
 
   const handleChangeUserBio = (ev) => {
@@ -18,7 +21,7 @@ const PostBox = () => {
 
   const handleClickUserBio = (ev) => {
     ev.preventDefault();
-
+    setMoodButtonStatus(false);
     fetch(`/api/profile/${_id}`, {
       method: "POST",
       body: JSON.stringify({
@@ -33,6 +36,9 @@ const PostBox = () => {
       .then((jsonP) => {
         if (jsonP.status === 200) {
           history.push(`/${handle}`);
+          setMoodButtonStatus(true);
+          setUserBio("");
+          setUpdate(!update);
         }
       });
   };
@@ -50,7 +56,13 @@ const PostBox = () => {
           />
         </AvatarContainer>
 
-        <Button onClick={(ev) => handleClickUserBio(ev)}>Mood-on!</Button>
+        <Button onClick={(ev) => handleClickUserBio(ev)}>
+          {!moodButtonStatus ? (
+            <i className="fas fa-ring fa-spin" />
+          ) : (
+            "Mood-on!"
+          )}
+        </Button>
       </Form>
     </MasterContainer>
   );

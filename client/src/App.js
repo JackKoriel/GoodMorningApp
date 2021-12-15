@@ -22,6 +22,7 @@ import LogOut from "./component/LogOut";
 import Settings from "./component/Settings";
 import PostDetails from "./component/PostDetails";
 import { currentUserContext } from "./component/CurrentUserContext";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const App = () => {
   const { user } = useContext(currentUserContext);
@@ -29,55 +30,63 @@ const App = () => {
   return (
     <>
       <GlobalStyles />
-      <Router>
-        <MasterContainer>
-          {user.status === "active" && <SideNavbar />}
-          <Switch>
-            <Route path="/" exact>
-              {user.status === "idle" ? (
-                <Redirect to="/signup" />
-              ) : (
-                <HomeFeed />
-              )}
-            </Route>
-            <Route path="/signin">
-              {user.status === "active" ? <Redirect to="/" /> : <SignIn />}
-            </Route>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-            <Route path="/logout">
-              <LogOut />
-            </Route>
-            <Route path="/settings">
-              <Settings />
-            </Route>
-            <Route path="/favorite">
-              <Favorite />
-            </Route>
-            <Route path="/reading-list">
-              <ReadingList />
-            </Route>
-            <Route path="/post/:postId">
-              <PostDetails />
-            </Route>
-            <Route path="/:handle">
-              <Profile />
-            </Route>
-            <Route path="/horoscope">
-              <Horoscope />
-            </Route>
-            <Route path="/weather">
-              <Weather />
-            </Route>
-            <Route path="/news">
-              <News />
-            </Route>
-          </Switch>
-          {/* Widgest */}
-          {user.status === "active" && <Widgets />}
-        </MasterContainer>
-      </Router>
+      {user.status === "loading" ? (
+        <Progress>
+          <CircularProgress /> Loading...
+        </Progress>
+      ) : (
+        <>
+          <Router>
+            <MasterContainer>
+              {user.status === "active" && <SideNavbar />}
+              <Switch>
+                <Route path="/" exact>
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <HomeFeed />
+                  )}
+                </Route>
+                <Route path="/signin">
+                  {user.status === "active" ? <Redirect to="/" /> : <SignIn />}
+                </Route>
+                <Route path="/signup">
+                  <SignUp />
+                </Route>
+                <Route path="/logout">
+                  <LogOut />
+                </Route>
+                <Route path="/settings">
+                  <Settings />
+                </Route>
+                <Route path="/favorite">
+                  <Favorite />
+                </Route>
+                <Route path="/reading-list">
+                  <ReadingList />
+                </Route>
+                <Route path="/post/:postId">
+                  <PostDetails />
+                </Route>
+                <Route path="/:handle">
+                  <Profile />
+                </Route>
+                <Route path="/horoscope">
+                  <Horoscope />
+                </Route>
+                <Route path="/weather">
+                  <Weather />
+                </Route>
+                <Route path="/news">
+                  <News />
+                </Route>
+              </Switch>
+              {/* Widgest */}
+              {user.status === "active" && <Widgets />}
+            </MasterContainer>
+          </Router>
+        </>
+      )}
     </>
   );
 };
@@ -94,6 +103,21 @@ const MasterContainer = styled.div`
   /* padding: 0 10px; */
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
   /* background-color: var(--lightBlue-color); */
+`;
+
+const Progress = styled.div`
+  display: flex;
+  width: 700px;
+  height: 100vh;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: calc(50% - (40% / 2));
+  background-color: var(--beige-color);
 `;
 
 export default App;

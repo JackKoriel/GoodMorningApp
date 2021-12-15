@@ -115,13 +115,11 @@ const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
                 >
                   <ImageBigContainer>
                     <Img src={post.author.avatarSrc} alt="profile" />
-                    {post.media?.map((src, index) => {
-                      if (src.url) {
-                        return (
-                          <ImgBig key={index} src={src.url} alt="postImage" />
-                        );
-                      }
-                    })}
+                    {post.media?.map((src, index) =>
+                      src.url ? (
+                        <ImgBig key={index} src={src.url} alt="postImage" />
+                      ) : null
+                    )}
                     <ActionBar
                       tweetId={post._id}
                       isLiked={post.isLiked}

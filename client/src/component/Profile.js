@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import { useParams } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
+import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
 import styled from "styled-components";
 import { GiSpellBook } from "react-icons/gi";
@@ -119,7 +119,9 @@ const Profile = () => {
   return (
     <>
       {!status ? (
-        <CircularProgress />
+        <Progress>
+          <HeartSpinner color="var(--blue-color)" /> Loading...
+        </Progress>
       ) : (
         <Master>
           <div>
@@ -200,9 +202,22 @@ const Profile = () => {
   );
 };
 
+const Progress = styled.div`
+  background-color: var(--beige-color);
+  width: 650px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Master = styled.div`
   background: var(--beige-color);
   max-width: 700px;
+  width: 650px;
   height: auto;
   display: flex;
   flex-direction: column;

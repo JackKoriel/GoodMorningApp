@@ -34,6 +34,11 @@ const Settings = () => {
   const [avatarURL, setAvatarURL] = useState("");
   const [bannerURL, setBannerURL] = useState("");
 
+  //submit button states
+  const [avatarState, setAvatarState] = useState(true);
+  const [bannerState, setBannerState] = useState(true);
+  const [confirmState, setConfirmState] = useState(true);
+
   const horoscpes = [
     "Aries",
     "Taurus",
@@ -97,10 +102,12 @@ const Settings = () => {
 
   //when user selects avatar
   const handleAvatarChange = (event) => {
+    //set the button state so the user doesn't submit before the URL is returned
+    setAvatarState(false);
     setAvatarSrc(event.target.files[0]);
     setAvatarInputValue(event.target.value);
 
-    //use form data for avatar to use with axios
+    //use form data for banner to use with axios
     const formDataAvatar = new FormData();
     formDataAvatar.append("file", event.target.files[0]);
     formDataAvatar.append("upload_preset", "ow8yfkvb");
@@ -111,11 +118,14 @@ const Settings = () => {
       formDataAvatar
     ).then((res) => {
       setAvatarURL(res.data.url);
+      setAvatarState(true);
     });
   };
 
   //when user selects banner
   const handleBannerChange = (event) => {
+    //set the button state so the user doesn't submit before the URL is returned
+    setBannerState(false);
     setBannerSrc(event.target.files[0]);
     setBannerInputValue(event.target.value);
 
@@ -131,11 +141,14 @@ const Settings = () => {
       formDataBanner
     ).then((res) => {
       setBannerURL(res.data.url);
+      setBannerState(true);
     });
   };
 
   const handleClick = (ev) => {
     ev.preventDefault();
+    //set the button state for the loading animations
+    setConfirmState(false);
     // setSubStatus("pending");
 
     fetch(`/api/profile/${_id}`, {
@@ -161,6 +174,7 @@ const Settings = () => {
         if (jsonP.status === 200) {
           setUpdate(!update);
           history.push(`/${handle}`);
+          setConfirmState(true);
         }
 
         // const { status, error } = json;
@@ -341,12 +355,16 @@ const Settings = () => {
             />
           </BannerInput>
         </div>
-        <Button onClick={(ev) => handleClick(ev)}>
-          {/* {subStatus === "pending" ? (
-              <i className="fa fa-circle-o-notch fa-spin" />
-            ) : ( */}
-          Confirm
-          {/* )} */}
+        <Button
+          disabled={!avatarState || !bannerState || !confirmState}
+          type="submit"
+          onClick={(ev) => handleClick(ev)}
+        >
+          {!avatarState || !bannerState || !confirmState ? (
+            <i className="fas fa-cog fa-spin" />
+          ) : (
+            "Confirm"
+          )}
         </Button>
       </SignContainer>
     </MasterContainer>
@@ -482,6 +500,9 @@ const Button = styled.button`
     width: calc(100% - 1px);
     height: calc(100% - 1px);
   }
+  cursor: ${({ disabled }) => {
+    return disabled && "no-drop";
+  }};
 `;
 
 export default Settings;

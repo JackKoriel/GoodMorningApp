@@ -23,10 +23,9 @@ const Master = styled.div`
   gap: 10px;
   width: 100%;
   background-color: var(--brown-color);
-  padding-right: 25px;
-  padding-left: 25px;
   border-left: 1px solid var(--yellow-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 5px 25px;
 `;
 
 export default Widgets;
