@@ -45,7 +45,6 @@ const getPosts = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -76,7 +75,6 @@ const getPostById = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -112,7 +110,6 @@ const getUserPosts = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -132,13 +129,10 @@ const getUserFriendsPosts = async (req, res) => {
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
-    console.log("friendsPost", user);
     //get user's friends array
     let friendsIdsArray = user.followingIds;
-    console.log("friendsIdsArray", friendsIdsArray);
     //add the user id to the array
     let userAndFriendsArray = friendsIdsArray.push(handle);
-    console.log("after push", friendsIdsArray);
     //find all posts from friends the user follow
     const friendsPosts = await db
       .collection("posts")
@@ -146,8 +140,6 @@ const getUserFriendsPosts = async (req, res) => {
       .sort({ timestamp: -1 })
       .toArray();
     // validations and user control
-    // console.log(friendsPosts);
-
     friendsPosts.length !== 0
       ? res.status(200).json({ status: 200, data: friendsPosts })
       : res.status(404).json({ status: 404, message: "Posts not found" });
@@ -158,7 +150,6 @@ const getUserFriendsPosts = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -183,7 +174,6 @@ const addPost = async (req, res) => {
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
-    // console.log("user", user);
     //create a new post by signed in user
     const newPost = await db.collection("posts").insertOne({
       status,
@@ -198,7 +188,6 @@ const addPost = async (req, res) => {
       numLikes: 0,
       numReshares: 0,
     });
-    // console.log("post", newPost);
     res
       .status(201)
       .json({ status: 201, message: "New post created.", data: newPost });
@@ -209,7 +198,6 @@ const addPost = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -257,7 +245,6 @@ const addLike = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -285,12 +272,10 @@ const sharePost = async (req, res) => {
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
-    // console.log("user", user);
     // find the post data by looking up its ID
     const friendPostData = await db
       .collection("posts")
       .findOne({ _id: postId });
-    // console.log(friendPostData);
     //update the share status by the user
     await db
       .collection("posts")
@@ -324,7 +309,6 @@ const sharePost = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -369,7 +353,6 @@ const deletePost = async (req, res) => {
     }
 
     const deletedPost = await db.collection("posts").deleteOne({ _id: postId });
-    // console.log(deletedPost);
     res.status(200).json({
       status: 200,
       data: deletedPost,
@@ -382,7 +365,6 @@ const deletePost = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 

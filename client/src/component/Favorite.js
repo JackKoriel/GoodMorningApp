@@ -11,13 +11,11 @@ const Favorite = () => {
   const { horoStatus } = useContext(PostContext);
   const [favList, setFavList] = useState([]);
   const [status, setStatus] = useState("idle");
-  console.log("favlist", favList);
 
   useEffect(() => {
     fetch(`/api/favorite`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("fetch data", data);
         setFavList(data.data);
         setStatus("active");
       })

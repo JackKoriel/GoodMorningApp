@@ -1,27 +1,33 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
 import ActionBar from "./ActionBar";
-import { FaCat } from "react-icons/fa";
-import { GiWizardFace } from "react-icons/gi";
+// import { FaCat } from "react-icons/fa";
+// import { GiWizardFace } from "react-icons/gi";
 
 const PostDetails = () => {
   let history = useHistory();
   const { postId } = useParams();
   const [status, setStatus] = useState(false);
   const [postData, setPostData] = useState({});
+  const [authorData, setAuthorData] = useState({});
   const [errorStatus, setErrorStatus] = useState(false);
 
+  //fetch posts by id
   useEffect(() => {
     fetch(`/api/post/${postId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("fetch data", data);
         setPostData(data.data);
-        setStatus(true);
+        fetch(`/api/user/${data.data.author._id}`)
+          .then((res) => res.json())
+          .then((author) => {
+            setAuthorData(author.data);
+            setStatus(true);
+          });
       })
       .catch((err) => {
         setErrorStatus(true);
@@ -32,7 +38,11 @@ const PostDetails = () => {
   const handleClickProfile = (ev, ProfileHandle) => {
     history.push(`/${ProfileHandle}`);
     ev.stopPropagation();
-    // console.log("Profile:", handleProfile);
+  };
+
+  const handleSharedClick = (ev, shareId) => {
+    ev.stopPropagation();
+    history.push(`/post/${shareId}`);
   };
 
   //   if (errorStatus) {
@@ -59,7 +69,6 @@ const PostDetails = () => {
   //       </div>
   //     );
   //   }
-  console.log("postData", postData);
   return (
     <>
       {!status ? (
@@ -70,7 +79,7 @@ const PostDetails = () => {
         <APost>
           <PostObj>
             <ImageBigContainer>
-              <Img src={postData.author.avatarSrc} alt="profile" />
+              <Img src={authorData.avatarSrc} alt="profile" />
               {postData.media !== undefined && (
                 <ImgBig src={postData.media[0]?.url} />
               )}
@@ -83,20 +92,38 @@ const PostDetails = () => {
               />
             </ImageBigContainer>
             <Status>
-              <NameHandl
-                onClick={(ev) => {
-                  let ProfileHandle = postData.author.handle;
-                  handleClickProfile(ev, ProfileHandle);
-                  // console.log(handleProfile);
-                }}
-              >
-                {postData.author.displayName}
-              </NameHandl>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <NameHandl
+                  onClick={(ev) => {
+                    let ProfileHandle = authorData.handle;
+                    handleClickProfile(ev, ProfileHandle);
+                  }}
+                >
+                  {authorData.displayName}
+                </NameHandl>
+                {postData.reshareOf && (
+                  <SharedFrom
+                    onClick={(ev) => {
+                      handleSharedClick(ev, postData.reshareOf);
+                    }}
+                  >
+                    {" "}
+                    shared a post by @{postData.originalAuthor}
+                  </SharedFrom>
+                )}
+              </div>
               <PostStatus>{postData.status}</PostStatus>
-              <Span>
-                @{postData.author.handle} ·{" "}
-                {moment(postData.timestamp).format(" MMM Do")}
-              </Span>
+              {postData.reshareOf ? (
+                <Span>
+                  @{postData.originalAuthor} ·{" "}
+                  {moment(postData.originalTimeStamp).format(" MMM Do")}
+                </Span>
+              ) : (
+                <Span>
+                  @{authorData.handle} ·{" "}
+                  {moment(postData.timestamp).format(" MMM Do")}
+                </Span>
+              )}
             </Status>
           </PostObj>
           <Time style={{ paddingLeft: "15px" }}>
@@ -128,6 +155,7 @@ const PostObj = styled.div`
 
 const APost = styled.div`
   max-width: 700px;
+  width: 650px;
   background: var(--beige-color);
   height: auto;
   display: flex;
@@ -135,8 +163,8 @@ const APost = styled.div`
   border: 1px solid var(--yellow-color);
   border-radius: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 15px;
-  padding: 0 5px;
+  margin: 5px 10px;
+  padding: 10px 5px;
   transition: all 300ms ease-out;
   padding-bottom: 15px;
 `;
@@ -176,6 +204,21 @@ const NameHandl = styled.div`
     background: var(--gold-color);
     border-radius: 10px;
     cursor: pointer;
+    padding-left: 5px;
+  }
+`;
+
+const SharedFrom = styled.div`
+  font-weight: 700;
+  color: rgb(101, 119, 134);
+  font-size: 14px;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.05);
+    background: var(--gold-color);
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 5px;
   }
 `;
 

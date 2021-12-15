@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiBookmark } from "react-icons/fi";
@@ -134,13 +134,12 @@ const News = () => {
   const { newsStatus, setNewsStatus } = useContext(PostContext);
 
   const {
-    user: { location, email, readingList },
+    user: { country, email, readingList },
     update,
     setUpdate,
   } = useContext(currentUserContext);
 
   const [topNews, setTopNews] = useState(dummyData);
-  console.log("topNews", topNews);
 
   const [readingL, setReadingL] = useState(false);
 
@@ -185,7 +184,7 @@ const News = () => {
   //       Accept: "application/json",
   //     },
   //     body: JSON.stringify({
-  //       country: location,
+  //       country,
   //       lang: "en",
   //     }),
   //   })
@@ -196,7 +195,7 @@ const News = () => {
   //     .catch((err) => {
   //       console.log(err);
   //     });
-  // }, []);
+  // }, [topNews]);
 
   return (
     <MasterContainer>

@@ -26,10 +26,8 @@ const batchImport = async () => {
     await db.collection("users").insertMany(users);
     await db.collection("posts").insertMany(posts);
   } catch (err) {
-    console.log("error", err);
   } finally {
     client.close();
-    console.log("disconnected!");
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { currentUserContext } from "./CurrentUserContext";
 import TextField from "@mui/material/TextField";
@@ -7,9 +7,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import SuneriseLogo from "./SuneriseLogo";
-import Horoscope from "./Horoscope";
-import { GiRayGun } from "react-icons/gi";
 import Axios from "axios";
 import { useHistory } from "react-router";
 
@@ -20,7 +17,6 @@ const Settings = () => {
     update,
     setUpdate,
   } = useContext(currentUserContext);
-  // console.log(_id);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +31,8 @@ const Settings = () => {
   const [avatarInputValue, setAvatarInputValue] = useState("");
   const [bannerSrc, setBannerSrc] = useState(null);
   const [bannerInputValue, setBannerInputValue] = useState("");
+  const [avatarURL, setAvatarURL] = useState("");
+  const [bannerURL, setBannerURL] = useState("");
 
   const horoscpes = [
     "Aries",
@@ -54,57 +52,37 @@ const Settings = () => {
   //   const [subStatus, setSubStatus] = useState("idle");
   //   const [errMessage, setErrMessage] = useState("");
 
-  // console.log(subStatus);
-
-  //when user selects avatar
-  const handleAvatarChange = (event) => {
-    setAvatarSrc(event.target.files[0]);
-    setAvatarInputValue(event.target.value);
-  };
-  //when user selects banner
-  const handleBannerChange = (event) => {
-    setBannerSrc(event.target.files[0]);
-    setBannerInputValue(event.target.value);
-  };
-
   const handleChangeUsername = (ev) => {
-    // console.log(ev.target.value);
     setusername(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangePassword = (ev) => {
-    // console.log(ev.target.value);
     setPassword(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeEmail = (ev) => {
-    // console.log(ev.target.value);
     setEmail(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeDisplayName = (ev) => {
-    // console.log(ev.target.value);
     setDisplayName(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeCity = (ev) => {
-    // console.log(ev.target.value);
     setCity(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeCountry = (ev) => {
-    // console.log(ev.target.value);
     setCountry(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeSign = (ev) => {
-    // console.log(ev.target.value);
     setSign(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
@@ -117,82 +95,97 @@ const Settings = () => {
     event.preventDefault();
   };
 
-  const handleClick = (ev) => {
-    // console.log("usename", username);
-    ev.preventDefault();
-    // setSubStatus("pending");
+  //when user selects avatar
+  const handleAvatarChange = (event) => {
+    setAvatarSrc(event.target.files[0]);
+    setAvatarInputValue(event.target.value);
 
     //use form data for avatar to use with axios
     const formDataAvatar = new FormData();
-    formDataAvatar.append("file", avatarSrc);
+    formDataAvatar.append("file", event.target.files[0]);
     formDataAvatar.append("upload_preset", "ow8yfkvb");
-    //use form data for banner to use with axios
-    const formDataBanner = new FormData();
-    formDataBanner.append("file", bannerSrc);
-    formDataBanner.append("upload_preset", "ow8yfkvb");
+
     //use Axios to send the image to cloudinary
     Axios.post(
       "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
       formDataAvatar
     ).then((res) => {
-      Axios.post(
-        "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
-
-        formDataBanner
-      ).then((json) => {
-        // console.log("files from couldinary ", res, json);
-
-        fetch(`/api/profile/${_id}`, {
-          method: "POST",
-          body: JSON.stringify({
-            handle: username,
-            password,
-            email,
-            displayName,
-            city,
-            sign,
-            country,
-            avatarSrc: res.data.url,
-            bannerSrc: json.data.url,
-          }),
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        })
-          .then((resP) => resP.json())
-          .then((jsonP) => {
-            console.log(jsonP.data);
-            if (jsonP.status === 200) {
-              setUpdate(!update);
-              history.push(`/${handle}`);
-            }
-            // console.log(json.user[0]);
-            // const { status, error } = json;
-            // if (status === "success") {
-            //   window.sessionStorage.setItem(
-            //     "username",
-            //     JSON.stringify(json.user[0])
-            //   );
-            //   //using the json data is better than getting the data from the session because the session stops other functions and therefore it will not display the name next to the greeting without a refresh
-            //   setUserNow(json.user[0]);
-            //   setSubStatus("confirmed");
-            //   //use history to direct the user to the homepage
-            //   history.push("/");
-            // } else if (error) {
-            //   setSubStatus("error");
-            //   setErrMessage("Incorrect username");
-            //   setusername("");
-            // }
-            //////////////////
-          });
-        /////////////////
-        // .catch((err) => {
-        //   // setPostStatusError(true);
-        //   console.log(err);
-        // });
-      });
+      setAvatarURL(res.data.url);
     });
+  };
+
+  //when user selects banner
+  const handleBannerChange = (event) => {
+    setBannerSrc(event.target.files[0]);
+    setBannerInputValue(event.target.value);
+
+    //use form data for banner to use with axios
+    const formDataBanner = new FormData();
+    formDataBanner.append("file", event.target.files[0]);
+    formDataBanner.append("upload_preset", "ow8yfkvb");
+
+    //use Axios to send the image to cloudinary
+    Axios.post(
+      "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
+
+      formDataBanner
+    ).then((res) => {
+      setBannerURL(res.data.url);
+    });
+  };
+
+  const handleClick = (ev) => {
+    ev.preventDefault();
+    // setSubStatus("pending");
+
+    fetch(`/api/profile/${_id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        handle: username,
+        password,
+        email,
+        displayName,
+        city,
+        sign,
+        country,
+        avatarSrc: avatarURL,
+        bannerSrc: bannerURL,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resP) => resP.json())
+      .then((jsonP) => {
+        if (jsonP.status === 200) {
+          setUpdate(!update);
+          history.push(`/${handle}`);
+        }
+
+        // const { status, error } = json;
+        // if (status === "success") {
+        //   window.sessionStorage.setItem(
+        //     "username",
+        //     JSON.stringify(json.user[0])
+        //   );
+        //   //using the json data is better than getting the data from the session because the session stops other functions and therefore it will not display the name next to the greeting without a refresh
+        //   setUserNow(json.user[0]);
+        //   setSubStatus("confirmed");
+        //   //use history to direct the user to the homepage
+        //   history.push("/");
+        // } else if (error) {
+        //   setSubStatus("error");
+        //   setErrMessage("Incorrect username");
+        //   setusername("");
+        // }
+        //////////////////
+      });
+    /////////////////
+    // .catch((err) => {
+    //   // setPostStatusError(true);
+    //   console.log(err);
+    // });
   };
 
   return (
@@ -211,7 +204,7 @@ const Settings = () => {
         >
           <TextField
             onChange={(ev) => handleChangeUsername(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small1"
             placeholder="Your username name"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -219,7 +212,7 @@ const Settings = () => {
           />
           <TextField
             onChange={(ev) => handleChangeDisplayName(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small2"
             placeholder="Your full name"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -249,7 +242,7 @@ const Settings = () => {
         />
         <TextField
           onChange={(ev) => handleChangeEmail(ev)}
-          id="outlined-size-small"
+          id="outlined-size-small3"
           placeholder="Your email"
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -265,7 +258,7 @@ const Settings = () => {
         >
           <TextField
             onChange={(ev) => handleChangeCity(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small4"
             placeholder="City eg. Montreal"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -273,7 +266,7 @@ const Settings = () => {
           />
           <TextField
             onChange={(ev) => handleChangeCountry(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small5"
             placeholder="Country code, eg. CA for Canada"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -288,8 +281,7 @@ const Settings = () => {
           onFocus={({ target }) => (target.style.border = "2px solid #2196F3")}
           onBlur={({ target }) => (target.style.border = "1px solid lightgray")}
           variant="outlined"
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="simple-select"
           value={sign}
           // placeholder="Choose your zodiac sign"
           onChange={(ev) => handleChangeSign(ev)}
@@ -315,7 +307,7 @@ const Settings = () => {
           }}
         >
           <AvatarInput>
-            <label for="file-upload-avatar" style={lableStyle}>
+            <label htmlFor="file-upload-avatar" style={lableStyle}>
               {avatarInputValue ? avatarInputValue : "Choose an avatar image"}
             </label>
             <input
@@ -332,7 +324,7 @@ const Settings = () => {
             />
           </AvatarInput>
           <BannerInput>
-            <label for="file-upload-banner" style={lableStyle}>
+            <label htmlFor="file-upload-banner" style={lableStyle}>
               {bannerInputValue ? bannerInputValue : "Choose a banner image"}
             </label>
             <input

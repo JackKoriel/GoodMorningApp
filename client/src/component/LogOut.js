@@ -3,6 +3,7 @@ import { ImSad } from "react-icons/im";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { currentUserContext } from "./CurrentUserContext";
+
 const LogOut = () => {
   let history = useHistory();
   const {
@@ -17,7 +18,6 @@ const LogOut = () => {
     fetch(`/api/logout`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         history.push("/signup");
         logoutUserStatus();
       })

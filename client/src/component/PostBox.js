@@ -7,7 +7,7 @@ import { useHistory } from "react-router";
 const PostBox = () => {
   let history = useHistory();
   const {
-    user: { status, avatarSrc, handle, _id },
+    user: { avatarSrc, handle, _id },
   } = useContext(currentUserContext);
   const [userBio, setUserBio] = useState("");
   let placeholderText = `How is your mood today ${handle}?`;
@@ -31,7 +31,6 @@ const PostBox = () => {
     })
       .then((resP) => resP.json())
       .then((jsonP) => {
-        console.log(jsonP.data);
         if (jsonP.status === 200) {
           history.push(`/${handle}`);
         }

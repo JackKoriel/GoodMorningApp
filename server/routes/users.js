@@ -16,6 +16,7 @@ const {
   logoutUser,
   getUser,
   getUserFriends,
+  getUserById,
 } = require("../handlerUser");
 
 /////////////////////////////////////////////////////////////////////////////
@@ -27,6 +28,9 @@ router.get("/api/users", getUsers);
 
 // gets one user from the server by using the handle
 router.get("/api/users/:handle", getUserByHandle);
+
+// gets one user from the server by using the handle
+router.get("/api/user/:_id", getUserById);
 
 // gets one user from the server by using the email and name while in the signin process
 router.post("/api/signin", getUsersByEmail);

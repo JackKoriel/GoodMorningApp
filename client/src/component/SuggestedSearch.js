@@ -14,9 +14,11 @@ const SuggestedSearch = ({ allUsersArray, searchValue, setSearchValue }) => {
   const history = useHistory();
 
   return (
-    <>
-      <SearchList>
-        {matchSuggestions.map((user) => {
+    <SearchList>
+      {matchSuggestions.length === 0 ? (
+        <NotFound>No users found</NotFound>
+      ) : (
+        matchSuggestions.map((user) => {
           return (
             <div key={user._id}>
               <ListedItem
@@ -48,13 +50,11 @@ const SuggestedSearch = ({ allUsersArray, searchValue, setSearchValue }) => {
               </ListedItem>
             </div>
           );
-        })}
-      </SearchList>
-    </>
+        })
+      )}
+    </SearchList>
   );
 };
-
-export default SuggestedSearch;
 
 const SearchList = styled.ul`
   border-radius: 10px;
@@ -77,3 +77,10 @@ const ListedItem = styled.li`
     background-color: var(--gold-color);
   }
 `;
+const NotFound = styled.div`
+  padding: 5px;
+  font-size: 15px;
+  font-weight: 700;
+`;
+
+export default SuggestedSearch;

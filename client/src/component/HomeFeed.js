@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 // import PostBox from "./PostBox";
 import PostModal from "./PostModal";
@@ -15,21 +15,18 @@ import SearchBar from "./SearchBar";
 const HomeFeed = () => {
   let history = useHistory();
   const {
-    user: { status, avatarSrc, handle },
+    user: { status },
   } = useContext(currentUserContext);
-  // console.log("user handle", handle);
 
   const {
     posts: { data },
     modalStatus,
     setModalStatus,
   } = useContext(PostContext);
-  // console.log("posts object", posts);
 
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
     ev.stopPropagation();
-    // console.log("Profile:", handleProfile);
   };
 
   const handleSharedClick = (ev, shareId) => {
@@ -38,11 +35,8 @@ const HomeFeed = () => {
   };
   const handleClickPost = (ev, _id) => {
     history.push(`/post/${_id}`);
-    // console.log("hello");
   };
 
-  // console.log("the array", postsArray);
-  console.log("home feed data", data);
   return (
     <>
       {status === "idle" ? (
@@ -50,7 +44,7 @@ const HomeFeed = () => {
           <CircularProgress /> Loading...
         </Progress>
       ) : (
-        <MasterContainer>
+        <MasterContainer id="HomeFeed">
           <SearchBar />
           <Header>
             <Video
@@ -80,9 +74,11 @@ const HomeFeed = () => {
                     <ImageBigContainer>
                       <Img src={post.author.avatarSrc} alt="profile" />
                       {post.media?.map((src, index) => {
-                        return (
-                          <ImgBig key={index} src={src.url} alt="postImage" />
-                        );
+                        if (src.url) {
+                          return (
+                            <ImgBig key={index} src={src.url} alt="postImage" />
+                          );
+                        }
                       })}
                       <ActionBar
                         postId={post._id}
@@ -99,7 +95,6 @@ const HomeFeed = () => {
                         <NameHandl
                           onClick={(ev) => {
                             handleClickProfile(ev, handleProfile);
-                            // console.log(handleProfile);
                           }}
                         >
                           {post.author.displayName}

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import Navbar from "./Navbar";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -10,16 +7,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import SuneriseLogo from "./SuneriseLogo";
-import Horoscope from "./Horoscope";
-import { GiRayGun } from "react-icons/gi";
 import Axios from "axios";
 import { useHistory } from "react-router";
-// import { UserContext } from "./UserContext";
 
 const SignUp = () => {
   let history = useHistory();
-  //   let history = useHistory();
-  //   const { setUserNow } = useContext(UserContext);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,8 +45,6 @@ const SignUp = () => {
   //   const [subStatus, setSubStatus] = useState("idle");
   //   const [errMessage, setErrMessage] = useState("");
 
-  // console.log(subStatus);
-
   //when user selects avatar
   const handleAvatarChange = (event) => {
     setAvatarSrc(event.target.files[0]);
@@ -67,43 +57,36 @@ const SignUp = () => {
   };
 
   const handleChangeUsername = (ev) => {
-    // console.log(ev.target.value);
     setusername(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangePassword = (ev) => {
-    // console.log(ev.target.value);
     setPassword(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeEmail = (ev) => {
-    // console.log(ev.target.value);
     setEmail(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeDisplayName = (ev) => {
-    // console.log(ev.target.value);
     setDisplayName(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeCity = (ev) => {
-    // console.log(ev.target.value);
     setCity(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeCountry = (ev) => {
-    // console.log(ev.target.value);
     setCountry(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeSign = (ev) => {
-    // console.log(ev.target.value);
     setSign(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
@@ -121,7 +104,6 @@ const SignUp = () => {
   };
 
   const handleClick = (ev) => {
-    // console.log("usename", username);
     ev.preventDefault();
     // setSubStatus("pending");
 
@@ -143,8 +125,6 @@ const SignUp = () => {
 
         formDataBanner
       ).then((json) => {
-        // console.log("files from couldinary ", res, json);
-
         fetch("/api/signup", {
           method: "POST",
           body: JSON.stringify({
@@ -165,11 +145,9 @@ const SignUp = () => {
         })
           .then((resP) => resP.json())
           .then((jsonP) => {
-            console.log(jsonP.data);
             if (jsonP.status === 201) {
               history.push("/signin");
             }
-            // console.log(json.user[0]);
             // const { status, error } = json;
             // if (status === "success") {
             //   window.sessionStorage.setItem(
@@ -216,7 +194,7 @@ const SignUp = () => {
         >
           <TextField
             onChange={(ev) => handleChangeUsername(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small9"
             placeholder="Your username name"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -224,7 +202,7 @@ const SignUp = () => {
           />
           <TextField
             onChange={(ev) => handleChangeDisplayName(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small10"
             placeholder="Your full name"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -254,7 +232,7 @@ const SignUp = () => {
         />
         <TextField
           onChange={(ev) => handleChangeEmail(ev)}
-          id="outlined-size-small"
+          id="outlined-size-small11"
           placeholder="Your email"
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -270,7 +248,7 @@ const SignUp = () => {
         >
           <TextField
             onChange={(ev) => handleChangeCity(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small12"
             placeholder="City eg. Montreal"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -278,7 +256,7 @@ const SignUp = () => {
           />
           <TextField
             onChange={(ev) => handleChangeCountry(ev)}
-            id="outlined-size-small"
+            id="outlined-size-small13"
             placeholder="Country code, eg. CA for Canada"
             variant="outlined"
             style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -293,8 +271,7 @@ const SignUp = () => {
           onFocus={({ target }) => (target.style.border = "2px solid #2196F3")}
           onBlur={({ target }) => (target.style.border = "1px solid lightgray")}
           variant="outlined"
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="simple-select"
           value={sign}
           // placeholder="Choose your zodiac sign"
           onChange={(ev) => handleChangeSign(ev)}
@@ -320,7 +297,7 @@ const SignUp = () => {
           }}
         >
           <AvatarInput>
-            <label for="file-upload-avatar" style={lableStyle}>
+            <label htmlFor="file-upload-avatar" style={lableStyle}>
               {avatarInputValue ? avatarInputValue : "Choose an avatar image"}
             </label>
             <input
@@ -337,7 +314,7 @@ const SignUp = () => {
             />
           </AvatarInput>
           <BannerInput>
-            <label for="file-upload-banner" style={lableStyle}>
+            <label htmlFor="file-upload-banner" style={lableStyle}>
               {bannerInputValue ? bannerInputValue : "Choose a banner image"}
             </label>
             <input

@@ -17,6 +17,7 @@ function reducer(state, action) {
         _id: action._id,
         email: action.email,
         handle: action.handle,
+        displayName: action.displayName,
         sign: action.sign,
         country: action.country,
         city: action.city,
@@ -50,7 +51,7 @@ function reducer(state, action) {
 
 export const CurrentUserProvider = ({ children }) => {
   const [user, dispatch] = useReducer(reducer, initialState);
-  console.log(user.readingList);
+
   const [errorStatus, setErrorStatus] = useState(false);
   const [update, setUpdate] = useState(false);
 
@@ -73,7 +74,6 @@ export const CurrentUserProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           checkingUserStatus(res.data);
-          console.log("res", res);
         } else {
           throw new Error(res.message);
         }

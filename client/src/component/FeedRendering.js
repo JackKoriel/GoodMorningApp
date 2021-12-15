@@ -5,20 +5,18 @@ import moment from "moment";
 import styled from "styled-components";
 import ActionBar from "./ActionBar";
 import { FiXCircle } from "react-icons/fi";
-import { currentUserContext } from "./CurrentUserContext";
+import { PostContext } from "./PostContext";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 
-const FeedRendering = ({ handle, name, currentUser, friend }) => {
+const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
   let history = useHistory();
-
-  const {
-    user: { update, setUpdate },
-  } = useContext(currentUserContext);
+  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
   const [posts, setPosts] = useState();
   const [postStatus, setPostStatus] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
 
+  //get user's posts
   useEffect(() => {
     fetch(`/api/${handle}/feed`)
       .then((res) => res.json())
@@ -30,12 +28,11 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
         setErrorStatus(true);
         // console.log(err);
       });
-  }, [handle]);
+  }, [handle, isUpdatingPost]);
 
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
     ev.stopPropagation();
-    // console.log("Profile:", handleProfile);
   };
 
   const handleSharedClick = (ev, shareId) => {
@@ -45,9 +42,9 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
 
   const handleClickPost = (ev, _id) => {
     history.push(`/post/${_id}`);
-    // console.log("hello");
   };
 
+  // delete user's posts
   const handleRemove = (ev, _id, originId) => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -65,6 +62,7 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
       .then((res) => res.json())
       .then((data) => {
         // setUpdate(!update);
+        setIsUpdatingPost(!isUpdatingPost);
       })
       .catch((err) => {
         console.log(err.stack);
@@ -95,7 +93,7 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
   //       </div>
   //     );
   //   }
-  // console.log("jack", posts);
+
   return (
     <>
       {!postStatus ? (
@@ -118,9 +116,11 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
                   <ImageBigContainer>
                     <Img src={post.author.avatarSrc} alt="profile" />
                     {post.media?.map((src, index) => {
-                      return (
-                        <ImgBig key={index} src={src.url} alt="postImage" />
-                      );
+                      if (src.url) {
+                        return (
+                          <ImgBig key={index} src={src.url} alt="postImage" />
+                        );
+                      }
                     })}
                     <ActionBar
                       tweetId={post._id}
@@ -137,10 +137,9 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
                       <NameHandl
                         onClick={(ev) => {
                           handleClickProfile(ev, handleProfile);
-                          // console.log(handleProfile);
                         }}
                       >
-                        {post.author.displayName}
+                        {name}
                       </NameHandl>
                       {post.reshareOf && (
                         <SharedFrom
@@ -161,7 +160,7 @@ const FeedRendering = ({ handle, name, currentUser, friend }) => {
                       </Span>
                     ) : (
                       <Span>
-                        @{post.author.handle} ·{" "}
+                        @{userHandle} ·{" "}
                         {moment(post.timestamp).format(" MMM Do")}
                       </Span>
                     )}

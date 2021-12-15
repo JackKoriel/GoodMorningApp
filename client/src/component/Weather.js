@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 
@@ -38,7 +38,6 @@ const Weather = () => {
     user: { city },
   } = useContext(currentUserContext);
   const [dailyForcast, setDailyForcast] = useState(dummyData);
-  console.log("dailyforcast", dailyForcast);
 
   // useEffect(() => {
   //   fetch("/api/weather", {

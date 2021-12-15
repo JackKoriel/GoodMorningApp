@@ -2,10 +2,14 @@ import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { TextareaAutosize } from "@material-ui/core";
 import Axios from "axios";
+import { FiXCircle } from "react-icons/fi";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
+import { PostContext } from "./PostContext";
 
 const PostModal = ({ modalStatus, setModalStatus }) => {
+  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
+
   //status states
   const [statusUpdate, setStatusUpdate] = useState("");
   const [statusValue, setStatusValue] = useState("");
@@ -14,18 +18,18 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
   const [previewSource, setPreviewSource] = useState("");
   const [imageSelected, setImageSelected] = useState(null);
   const [inputValue, setInputValue] = useState("");
-
-  // const { setIsUpdating, isUpdating } = useContext(TweetContext);
+  const [imageURL, setImageURL] = useState("");
   // const [postStatusError, setPostStatusError] = useState(false);
 
   const [counter, setCounter] = useState(280);
   const [counterColor, setCounterColor] = useState("");
   const [buttonState, setButtonState] = useState();
+  const [buttonStateImage, setButtonStateImage] = useState(true);
 
   //change counter color for the status update
   useEffect(() => {
     if (counter > 50) {
-      setCounterColor("#CACACA");
+      setCounterColor("var(--blue-color)");
       setButtonState(false);
     }
     if (counter <= 50) {
@@ -49,6 +53,22 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
     } else {
       setPreviewSource("");
     }
+    //use form data to use with axios
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", "ow8yfkvb");
+    //use Axios to send the image to cloudinary
+
+    if (event.target.files[0] !== undefined) {
+      setButtonStateImage(false);
+      Axios.post(
+        "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
+        formData
+      ).then((res) => {
+        setImageURL(res.data.url);
+        setButtonStateImage(true);
+      });
+    }
   };
   //to preview the image after handleImageChange
   const previewFile = (file) => {
@@ -61,7 +81,6 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
 
   //the changes in the status
   const handleStatusChange = (event) => {
-    // console.log(event.target.value);
     setStatusValue(event.target.value);
     setStatusUpdate(event.target.value);
     setCounter(280 - event.target.value.length);
@@ -77,52 +96,42 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
   const handleSubmitPost = (ev) => {
     //prevent page from refresh
     ev.preventDefault();
-
-    //use form data to use with axios
-    const formData = new FormData();
-    formData.append("file", imageSelected);
-    formData.append("upload_preset", "ow8yfkvb");
-    //use Axios to send the image to cloudinary
-    Axios.post(
-      "https://api.cloudinary.com/v1_1/dhj5ncbxs/image/upload",
-      formData
-    ).then((res) => {
-      // console.log("files from couldinary ", res);
-      //send image url with status to backend
-      fetch("/api/post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          status: statusUpdate,
-          imageURL: res.data.url,
-        }),
+    //send image url with status to backend
+    fetch("/api/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        status: statusUpdate,
+        imageURL: imageURL,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // setIsUpdating(true);
+        setStatusValue("");
+        setInputValue("");
+        setIsUpdatingPost(!isUpdatingPost);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("The data posted", data);
-          // setIsUpdating(true);
-          setStatusValue("");
-          setInputValue("");
-        })
-        .catch((err) => {
-          // setPostStatusError(true);
-          console.log(err);
-        });
-      setCounter(280);
-      setModalStatus(false);
-    });
+      .catch((err) => {
+        // setPostStatusError(true);
+        console.log(err);
+      });
+    setCounter(280);
+    setModalStatus(false);
   };
   return (
     <Box isOpen={modalStatus}>
       <Form>
         <PostInput>
           <TextareaAutosize
-            maxRows={4}
-            aria-label="maximum height"
+            id="outlined-multiline-static"
+            label="Multiline"
             // multiline
+            minRows={4}
+            maxRows={4}
             placeholder="What's up!!!"
             value={statusValue}
             onChange={handleStatusChange}
@@ -130,28 +139,28 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
           />
         </PostInput>
         <ImageUploadContainer>
-          <ImageInput
-            type="file"
-            value={inputValue}
-            name="file"
-            accept="image/*"
-            placeholder="Upload image"
-            onChange={(event) => {
-              handleImageChange(event);
-            }}
-          />
-          {previewSource && (
-            <ImageView
-              src={previewSource}
-              alt="chosen"
-              style={{ height: "300px" }}
+          <ImageInput>
+            <label htmlFor="file-upload-image" style={lableStyle}>
+              {inputValue ? inputValue : "Choose an image"}
+            </label>
+            <input
+              style={{ display: "none" }}
+              id="file-upload-image"
+              type="file"
+              value={inputValue}
+              name="file"
+              accept="image/*"
+              placeholder="Upload image"
+              onChange={(event) => {
+                handleImageChange(event);
+              }}
             />
-          )}
+          </ImageInput>
         </ImageUploadContainer>
         <ButtonContainer>
           <Counter counterColor={counterColor}>{counter}</Counter>
           <Button
-            disabled={buttonState}
+            disabled={buttonState || !buttonStateImage}
             type="submit"
             onClick={(ev) => {
               handleSubmitPost(ev);
@@ -160,14 +169,26 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
             {/* {isUpdating ? <i className="fa fa-spinner fa-spin" /> : "Mewo"} */}
             POST
           </Button>
-          <ButtonClose
-            onClick={(ev) => {
-              closeModalHandle(ev);
-            }}
-          >
-            X
-          </ButtonClose>
         </ButtonContainer>
+        {previewSource && (
+          <ImageView
+            src={previewSource}
+            alt="chosen"
+            style={{ height: "300px" }}
+          />
+        )}
+        <ButtonRemove
+          onClick={(ev) => {
+            closeModalHandle(ev);
+          }}
+        >
+          <FiXCircle
+            onMouseOver={({ target }) =>
+              (target.style.fill = "var(--blue-color)")
+            }
+            onMouseOut={({ target }) => (target.style.fill = "white")}
+          />
+        </ButtonRemove>
       </Form>
     </Box>
   );
@@ -200,62 +221,56 @@ const Box = styled.div`
 
 const Form = styled.form`
   position: relative;
-  background-color: white;
+  background-color: var(--beige-color);
+  border: 3px solid var(--gold-color);
   border-radius: 10px;
-  height: 40%;
-  min-width: 50%;
+  height: 50%;
+  width: 50%;
+  min-width: 500px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
-const PostInput = styled.div``;
-
-const inputField = {};
-
-const ButtonContainer = styled.div``;
-
-const Counter = styled.div`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${({ counterColor }) => {
-    return counterColor;
-  }};
+const PostInput = styled.div`
+  margin-top: 30px;
+  /* border: 1px red solid; */
+  width: 50%;
+  height: 20%;
 `;
 
-const Button = styled.button`
-  padding: 10px 16px;
-  width: 80px;
-  margin-bottom: 10px;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  background-color: var(--blue-color);
-  margin-left: 0;
-  margin-top: 20px;
-  font-weight: 700;
-  transition: all 300ms ease-out;
-  font-size: 15px;
-  &&:active {
-    transform: scale(0.8);
-  }
-  background-color: ${({ disabled }) => {
-    return disabled && "gray";
-  }};
-  cursor: ${({ disabled }) => {
-    return disabled && "no-drop";
-  }};
+const inputField = {
+  width: "100%",
+  // paddingBottom: "80px",
+};
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  /* border: 1px solid red; */
+  width: 50%;
+  margin-top: 10px;
+  margin-bottom: 5px;
 `;
 
-const ButtonClose = styled.button`
+const ButtonRemove = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  font-weight: 700;
   border: none;
   background: none;
-  font-size: 20px;
+  font-size: 30px;
+  &:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+    fill: var(--blue-color);
+  }
 `;
 
 const ImageUploadContainer = styled.div`
@@ -263,14 +278,99 @@ const ImageUploadContainer = styled.div`
   flex-direction: column;
 `;
 
-const ImageInput = styled.input`
+const ImageInput = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  background: white;
   border-radius: 5px;
+  padding: 10px 0;
+  font-size: 15px;
+  border: 1px solid lightgray;
+  transition: all 300ms ease-out;
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+    /* border-radius: 5px; */
+  }
 `;
+const lableStyle = {
+  width: "100%",
+  height: "100%",
+  cursor: "pointer",
+  paddingLeft: "15px",
+  paddingRight: "15px",
+};
 
 const ImageView = styled.img`
-  width: 50px;
-  height: auto;
+  width: auto;
+  max-height: 150px;
+  border-radius: 10px;
+  /* border: 1px green solid; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const Counter = styled.div`
+  font-size: 14px;
+  font-weight: 900;
+  color: ${({ counterColor }) => {
+    return counterColor;
+  }};
+  background-color: var(--gold-color);
+  border-radius: 20px;
+  padding: 10px 20px;
+`;
+
+const Button = styled.button`
+  /* margin-top: 40px; */
+  background-color: var(--blue-color);
+  border: 0 solid #e5e7eb;
+  box-sizing: border-box;
+  color: white;
+  display: flex;
+  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.75rem;
+  padding: 0.75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: 50%;
+  max-width: 460px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  &&:focus {
+    outline: 0;
+  }
+  &&:hover:after {
+    bottom: 2px;
+    left: 2px;
+  }
+  &&:after {
+    content: "";
+    position: absolute;
+    border: 1px solid #000000;
+    bottom: 4px;
+    left: 4px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
+  }
+  background-color: ${({ disabled }) => {
+    return disabled && "gray";
+  }};
+  cursor: ${({ disabled }) => {
+    return disabled && "no-drop";
+  }};
 `;
 
 export default PostModal;

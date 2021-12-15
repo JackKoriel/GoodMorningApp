@@ -14,9 +14,6 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  // console.log(action.tweetsById);
-  //   console.log(action.data);
-  //   console.log(state.tweetId);
   switch (action.type) {
     case "received-tweets": {
       return {
@@ -33,8 +30,7 @@ function reducer(state, action) {
 export const PostProvider = ({ children }) => {
   const { user } = useContext(currentUserContext);
   const [posts, dispatch] = useReducer(reducer, initialState);
-  console.log(posts);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpdatingPost, setIsUpdatingPost] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
   const [newsStatus, setNewsStatus] = useState(false);
@@ -46,19 +42,17 @@ export const PostProvider = ({ children }) => {
 
   useEffect(() => {
     if (user.status === "active") {
-      //   console.log(user);
       fetch(`/api/${user.handle}/friends-feed`)
         .then((res) => res.json())
         .then((data) => {
           checkingPosts(data.data);
-          //   console.log(data);
         })
         .catch((err) => {
           setErrorStatus(true);
           console.log(err);
         });
     }
-  }, [user]);
+  }, [isUpdatingPost, user]);
 
   return (
     <PostContext.Provider
@@ -66,8 +60,8 @@ export const PostProvider = ({ children }) => {
         posts,
         actions: { checkingPosts },
         errorStatus,
-        isUpdating,
-        setIsUpdating,
+        isUpdatingPost,
+        setIsUpdatingPost,
         modalStatus,
         setModalStatus,
         newsStatus,

@@ -48,7 +48,6 @@ const getUsers = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -58,8 +57,6 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
   //express session after signing in
   let handle = req.session.handle;
-  // console.log(req.session);
-  // console.log(req.session.handle);
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -71,7 +68,6 @@ const getUser = async (req, res) => {
     //find current users
     const user = await db.collection("users").findOne({ handle });
     // validations and user control
-    // console.log(user);
     user
       ? res.status(200).json({ status: 200, data: user })
       : res.status(404).json({ status: 404, data: "No users logged in" });
@@ -82,7 +78,6 @@ const getUser = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -92,8 +87,6 @@ const getUser = async (req, res) => {
 const getUserFriends = async (req, res) => {
   //express session after signing in
   let handle = req.session.handle;
-  // console.log(req.session);
-  // console.log(req.session.handle);
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -122,7 +115,6 @@ const getUserFriends = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -153,7 +145,36 @@ const getUserByHandle = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
+  }
+};
+
+//***************************
+// GET user based on :_id
+//***************************
+const getUserById = async (req, res) => {
+  //get the handle from params
+  const { _id } = req.params;
+  //declair client in mongo
+  const client = new MongoClient(MONGO_URI, options);
+  //try catch finally function
+  try {
+    //connect client
+    await client.connect();
+    //declair database in mongo
+    const db = client.db("GoodMorningApp");
+    //find one user who has the handle
+    const oneUser = await db.collection("users").findOne({ _id: _id });
+    // validations and oneUser control
+    oneUser
+      ? res.status(200).json({ status: 200, data: oneUser })
+      : res.status(404).json({ status: 404, data: "User not found" });
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "Something went wrong, please try again later.",
+    });
+  } finally {
+    client.close();
   }
 };
 
@@ -192,7 +213,6 @@ const getUsersByEmail = async (req, res) => {
 
     //find user in db based on email
     const user = await db.collection("users").findOne({ email });
-    // console.log("user", user);
     // variable for passowrd validation
     const validPassword = await bcrypt.compare(password, user.password);
     //verifications for provided user
@@ -213,7 +233,6 @@ const getUsersByEmail = async (req, res) => {
       req.session.handle = handle;
       req.session._id = user._id;
       req.session.email = email;
-      // console.log(req.session._id);
       res.status(200).json({ status: 200, data: user });
     }
   } catch (err) {
@@ -224,7 +243,6 @@ const getUsersByEmail = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -260,7 +278,6 @@ const addUser = async (req, res) => {
     avatarSrc,
     bannerSrc,
   } = req.body;
-  // console.log(req.body);
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -338,7 +355,6 @@ const addUser = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -359,10 +375,8 @@ const updateUser = async (req, res) => {
     displayName,
     bio,
   } = req.body;
-  console.log("body", req.body);
   //get user handle from prams
   const { _id } = req.params;
-  console.log("param", _id);
   //verify user updating their profile and not other usersr
   if (req.session._id !== _id) {
     return res.status(401).json({
@@ -446,7 +460,6 @@ const updateUser = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -491,7 +504,6 @@ const addFollower = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -538,7 +550,6 @@ const removeFolower = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -558,4 +569,5 @@ module.exports = {
   logoutUser,
   getUser,
   getUserFriends,
+  getUserById,
 };

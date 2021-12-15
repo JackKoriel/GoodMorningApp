@@ -1,13 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-// import Navbar from "./Navbar";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
-// import backgroundImage from "../Images/facespace_bg.jpg";
 import { currentUserContext } from "./CurrentUserContext";
 import { useHistory } from "react-router";
 
@@ -31,22 +29,17 @@ const SignIn = () => {
   //   const [subStatus, setSubStatus] = useState("idle");
   //   const [errMessage, setErrMessage] = useState("");
 
-  // console.log(subStatus);
-
   const handleChangeUsername = (ev) => {
-    // console.log(ev.target.value);
     setusername(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangePassword = (ev) => {
-    // console.log(ev.target.value);
     setPassword(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
   };
   const handleChangeEmail = (ev) => {
-    // console.log(ev.target.value);
     setEmail(ev.target.value);
     // setErrMessage("");
     // setSubStatus("idle");
@@ -60,7 +53,6 @@ const SignIn = () => {
   };
 
   const handleClick = (ev) => {
-    // console.log("usename", username);
     ev.preventDefault();
     // setSubStatus("pending");
     fetch("/api/signin", {
@@ -78,10 +70,8 @@ const SignIn = () => {
       .then((res) => res.json())
       .then((json) => {
         //put an if condition for success
-        console.log("login", json);
         checkingUserStatus(json.data);
         history.push("/");
-        // console.log(json.user[0]);
         // const { status, error } = json;
         // if (status === "success") {
         //   window.sessionStorage.setItem(
@@ -109,7 +99,7 @@ const SignIn = () => {
       <SignContainer>
         <TextField
           onChange={(ev) => handleChangeUsername(ev)}
-          id="outlined-size-small"
+          id="outlined-size-small6"
           placeholder="Your first name"
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -119,7 +109,7 @@ const SignIn = () => {
           onChange={(ev) => handleChangePassword(ev)}
           type={showPassword ? "text" : "password"}
           value={password}
-          id="outlined-size-small"
+          id="outlined-size-small7"
           placeholder="Your password"
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
@@ -138,7 +128,7 @@ const SignIn = () => {
         />
         <TextField
           onChange={(ev) => handleChangeEmail(ev)}
-          id="outlined-size-small"
+          id="outlined-size-small8"
           placeholder="Your email"
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}

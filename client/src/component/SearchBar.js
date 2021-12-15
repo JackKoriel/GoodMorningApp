@@ -5,10 +5,8 @@ import SuggestedSearch from "./SuggestedSearch";
 const SearchBar = () => {
   // useState for the value inside of search bar
   const [searchValue, setSearchValue] = useState("");
-  console.log("searchValue", searchValue);
   // stores all items from backend
   const [allUsersArray, setAllUsersArray] = useState([]);
-  console.log("allUsersArray", allUsersArray);
 
   useEffect(() => {
     fetch("/api/users")

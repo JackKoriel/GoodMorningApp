@@ -1,26 +1,24 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { AiOutlineRetweet } from "react-icons/ai";
-import { BiMessageRounded } from "react-icons/bi";
 import { FiPlusSquare } from "react-icons/fi";
 import { FiHeart } from "react-icons/fi";
 // import { FaCat } from "react-icons/fa";
 // import { GiWizardFace } from "react-icons/gi";
 import { PostContext } from "./PostContext";
+import { useHistory } from "react-router-dom";
 
 const ActionBar = ({
   postId,
   isLiked,
-  isShared,
   numLikes,
-  numShares,
+  // numShares,
   sharedArray,
 }) => {
-  const { setIsUpdating, isUpdating } = useContext(PostContext);
+  let history = useHistory();
+  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
   const [likes, setLikes] = useState(isLiked);
   const [likesNum, setLikesNum] = useState(numLikes);
   const [shared, setShared] = useState(sharedArray?.length > 0 ? true : false);
-  // console.log(shared);
 
   const handleClickLike = (ev) => {
     ev.preventDefault();
@@ -40,9 +38,8 @@ const ActionBar = ({
       .then((data) => {
         if (data.status === 200) {
           setLikes(!likes);
-          setIsUpdating(true);
+          setIsUpdatingPost(!isUpdatingPost);
         }
-        // console.log("The likes", data);
       })
       .catch((err) => {
         // setErrorStatus(true);
@@ -68,7 +65,12 @@ const ActionBar = ({
       .then((data) => {
         if (data.status === 200) {
           setShared(sharedArray?.length > 0 ? true : false);
-          setIsUpdating(true);
+          setIsUpdatingPost(!isUpdatingPost);
+          history.push(`/`);
+          document.getElementById("HomeFeed").scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
         }
       })
       .catch((err) => {
@@ -135,7 +137,7 @@ const ActionBar = ({
       >
         <UnstyledActionButton>
           <LittleShare>
-            {shared ? (
+            {sharedArray?.length > 0 ? (
               <FiPlusSquare style={shareStyleActive} />
             ) : (
               <FiPlusSquare style={shareStyleInactive} />

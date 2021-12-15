@@ -29,7 +29,9 @@ const SideNavbar = () => {
   return (
     <SidebarContainer>
       {/* site icon */}
-      <SuneriseLogo />
+      <div style={{ marginLeft: "25%" }}>
+        <SuneriseLogo />
+      </div>
       <PostBox avatarSrc={avatarSrc} />
       {/* sidebarOptions */}
       <NavbarOptions exact={true} to="/" Icon={FiHome} text="Home" />

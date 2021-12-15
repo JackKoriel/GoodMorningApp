@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
-import moment from "moment";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import FeedRendering from "./FeedRendering";
@@ -11,41 +10,38 @@ import { GiSpellBook } from "react-icons/gi";
 
 const Profile = () => {
   const { handle } = useParams();
-
   const { user, errorStatus, update, setUpdate } =
     useContext(currentUserContext);
-  // console.log("userProfile", user.handle);
-  // console.log("userObject", user);
-
   const [userData, setUserData] = useState({});
   // const [location, setLocation] = useState(true);
   const [status, setStatus] = useState(false);
   const [errorStatusProfiles, setErrorStatusProfiles] = useState(false);
-  const [followingText, setFollowingText] = useState(null);
+  const [followingText, setFollowingText] = useState(
+    user.followingIds?.includes(handle)
+  );
 
-  useEffect(() => {
-    if (user.followingIds?.includes(handle)) {
-      setFollowingText(true);
-    }
-  }, [update]);
+  // useEffect(() => {
+  //   if (user.followingIds?.includes(handle)) {
+  //     setFollowingText(true);
+  //   }
+  // }, [update]);
 
+  //get user data from DB
   useEffect(() => {
     fetch(`/api/users/${handle}`)
       .then((res) => res.json())
       .then((data) => {
         setUserData(data.data);
-        // console.log("profile data", data);
         setStatus(true);
       })
       .catch((err) => {
         setErrorStatusProfiles(true);
-        console.log(err.stack);
       });
   }, [handle, update]);
 
+  //follow or unfollow users
   const followingButtonHandle = (ev) => {
     ev.preventDefault();
-
     if (followingText) {
       fetch(`/api/${handle}/profile/unfollow`, {
         method: "PATCH",
@@ -53,9 +49,6 @@ const Profile = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        // body: JSON.stringify({
-        //   current_date,
-        // }),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -72,9 +65,6 @@ const Profile = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        // body: JSON.stringify({
-        //   current_date,
-        // }),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -86,6 +76,8 @@ const Profile = () => {
         });
     }
   };
+
+  //change the text on the button after each click
   let followingFinalText;
   followingText
     ? (followingFinalText = "Following")
@@ -95,13 +87,9 @@ const Profile = () => {
   //     setLocation(false);
   //   }
   // }, []);
-  // console.log(location);
 
   let userProfile = {};
   handle === user.handle ? (userProfile = user) : (userProfile = userData);
-  // console.log(userProfile.handle);
-  // console.log(handle);
-  console.log(user.followingIds);
 
   // if (errorStatus || errorStatusProfiles) {
   //   return (
@@ -202,6 +190,7 @@ const Profile = () => {
           <FeedRendering
             handle={handle}
             name={userProfile.displayName}
+            userHandle={userProfile.handle}
             friend={userProfile.handle}
             currentUser={user.handle}
           />

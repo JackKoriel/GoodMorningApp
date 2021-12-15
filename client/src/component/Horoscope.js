@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
@@ -19,15 +19,12 @@ const dummyData = {
 const Horoscope = () => {
   const { horoStatus, setHoroStatus } = useContext(PostContext);
   const {
-    user: { sign, email, favorite },
+    user: { email, favorite },
     update,
     setUpdate,
   } = useContext(currentUserContext);
-  console.log("horoscope fav", favorite);
 
   const [dailyHoro, setDailyHoro] = useState(dummyData);
-  console.log("dailyhoro current date", dailyHoro.current_date);
-  console.log("dailyHoro ", dailyHoro);
 
   const handleClickFavorite = (ev) => {
     ev.preventDefault();
@@ -67,7 +64,6 @@ const Horoscope = () => {
   //   })
   //     .then((res) => res.json())
   //     .then((data) => {
-  //       console.log("horo data", data);
   //       setDailyHoro(data.data);
   //     })
   //     .catch((err) => {

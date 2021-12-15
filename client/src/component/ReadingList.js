@@ -17,7 +17,6 @@ const ReadingList = () => {
     fetch(`/api/reading-list`)
       .then((res) => res.json())
       .then((data) => {
-        // console.log("fetch data", data);
         setReadingList(data.data);
         setStatus("active");
       })

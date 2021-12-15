@@ -53,7 +53,6 @@ const postImage = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 

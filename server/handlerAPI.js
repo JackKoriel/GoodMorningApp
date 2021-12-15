@@ -52,8 +52,8 @@ const getHoroscope = async (req, res) => {
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    // client.close();
-    // console.log("Disconnected from Mongo");
+    //it was commented out confirm before presentation
+    client.close();
   }
 };
 
@@ -62,7 +62,6 @@ const getHoroscope = async (req, res) => {
 //***************************
 const getWeather = async (req, res) => {
   const { city } = req.body;
-  //   console.log(city);
   try {
     const options = {
       method: "GET",
@@ -83,14 +82,13 @@ const getWeather = async (req, res) => {
     });
     //send data to mongo
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: 500,
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    // client.close();
-    // console.log("Disconnected from Mongo");
+    //it was commented out confirm before presentation
+    client.close();
   }
 };
 
@@ -129,8 +127,8 @@ const getNews = async (req, res) => {
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    // client.close();
-    // console.log("Disconnected from Mongo");
+    //it was commented out confirm before presentation
+    client.close();
   }
 };
 
@@ -142,8 +140,6 @@ const addToFav = async (req, res) => {
   let handle = req.session.handle;
   //get horoscope information form horoscope page using POST
   const { dailyHoro, email } = req.body;
-  console.log("Daily for body", dailyHoro);
-  console.log("email body", email);
   //declair client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
@@ -192,7 +188,6 @@ const addToFav = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -236,7 +231,6 @@ const removeFav = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -272,7 +266,6 @@ const getFav = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -324,7 +317,6 @@ const addToReading = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -363,7 +355,6 @@ const removeArticleFromRL = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
@@ -396,7 +387,6 @@ const getRL = async (req, res) => {
     });
   } finally {
     client.close();
-    console.log("Disconnected from Mongo");
   }
 };
 
