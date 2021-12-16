@@ -39,7 +39,7 @@ router.post("/api/signin", getUsersByEmail);
 router.get("/api/logout", logoutUser);
 
 // gets one user from the server by using the email and name while in the signin process
-router.post("/api/signup", authRequired, addUser);
+router.post("/api/signup", addUser);
 
 // update user's basic information at the settings in the profile page
 router.post("/api/profile/:_id", authRequired, updateUser);
