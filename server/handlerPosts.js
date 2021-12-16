@@ -146,13 +146,11 @@ const getUserFriendsPosts = async (req, res) => {
         const updatedUser = await db
           .collection("users")
           .findOne({ _id: post.author._id });
-        console.log(updatedUser);
         post.author = updatedUser;
         return post;
       })
     );
 
-    console.log(updatedFriendsPosts);
     updatedFriendsPosts.length !== 0
       ? res.status(200).json({ status: 200, data: updatedFriendsPosts })
       : res.status(404).json({ status: 404, message: "Posts not found" });

@@ -39,7 +39,7 @@ router.post("/api/signin", getUsersByEmail);
 router.get("/api/logout", logoutUser);
 
 // gets one user from the server by using the email and name while in the signin process
-router.post("/api/signup", addUser);
+router.post("/api/signup", authRequired, addUser);
 
 // update user's basic information at the settings in the profile page
 router.post("/api/profile/:_id", authRequired, updateUser);
@@ -54,7 +54,7 @@ router.patch("/api/:handle/profile/unfollow", authRequired, removeFolower);
 router.get("/api/user", getUser);
 
 // gets current user friends in db
-router.get("/api/friends/handle", getUserFriends);
+router.get("/api/friends/handle", authRequired, getUserFriends);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////

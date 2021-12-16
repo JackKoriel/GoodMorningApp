@@ -80,7 +80,6 @@ export const CurrentUserProvider = ({ children }) => {
       })
       .catch((err) => {
         setErrorStatus(true);
-        console.log(err);
         noAvailableUserStatus();
       });
   }, [update]);

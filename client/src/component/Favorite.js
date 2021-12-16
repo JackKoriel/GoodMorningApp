@@ -19,9 +19,7 @@ const Favorite = () => {
         setFavList(data.data);
         setStatus("active");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [status, horoStatus]);
 
   const handleRemove = (ev, _id, current_date) => {
@@ -43,9 +41,7 @@ const Favorite = () => {
         setStatus("deleted");
         setUpdate(!update);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   if (favList === undefined) {
     return (

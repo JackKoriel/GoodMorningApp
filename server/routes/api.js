@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+const { authRequired } = require("../helpers/authentication");
+
 const {
   getHoroscope,
   getWeather,
@@ -16,28 +18,28 @@ const {
 
 /////////////////////////////////////////////////////////////////////////////
 // gets horoscopes
-router.post("/api/horoscope", getHoroscope);
+router.post("/api/horoscope", authRequired, getHoroscope);
 
 // gets weather forcast
-router.post("/api/weather", getWeather);
+router.post("/api/weather", authRequired, getWeather);
 
 // gets top news
-router.post("/api/news", getNews);
+router.post("/api/news", authRequired, getNews);
 
 // add horoscope to favorite
-router.post("/api/favorite", addToFav);
+router.post("/api/favorite", authRequired, addToFav);
 
 // remove horoscope from favorite
-router.delete("/api/favorite/:horoId", removeFav);
+router.delete("/api/favorite/:horoId", authRequired, removeFav);
 
 // get all favorites
 router.get("/api/favorite", getFav);
 
 // add article to reading list
-router.post("/api/reading-list", addToReading);
+router.post("/api/reading-list", authRequired, addToReading);
 
 // remove article from reading list
-router.delete("/api/reading-list/:_id", removeArticleFromRL);
+router.delete("/api/reading-list/:_id", authRequired, removeArticleFromRL);
 
 // get all articles in reading list
 router.get("/api/reading-list", getRL);

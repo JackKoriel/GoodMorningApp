@@ -8,12 +8,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Axios from "axios";
-import { useHistory } from "react-router";
+import ErrorMsg from "./ErrorMsg";
 
 const Settings = () => {
-  let history = useHistory();
   const {
-    user: { _id, handle },
+    user: { _id },
     update,
     setUpdate,
   } = useContext(currentUserContext);
@@ -27,9 +26,7 @@ const Settings = () => {
   const [sign, setSign] = useState("");
 
   //images states
-  const [avatarSrc, setAvatarSrc] = useState(null);
   const [avatarInputValue, setAvatarInputValue] = useState("");
-  const [bannerSrc, setBannerSrc] = useState(null);
   const [bannerInputValue, setBannerInputValue] = useState("");
   const [avatarURL, setAvatarURL] = useState("");
   const [bannerURL, setBannerURL] = useState("");
@@ -54,43 +51,47 @@ const Settings = () => {
     "Pisces",
   ];
 
-  //   const [subStatus, setSubStatus] = useState("idle");
-  //   const [errMessage, setErrMessage] = useState("");
+  //error messages validations
+  const [subStatus, setSubStatus] = useState("idle");
+  const [errMessage, setErrMessage] = useState("");
+
+  //done message state
+  const [userUpdated, setUserUpdated] = useState(false);
 
   const handleChangeUsername = (ev) => {
     setusername(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangePassword = (ev) => {
     setPassword(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeEmail = (ev) => {
     setEmail(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeDisplayName = (ev) => {
     setDisplayName(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeCity = (ev) => {
     setCity(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeCountry = (ev) => {
     setCountry(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeSign = (ev) => {
     setSign(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
 
   const handleClickShowPassword = (ev) => {
@@ -104,7 +105,6 @@ const Settings = () => {
   const handleAvatarChange = (event) => {
     //set the button state so the user doesn't submit before the URL is returned
     setAvatarState(false);
-    setAvatarSrc(event.target.files[0]);
     setAvatarInputValue(event.target.value);
 
     //use form data for banner to use with axios
@@ -126,7 +126,6 @@ const Settings = () => {
   const handleBannerChange = (event) => {
     //set the button state so the user doesn't submit before the URL is returned
     setBannerState(false);
-    setBannerSrc(event.target.files[0]);
     setBannerInputValue(event.target.value);
 
     //use form data for banner to use with axios
@@ -149,7 +148,7 @@ const Settings = () => {
     ev.preventDefault();
     //set the button state for the loading animations
     setConfirmState(false);
-    // setSubStatus("pending");
+    setSubStatus("pending");
 
     fetch(`/api/profile/${_id}`, {
       method: "POST",
@@ -169,37 +168,19 @@ const Settings = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((resP) => resP.json())
-      .then((jsonP) => {
-        if (jsonP.status === 200) {
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status === 200) {
           setUpdate(!update);
-          history.push(`/${handle}`);
+          setConfirmState(true);
+          setSubStatus("idle");
+          setUserUpdated(true);
+        } else {
+          setSubStatus("error");
+          setErrMessage(json.message);
           setConfirmState(true);
         }
-
-        // const { status, error } = json;
-        // if (status === "success") {
-        //   window.sessionStorage.setItem(
-        //     "username",
-        //     JSON.stringify(json.user[0])
-        //   );
-        //   //using the json data is better than getting the data from the session because the session stops other functions and therefore it will not display the name next to the greeting without a refresh
-        //   setUserNow(json.user[0]);
-        //   setSubStatus("confirmed");
-        //   //use history to direct the user to the homepage
-        //   history.push("/");
-        // } else if (error) {
-        //   setSubStatus("error");
-        //   setErrMessage("Incorrect username");
-        //   setusername("");
-        // }
-        //////////////////
       });
-    /////////////////
-    // .catch((err) => {
-    //   // setPostStatusError(true);
-    //   console.log(err);
-    // });
   };
 
   return (
@@ -221,7 +202,11 @@ const Settings = () => {
             id="outlined-size-small1"
             placeholder="Your username name"
             variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              background: "white",
+              borderRadius: "5px",
+            }}
             value={username}
           />
           <TextField
@@ -229,7 +214,11 @@ const Settings = () => {
             id="outlined-size-small2"
             placeholder="Your full name"
             variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              background: "white",
+              borderRadius: "5px",
+            }}
             value={displayName}
           />
         </div>
@@ -275,7 +264,11 @@ const Settings = () => {
             id="outlined-size-small4"
             placeholder="City eg. Montreal"
             variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              background: "white",
+              borderRadius: "5px",
+            }}
             value={city}
           />
           <TextField
@@ -283,7 +276,11 @@ const Settings = () => {
             id="outlined-size-small5"
             placeholder="Country code, eg. CA for Canada"
             variant="outlined"
-            style={{ width: "100%", background: "white", borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              background: "white",
+              borderRadius: "5px",
+            }}
             value={country}
           />
         </div>
@@ -297,11 +294,10 @@ const Settings = () => {
           variant="outlined"
           id="simple-select"
           value={sign}
-          // placeholder="Choose your zodiac sign"
           onChange={(ev) => handleChangeSign(ev)}
           style={SelectStyle}
         >
-          <option value="" disabled selected hidden>
+          <option value="" disabled hidden>
             Choose your zodiac sign
           </option>
           {horoscpes.map((horosope, index) => {
@@ -366,6 +362,10 @@ const Settings = () => {
             "Confirm"
           )}
         </Button>
+        {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>}
+        {userUpdated === true && (
+          <ConfirmMessage>Settings have been updated!</ConfirmMessage>
+        )}
       </SignContainer>
     </MasterContainer>
   );
@@ -395,6 +395,7 @@ const Header = styled.div`
 `;
 const SignContainer = styled.div`
   /* width: 100%; */
+  position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -456,6 +457,26 @@ const SelectStyle = {
   fontSize: "15px",
   border: "1px solid lightgray",
 };
+
+const ConfirmMessage = styled.div`
+  position: absolute;
+  bottom: -100px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+  border: 2px solid green;
+  border-radius: 10px;
+  height: 75px;
+  width: fit-content;
+  padding: 0 25px;
+  justify-content: center;
+  align-items: center;
+  color: green;
+  font-weight: 700;
+  font-size: 14px;
+  background-color: var(--beige-color);
+  z-index: 10;
+`;
 
 const Button = styled.button`
   margin-top: 40px;

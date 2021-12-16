@@ -1,23 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { FiPlusSquare } from "react-icons/fi";
 import { FiHeart } from "react-icons/fi";
-// import { FaCat } from "react-icons/fa";
-// import { GiWizardFace } from "react-icons/gi";
 import { PostContext } from "./PostContext";
 import { useHistory } from "react-router-dom";
 
-const ActionBar = ({
-  postId,
-  isLiked,
-  numLikes,
-  // numShares,
-  sharedArray,
-}) => {
+const ActionBar = ({ postId, isLiked, sharedArray }) => {
   let history = useHistory();
   const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
   const [likes, setLikes] = useState(isLiked);
-  const [likesNum, setLikesNum] = useState(numLikes);
   const [shared, setShared] = useState(sharedArray?.length > 0 ? true : false);
 
   const handleClickLike = (ev) => {
@@ -41,10 +32,7 @@ const ActionBar = ({
           setIsUpdatingPost(!isUpdatingPost);
         }
       })
-      .catch((err) => {
-        // setErrorStatus(true);
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleClickShare = (ev) => {
@@ -73,45 +61,8 @@ const ActionBar = ({
           });
         }
       })
-      .catch((err) => {
-        // setErrorStatus(true);
-        console.log(err);
-      });
+      .catch((err) => {});
   };
-
-  useEffect(() => {
-    if (likes) {
-      setLikesNum(1);
-      // setHeartColor("red");
-    } else if (!likes) {
-      setLikesNum(0);
-      // setHeartColor("none");
-    }
-  }, [likes]);
-
-  // useEffect(() => {
-  //   if (reposts) {
-  //     setRepostsNum(1);
-  //   } else if (!reposts) {
-  //     setRepostsNum(0);
-  //   }
-  // }, [reposts]);
-
-  // if (errorStatus) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         fontSize: "20px",
-  //         alignContent: "center",
-  //       }}
-  //     >
-  //       You broke the cat... <FaCat /> Please refresh the page and try again{" "}
-  //       <GiWizardFace />{" "}
-  //     </div>
-  //   );
-  // }
 
   return (
     <Master>

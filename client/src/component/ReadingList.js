@@ -20,9 +20,7 @@ const ReadingList = () => {
         setReadingList(data.data);
         setStatus("active");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [status, newsStatus]);
 
   const handleRemove = (ev, _id) => {
@@ -41,9 +39,7 @@ const ReadingList = () => {
         setStatus("deleted");
         setUpdate(!update);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   if (readingList === undefined) {
     return (

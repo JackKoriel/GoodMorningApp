@@ -8,6 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { currentUserContext } from "./CurrentUserContext";
 import { useHistory } from "react-router";
+import ErrorMsg from "./ErrorMsg";
+import { HeartSpinner } from "react-spinners-kit";
 
 const SignIn = () => {
   let history = useHistory();
@@ -20,29 +22,36 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const [readyToPush, setReadyToPush] = useState(false);
+
   useEffect(() => {
-    if (user.status === "active") {
+    let isMounted = true;
+    if (isMounted && readyToPush) {
       history.push("/");
     }
-  }, [user.status]);
+    return () => {
+      isMounted = false;
+    };
+  }, [readyToPush, history]);
 
-  //   const [subStatus, setSubStatus] = useState("idle");
-  //   const [errMessage, setErrMessage] = useState("");
+  //error messages validations
+  const [subStatus, setSubStatus] = useState("idle");
+  const [errMessage, setErrMessage] = useState("");
 
   const handleChangeUsername = (ev) => {
     setusername(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangePassword = (ev) => {
     setPassword(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
   const handleChangeEmail = (ev) => {
     setEmail(ev.target.value);
-    // setErrMessage("");
-    // setSubStatus("idle");
+    setErrMessage("");
+    setSubStatus("idle");
   };
 
   const handleClickShowPassword = (ev) => {
@@ -54,7 +63,7 @@ const SignIn = () => {
 
   const handleClick = (ev) => {
     ev.preventDefault();
-    // setSubStatus("pending");
+    setSubStatus("pending");
     fetch("/api/signin", {
       method: "POST",
       body: JSON.stringify({
@@ -69,33 +78,30 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((json) => {
-        //put an if condition for success
-        checkingUserStatus(json.data);
-        history.push("/");
-        // const { status, error } = json;
-        // if (status === "success") {
-        //   window.sessionStorage.setItem(
-        //     "username",
-        //     JSON.stringify(json.user[0])
-        //   );
-        //   //using the json data is better than getting the data from the session because the session stops other functions and therefore it will not display the name next to the greeting without a refresh
-        //   setUserNow(json.user[0]);
-        //   setSubStatus("confirmed");
-        //   //use history to direct the user to the homepage
-        //   history.push("/");
-        // } else if (error) {
-        //   setSubStatus("error");
-        //   setErrMessage("Incorrect username");
-        //   setusername("");
-        // }
+        if (json.status === 200) {
+          checkingUserStatus(json.data);
+          setSubStatus("idle");
+          setReadyToPush(true);
+        } else {
+          setSubStatus("error");
+          setErrMessage(json.message);
+          setusername("");
+          setEmail("");
+          setPassword("");
+        }
       });
   };
+
   if (user.status === "active") {
-    return <div>Loading</div>;
+    return (
+      <Progress>
+        <HeartSpinner color="var(--blue-color)" />
+      </Progress>
+    );
   }
+
   return (
     <Master>
-      {/* <Background src={backgroundImage} /> */}
       <SignContainer>
         <TextField
           onChange={(ev) => handleChangeUsername(ev)}
@@ -104,8 +110,10 @@ const SignIn = () => {
           variant="outlined"
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
           value={username}
+          required
         />
         <OutlinedInput
+          required
           onChange={(ev) => handleChangePassword(ev)}
           type={showPassword ? "text" : "password"}
           value={password}
@@ -127,6 +135,7 @@ const SignIn = () => {
           }
         />
         <TextField
+          required
           onChange={(ev) => handleChangeEmail(ev)}
           id="outlined-size-small8"
           placeholder="Your email"
@@ -135,20 +144,21 @@ const SignIn = () => {
           value={email}
         />
         <Button onClick={(ev) => handleClick(ev)}>
-          {/* {subStatus === "pending" ? (
-              <i className="fa fa-circle-o-notch fa-spin" />
-            ) : ( */}
-          Sign in
-          {/* )} */}
+          {subStatus === "pending" ? (
+            <i className="fas fa-ring fa-spin" />
+          ) : (
+            "Sign in"
+          )}
         </Button>
+        {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>}
       </SignContainer>
-      {/* {subStatus === "error" && <ErrorMsg>{errMessage}</ErrorMsg>} */}
     </Master>
   );
 };
 
 const Master = styled.div`
   display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
   justify-content: center;
@@ -156,7 +166,19 @@ const Master = styled.div`
   background-image: url("https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639365072/wp5784428_ryak7y.jpg");
 `;
 
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+`;
+
 const SignContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -187,23 +209,4 @@ const Button = styled.button`
   }
 `;
 
-const ErrorMsg = styled.div`
-  display: flex;
-  position: absolute;
-  margin-top: 300px;
-  color: var(--blue-color);
-  background: white;
-  border: 4px solid var(--blue-color);
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  /* border: none; */
-  padding: 20 px;
-  width: 250px;
-  height: 70px;
-  border-radius: 10px;
-  font-size: 20px;
-  font-weight: 900;
-  font-family: var(--heading-font-family);
-`;
 export default SignIn;

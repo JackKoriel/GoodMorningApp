@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+const { authRequired } = require("../helpers/authentication");
+
 const {
   getPosts,
   getUserPosts,
@@ -24,19 +26,19 @@ router.get("/api/post/:_id", getPostById);
 router.get("/api/:handle/feed", getUserPosts);
 
 //gets posts made by a user
-router.get("/api/:handle/friends-feed", getUserFriendsPosts);
+router.get("/api/:handle/friends-feed", authRequired, getUserFriendsPosts);
 
 //add new postsmade by signedin user
-router.post("/api/post", addPost);
+router.post("/api/post", authRequired, addPost);
 
 //like a specific post
-router.patch("/api/post/:_id/like", addLike);
+router.patch("/api/post/:_id/like", authRequired, addLike);
 
 //share a specific post
-router.patch("/api/post/:postId/share", sharePost);
+router.patch("/api/post/:postId/share", authRequired, sharePost);
 
 //delete a post made by the user
-router.delete("/api/post/:postId/delete", deletePost);
+router.delete("/api/post/:postId/delete", authRequired, deletePost);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////

@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { TextareaAutosize } from "@material-ui/core";
 import Axios from "axios";
 import { FiXCircle } from "react-icons/fi";
-// import { FaCat } from "react-icons/fa";
-// import { GiWizardFace } from "react-icons/gi";
 import { PostContext } from "./PostContext";
 
 const PostModal = ({ modalStatus, setModalStatus }) => {
@@ -16,7 +14,6 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
 
   //images states
   const [previewSource, setPreviewSource] = useState("");
-  const [imageSelected, setImageSelected] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [imageURL, setImageURL] = useState("");
   // const [postStatusError, setPostStatusError] = useState(false);
@@ -47,7 +44,6 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
 
   //when user selects and image fromt their machine
   const handleImageChange = (event) => {
-    setImageSelected(event.target.files[0]);
     setInputValue(event.target.value);
     if (event.target.files[0]) {
       previewFile(event.target.files[0]);
@@ -114,16 +110,12 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // setIsUpdating(true);
         setStatusValue("");
         setInputValue("");
         setIsUpdatingPost(!isUpdatingPost);
         setButtonStatePost(true);
       })
-      .catch((err) => {
-        // setPostStatusError(true);
-        console.log(err);
-      });
+      .catch((err) => {});
     setCounter(280);
     setModalStatus(false);
   };
@@ -219,12 +211,6 @@ const Box = styled.div`
   opacity: ${({ isOpen }) => {
     return isOpen ? 1 : 0;
   }};
-  /* transition: visibility 0s, opacity 0.5s; */
-
-  /* &&:active {
-    visibility: visible;
-    opacity: 1;
-  } */
 `;
 
 const Form = styled.form`
@@ -245,7 +231,6 @@ const Form = styled.form`
 
 const PostInput = styled.div`
   margin-top: 30px;
-  /* border: 1px red solid; */
   width: 50%;
   height: 20%;
 `;
@@ -262,7 +247,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 50px;
-  /* border: 1px solid red; */
   width: 50%;
   margin-top: 10px;
   margin-bottom: 5px;
@@ -301,7 +285,6 @@ const ImageInput = styled.div`
   &:hover {
     transform: scale(1.02);
     cursor: pointer;
-    /* border-radius: 5px; */
   }
 `;
 const lableStyle = {
@@ -316,7 +299,6 @@ const ImageView = styled.img`
   width: auto;
   max-height: 150px;
   border-radius: 10px;
-  /* border: 1px green solid; */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
@@ -332,7 +314,6 @@ const Counter = styled.div`
 `;
 
 const Button = styled.button`
-  /* margin-top: 40px; */
   background-color: var(--blue-color);
   border: 0 solid #e5e7eb;
   box-sizing: border-box;

@@ -49,7 +49,6 @@ export const PostProvider = ({ children }) => {
         })
         .catch((err) => {
           setErrorStatus(true);
-          console.log(err);
         });
     }
   }, [isUpdatingPost, user]);

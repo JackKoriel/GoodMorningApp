@@ -6,15 +6,12 @@ import styled from "styled-components";
 import ActionBar from "./ActionBar";
 import { FiXCircle } from "react-icons/fi";
 import { PostContext } from "./PostContext";
-// import { FaCat } from "react-icons/fa";
-// import { GiWizardFace } from "react-icons/gi";
 
 const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
   let history = useHistory();
   const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
   const [posts, setPosts] = useState();
   const [postStatus, setPostStatus] = useState(false);
-  const [errorStatus, setErrorStatus] = useState(false);
 
   //get user's posts
   useEffect(() => {
@@ -24,10 +21,7 @@ const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
         setPosts(data.data);
         setPostStatus(true);
       })
-      .catch((err) => {
-        setErrorStatus(true);
-        // console.log(err);
-      });
+      .catch((err) => {});
   }, [handle, isUpdatingPost]);
 
   const handleClickProfile = (ev, handleProfile) => {
@@ -61,38 +55,10 @@ const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // setUpdate(!update);
         setIsUpdatingPost(!isUpdatingPost);
       })
-      .catch((err) => {
-        console.log(err.stack);
-      });
+      .catch((err) => {});
   };
-
-  //   if (errorStatus) {
-  //     return (
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "center",
-  //           fontSize: "20px",
-  //           alignContent: "center",
-  //           flexDirection: "column",
-  //           alignItems: "center",
-  //           marginTop: "100px",
-  //           gap: "30px",
-  //         }}
-  //       >
-  //         <div>
-  //           You broke the cat... <FaCat size={60} />
-  //         </div>
-  //         <div>
-  //           <GiWizardFace size={60} /> Please refresh the page and try again{" "}
-  //           <GiWizardFace size={60} />
-  //         </div>
-  //       </div>
-  //     );
-  //   }
 
   return (
     <>
@@ -129,7 +95,6 @@ const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
                       sharedArray={post.sharedBy}
                     />
                   </ImageBigContainer>
-
                   <Status>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <NameHandl
@@ -197,9 +162,7 @@ const Progress = styled.div`
   font-weight: 700;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
   margin-top: 200px;
-  /* margin-left: 200px; */
 `;
 
 const APost = styled.div`
@@ -210,7 +173,6 @@ const APost = styled.div`
   border-radius: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   gap: 20px;
-  /* align-items: center; */
   margin: 15px;
   padding: 0 5px;
   transition: all 300ms ease-out;
@@ -228,9 +190,6 @@ const ImageBigContainer = styled.div`
   margin-right: 15px;
 `;
 const Img = styled.img`
-  /* position: relative; */
-  /* left: 20px;
-  top: 25px; */
   border-radius: 50px;
   border: 3px solid white;
   width: 50px;

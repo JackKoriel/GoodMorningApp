@@ -5,26 +5,15 @@ import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
 import styled from "styled-components";
 import { GiSpellBook } from "react-icons/gi";
-// import { FaCat } from "react-icons/fa";
-// import { GiWizardFace } from "react-icons/gi";
 
 const Profile = () => {
   const { handle } = useParams();
-  const { user, errorStatus, update, setUpdate } =
-    useContext(currentUserContext);
+  const { user, update, setUpdate } = useContext(currentUserContext);
   const [userData, setUserData] = useState({});
-  // const [location, setLocation] = useState(true);
   const [status, setStatus] = useState(false);
-  const [errorStatusProfiles, setErrorStatusProfiles] = useState(false);
   const [followingText, setFollowingText] = useState(
     user.followingIds?.includes(handle)
   );
-
-  // useEffect(() => {
-  //   if (user.followingIds?.includes(handle)) {
-  //     setFollowingText(true);
-  //   }
-  // }, [update]);
 
   //get user data from DB
   useEffect(() => {
@@ -34,9 +23,7 @@ const Profile = () => {
         setUserData(data.data);
         setStatus(true);
       })
-      .catch((err) => {
-        setErrorStatusProfiles(true);
-      });
+      .catch((err) => {});
   }, [handle, update]);
 
   //follow or unfollow users
@@ -55,9 +42,7 @@ const Profile = () => {
           setFollowingText(false);
           setUpdate(!update);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     } else {
       fetch(`/api/${handle}/profile/follow`, {
         method: "PATCH",
@@ -71,9 +56,7 @@ const Profile = () => {
           setFollowingText(true);
           setUpdate(!update);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   };
 
@@ -82,39 +65,9 @@ const Profile = () => {
   followingText
     ? (followingFinalText = "Following")
     : (followingFinalText = "Not following");
-  // useEffect(() => {
-  //   if (!userData.hasOwnProperty("location")) {
-  //     setLocation(false);
-  //   }
-  // }, []);
 
   let userProfile = {};
   handle === user.handle ? (userProfile = user) : (userProfile = userData);
-
-  // if (errorStatus || errorStatusProfiles) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         fontSize: "20px",
-  //         alignContent: "center",
-  //         flexDirection: "column",
-  //         alignItems: "center",
-  //         marginTop: "100px",
-  //         gap: "30px",
-  //       }}
-  //     >
-  //       <div>
-  //         You broke the cat... <FaCat size={60} />
-  //       </div>
-  //       <div>
-  //         <GiWizardFace size={60} /> Please refresh the page and try again{" "}
-  //         <GiWizardFace size={60} />
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <>
@@ -142,14 +95,6 @@ const Profile = () => {
               <Name>{userProfile?.displayName}</Name>
               <UnderName>
                 <Handle>@{userProfile?.handle} </Handle>
-                <Following>
-                  {userProfile?.isBeingFollowedByYou && (
-                    <FollowsYou>
-                      Follows you
-                      {/* {userProfile?.isBeingFollowedByYou ? "Follows you" : ""} */}
-                    </FollowsYou>
-                  )}
-                </Following>
               </UnderName>
             </NameSection>
             {/* best friend with text */}
@@ -161,7 +106,7 @@ const Profile = () => {
                   <i className="fas fa-map-marker-alt"></i> Location{" "}
                   {userData.country ? (
                     <strong>
-                      {userProfile?.city + "," + " " + userProfile?.country}
+                      {`${userProfile?.city}, ${userProfile?.country}`}
                     </strong>
                   ) : (
                     <strong>Unknown</strong>
@@ -233,7 +178,7 @@ const Master = styled.div`
 `;
 const TextSection = styled.div`
   padding-left: 20px;
-  border-bottom: 1px solid var(--twitter-background);
+  border-bottom: 1px solid var(--yellow-color);
 `;
 
 const Banner = styled.img`
@@ -300,29 +245,6 @@ const Handle = styled.div`
   color: rgb(101, 119, 134);
   font-weight: 700;
   font-size: 14px;
-`;
-
-const Following = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
-const FollowsYou = styled.div`
-  background-color: lightgray;
-  color: rgb(101, 119, 134);
-  padding: 2px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 700;
-`;
-
-const YouFollow = styled.div`
-  background-color: lightgray;
-  color: rgb(101, 119, 134);
-  padding: 2px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 700;
 `;
 
 const Status = styled.div`

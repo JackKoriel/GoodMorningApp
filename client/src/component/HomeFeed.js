@@ -193,6 +193,7 @@ const Text = styled.h1`
 `;
 
 const Progress = styled.div`
+  width: 700px;
   display: flex;
   flex-direction: row;
   gap: 20px;

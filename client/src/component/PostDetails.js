@@ -5,8 +5,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
 import ActionBar from "./ActionBar";
-// import { FaCat } from "react-icons/fa";
-// import { GiWizardFace } from "react-icons/gi";
 
 const PostDetails = () => {
   let history = useHistory();
@@ -14,7 +12,6 @@ const PostDetails = () => {
   const [status, setStatus] = useState(false);
   const [postData, setPostData] = useState({});
   const [authorData, setAuthorData] = useState({});
-  const [errorStatus, setErrorStatus] = useState(false);
 
   //fetch posts by id
   useEffect(() => {
@@ -29,10 +26,7 @@ const PostDetails = () => {
             setStatus(true);
           });
       })
-      .catch((err) => {
-        setErrorStatus(true);
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [postId]);
 
   const handleClickProfile = (ev, ProfileHandle) => {
@@ -45,30 +39,6 @@ const PostDetails = () => {
     history.push(`/post/${shareId}`);
   };
 
-  //   if (errorStatus) {
-  //     return (
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "center",
-  //           fontSize: "20px",
-  //           alignContent: "center",
-  //           flexDirection: "column",
-  //           alignItems: "center",
-  //           marginTop: "100px",
-  //           gap: "30px",
-  //         }}
-  //       >
-  //         <div>
-  //           You broke the cat... <FaCat size={60} />
-  //         </div>
-  //         <div>
-  //           <GiWizardFace size={60} /> Please refresh the page and try again{" "}
-  //           <GiWizardFace size={60} />
-  //         </div>
-  //       </div>
-  //     );
-  //   }
   return (
     <>
       {!status ? (
@@ -137,6 +107,8 @@ const PostDetails = () => {
 };
 
 const Progress = styled.div`
+  background-color: var(--beige-color);
+  width: 700px;
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -144,9 +116,7 @@ const Progress = styled.div`
   font-weight: 700;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
-  margin-top: 200px;
-  /* margin-left: 200px; */
+  /* margin-top: 200px; */
 `;
 const PostObj = styled.div`
   display: flex;
@@ -175,9 +145,6 @@ const ImageBigContainer = styled.div`
   margin-right: 15px;
 `;
 const Img = styled.img`
-  /* position: relative; */
-  /* left: 20px;
-  top: 25px; */
   border-radius: 50px;
   border: 3px solid white;
   width: 50px;
@@ -243,7 +210,6 @@ const Time = styled.div`
   color: #625b55;
   font-weight: 700;
   margin-top: 20px;
-  /* margin-bottom: 10px; */
 `;
 
 export default PostDetails;

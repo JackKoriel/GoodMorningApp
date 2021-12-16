@@ -52,8 +52,7 @@ const getHoroscope = async (req, res) => {
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    //it was commented out confirm before presentation
-    client.close();
+    // client.close();
   }
 };
 
@@ -87,8 +86,7 @@ const getWeather = async (req, res) => {
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    //it was commented out confirm before presentation
-    client.close();
+    // client.close();
   }
 };
 
@@ -121,14 +119,12 @@ const getNews = async (req, res) => {
     });
     //send data to mongo
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: 500,
       message: "Something went wrong, please try again later.",
     });
   } finally {
-    //it was commented out confirm before presentation
-    client.close();
+    // client.close();
   }
 };
 

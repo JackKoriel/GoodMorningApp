@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiBookmark } from "react-icons/fi";
 import { PostContext } from "./PostContext";
+import { HeartSpinner } from "react-spinners-kit";
 
 const dummyData = [
   {
@@ -132,7 +133,6 @@ const dummyData = [
 
 const News = () => {
   const { newsStatus, setNewsStatus } = useContext(PostContext);
-
   const {
     user: { country, email, readingList },
     update,
@@ -140,8 +140,8 @@ const News = () => {
   } = useContext(currentUserContext);
 
   const [topNews, setTopNews] = useState(dummyData);
-
-  const [readingL, setReadingL] = useState(false);
+  const [newsUpdated, setNewsUpdated] = useState(true);
+  // const [readingL, setReadingL] = useState(false);
 
   const handleClickReading = (ev, article) => {
     ev.preventDefault();
@@ -161,7 +161,7 @@ const News = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {
-          setReadingL(true);
+          // setReadingL(true);
           setUpdate(!update);
           setNewsStatus(!newsStatus);
         }
@@ -176,54 +176,73 @@ const News = () => {
   //   }
   // }, [readingL]);
 
-  // useEffect(() => {
-  //   fetch("/api/news", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       country,
-  //       lang: "en",
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setTopNews(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [topNews]);
+  useEffect(() => {
+    setNewsUpdated(false);
+    fetch("/api/news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        country,
+        lang: "en",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTopNews(data.data);
+        setNewsUpdated(true);
+      })
+      .catch((err) => {});
+  }, [country]);
 
   return (
-    <MasterContainer>
-      {topNews.map((article, index) => {
-        return (
-          <AnArticle key={article._id} lastArticle={index === 4}>
-            <Background src={article.media} />
-            <Filter>
-              <Summary>{article.title}</Summary>
-              <Author>{article.author}</Author>
-              <BookmarkButton
-                onClick={(ev) => {
-                  handleClickReading(ev, article);
-                }}
-              >
-                {readingList.includes(article._id) ? (
-                  <FiBookmark style={bookmarkStyleActive} />
-                ) : (
-                  <FiBookmark />
-                )}
-              </BookmarkButton>
-            </Filter>
-          </AnArticle>
-        );
-      })}
-    </MasterContainer>
+    <>
+      {!newsUpdated ? (
+        <Progress>
+          <HeartSpinner color="var(--blue-color)" />
+        </Progress>
+      ) : (
+        <MasterContainer>
+          {topNews?.map((article, index) => {
+            return (
+              <AnArticle key={article._id} lastArticle={index === 4}>
+                <Background src={article.media} />
+                <Filter>
+                  <Summary>{article.title}</Summary>
+                  <Author>{article.author}</Author>
+                  <BookmarkButton
+                    onClick={(ev) => {
+                      handleClickReading(ev, article);
+                    }}
+                  >
+                    {readingList.includes(article._id) ? (
+                      <FiBookmark style={bookmarkStyleActive} />
+                    ) : (
+                      <FiBookmark />
+                    )}
+                  </BookmarkButton>
+                </Filter>
+              </AnArticle>
+            );
+          })}
+        </MasterContainer>
+      )}
+    </>
   );
 };
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+`;
 
 const MasterContainer = styled.div`
   display: flex;
@@ -246,6 +265,7 @@ const AnArticle = styled.div`
   /* padding: 5px 0; */
   width: 100%;
   height: 100%;
+  /* padding: 5px 0; */
   border-bottom: ${({ lastArticle }) => {
     return lastArticle && "none";
   }};
@@ -267,6 +287,7 @@ const Filter = styled.div`
   height: 100%;
   border-radius: 5px;
   z-index: 2;
+  padding: 5px 0;
 `;
 const BookmarkButton = styled.button`
   position: absolute;

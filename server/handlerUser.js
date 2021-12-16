@@ -189,7 +189,7 @@ const getUsersByEmail = async (req, res) => {
   if (req.session.handle) {
     return res.status(400).json({
       status: 400,
-      data: "User already logged in.",
+      message: "User already logged in.",
     });
   }
 
@@ -212,23 +212,29 @@ const getUsersByEmail = async (req, res) => {
     const db = client.db("GoodMorningApp");
 
     //find user in db based on email
-    const user = await db.collection("users").findOne({ email });
+    const user = await db
+      .collection("users")
+      .findOne({ email: email.toLowerCase() });
+    //validate email
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        message: "Incorrect user, please provide the correct email address.",
+      });
+    }
     // variable for passowrd validation
     const validPassword = await bcrypt.compare(password, user.password);
     //verifications for provided user
-    if (!user) {
-      res.status(404).json({
+    if (!validPassword) {
+      return res.status(404).json({
         status: 404,
-        data: "Incorrect user, please provide the correct email address.",
+        message: "Incorrect password, please try again.",
       });
-    } else if (!validPassword) {
-      res
-        .status(404)
-        .json({ status: 404, data: "Incorrect password, please try again." });
-    } else if (user.handle !== handle) {
-      res
-        .status(404)
-        .json({ status: 404, data: "Incorrect username, please try again." });
+    } else if (user.handle.toLowerCase() !== handle.toLowerCase()) {
+      return res.status(404).json({
+        status: 404,
+        message: "Incorrect username, please try again.",
+      });
     } else {
       req.session.handle = handle;
       req.session._id = user._id;
@@ -236,10 +242,9 @@ const getUsersByEmail = async (req, res) => {
       res.status(200).json({ status: 200, data: user });
     }
   } catch (err) {
-    console.log(err.stack);
     res.status(500).json({
       status: 500,
-      message: "Something went wrong, please try again later.",
+      message: "Something went wrong, please try again.",
     });
   } finally {
     client.close();
@@ -326,7 +331,7 @@ const addUser = async (req, res) => {
     if (user) {
       res.status(409).json({
         status: 409,
-        data: "Username already exists, please try a different username",
+        message: "Username already exists, please try a different username",
       });
     } else {
       //create the new user
@@ -424,6 +429,12 @@ const updateUser = async (req, res) => {
       delete value[element];
     }
   });
+  if (Object.keys(value).length === 0) {
+    return res.status(400).json({
+      status: 400,
+      message: "No information is selected to perfom an update",
+    });
+  }
   // validating email
   if (value.email && !value.email?.includes("@")) {
     return res.status(400).json({
@@ -453,10 +464,9 @@ const updateUser = async (req, res) => {
       .updateOne({ _id }, { $set: { ...value } });
     res.status(200).json({ status: 200, message: "Sucess", data: updatedUser });
   } catch (err) {
-    console.log(err.stack);
     res.status(500).json({
       status: 500,
-      message: "Something went wrong, please try again later.",
+      message: "Something went wrong, please try again.",
     });
   } finally {
     client.close();

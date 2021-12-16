@@ -21,9 +21,7 @@ const LogOut = () => {
         history.push("/signup");
         logoutUserStatus();
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (

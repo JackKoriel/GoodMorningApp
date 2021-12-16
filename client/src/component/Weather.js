@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
+import { HeartSpinner } from "react-spinners-kit";
 
 let dummyData = {
   last_updated_epoch: 1639165500,
@@ -38,57 +39,76 @@ const Weather = () => {
     user: { city },
   } = useContext(currentUserContext);
   const [dailyForcast, setDailyForcast] = useState(dummyData);
+  const [weatherStatus, setWeatherStatus] = useState(true);
 
-  // useEffect(() => {
-  //   fetch("/api/weather", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       city: "montreal",
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setDailyForcast(data.data.current);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setWeatherStatus(false);
+    fetch("/api/weather", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        city,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDailyForcast(data.data.current);
+        setWeatherStatus(true);
+      })
+      .catch((err) => {});
+  }, [city]);
 
   return (
-    <MasterContainer>
-      <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639171975/dai4sky3_zo81od.jpg" />
-      <Title>The weather today is:</Title>
-      <Rep>
-        <Text>{dailyForcast.condition.text}</Text>
-        <Image src={dailyForcast.condition.icon} />
-      </Rep>
-      <Temp>
-        <Actual>
-          Temprature is {dailyForcast.temp_c} <span>&deg;c</span>
-        </Actual>
-        <FeelsLike>
-          Feels like {dailyForcast.feelslike_c} <span>&deg;c</span>
-        </FeelsLike>
-      </Temp>
-    </MasterContainer>
+    <>
+      {!weatherStatus ? (
+        <Progress>
+          <HeartSpinner color="var(--blue-color)" />
+        </Progress>
+      ) : (
+        <MasterContainer>
+          <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639171975/dai4sky3_zo81od.jpg" />
+          <Title>The weather today is:</Title>
+          <Rep>
+            <Text>{dailyForcast.condition.text}</Text>
+            <Image src={dailyForcast.condition.icon} />
+          </Rep>
+          <Temp>
+            <Actual>
+              Temprature is {dailyForcast.temp_c} <span>&deg;c</span>
+            </Actual>
+            <FeelsLike>
+              Feels like {dailyForcast.feelslike_c} <span>&deg;c</span>
+            </FeelsLike>
+          </Temp>
+        </MasterContainer>
+      )}
+    </>
   );
 };
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+`;
 
 const MasterContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
   flex-direction: column;
-  /* background-color: lightgreen; */
   align-items: center;
   border: 2px solid var(--yellow-color);
 
-  /* padding: 10px 0; */
+  padding-bottom: 20px;
   flex: 0.2;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

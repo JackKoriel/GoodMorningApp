@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
 import { PostContext } from "./PostContext";
+import { HeartSpinner } from "react-spinners-kit";
 
 const dummyData = {
   date_range: "Sep 23 - Oct 22",
@@ -19,12 +20,13 @@ const dummyData = {
 const Horoscope = () => {
   const { horoStatus, setHoroStatus } = useContext(PostContext);
   const {
-    user: { email, favorite },
+    user: { email, favorite, sign },
     update,
     setUpdate,
   } = useContext(currentUserContext);
 
   const [dailyHoro, setDailyHoro] = useState(dummyData);
+  const [newsUpdated, setNewsUpdated] = useState(true);
 
   const handleClickFavorite = (ev) => {
     ev.preventDefault();
@@ -50,75 +52,91 @@ const Horoscope = () => {
       });
   };
 
-  // useEffect(() => {
-  //   fetch("/api/horoscope", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       day: "today",
-  //       sign: sign,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setDailyHoro(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setNewsUpdated(false);
+    fetch("/api/horoscope", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        day: "today",
+        sign: sign,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDailyHoro(data.data);
+        setNewsUpdated(true);
+      })
+      .catch((err) => {});
+  }, [sign]);
 
   return (
-    <MasterContainer>
-      <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639173158/692599_astrology-backgrounds-wallpapers-zone_1299x1122_h_n7s4aa.jpg" />
-      <Desc>{dailyHoro.description}</Desc>
-      <LuckyNum>
-        Lucky number of the day: <strong>{dailyHoro.lucky_number}</strong>
-      </LuckyNum>
-      <LuckyTime>
-        Lucky time of the day: <strong>{dailyHoro.lucky_time}</strong>
-      </LuckyTime>
-      <Compat>
-        Compatible with: <strong>{dailyHoro.compatibility}</strong>
-      </Compat>
-      <LuckyColor>
-        Lucky color of the day:{" "}
-        <strong>
-          <Span color={dailyHoro.color}>{dailyHoro.color}</Span>
-        </strong>
-      </LuckyColor>
-      <StarFav
-        onClick={(ev) => {
-          handleClickFavorite(ev);
-        }}
-      >
-        {favorite.includes(dailyHoro.current_date) ? (
-          <FiStar style={FavStyleActive} />
-        ) : (
-          <FiStar />
-        )}
-      </StarFav>
-    </MasterContainer>
+    <>
+      {!newsUpdated ? (
+        <Progress>
+          <HeartSpinner color="var(--blue-color)" />
+        </Progress>
+      ) : (
+        <MasterContainer>
+          <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639173158/692599_astrology-backgrounds-wallpapers-zone_1299x1122_h_n7s4aa.jpg" />
+          <Desc>{dailyHoro.description}</Desc>
+          <LuckyNum>
+            Lucky number of the day: <strong>{dailyHoro.lucky_number}</strong>
+          </LuckyNum>
+          <LuckyTime>
+            Lucky time of the day: <strong>{dailyHoro.lucky_time}</strong>
+          </LuckyTime>
+          <Compat>
+            Compatible with: <strong>{dailyHoro.compatibility}</strong>
+          </Compat>
+          <LuckyColor>
+            Lucky color of the day:{" "}
+            <strong>
+              <Span color={dailyHoro.color}>{dailyHoro.color}</Span>
+            </strong>
+          </LuckyColor>
+          <StarFav
+            onClick={(ev) => {
+              handleClickFavorite(ev);
+            }}
+          >
+            {favorite.includes(dailyHoro.current_date) ? (
+              <FiStar style={FavStyleActive} />
+            ) : (
+              <FiStar />
+            )}
+          </StarFav>
+        </MasterContainer>
+      )}
+    </>
   );
 };
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+`;
 
 const MasterContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
   flex-direction: column;
-  /* background-color: lightyellow; */
   align-items: center;
-
   border: 2px solid var(--yellow-color);
-  /* padding: 10px 0; */
   flex: 0.3;
-  /* color: white; */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 5px;
+  padding-bottom: 20px;
 `;
 
 const StarFav = styled.button`
