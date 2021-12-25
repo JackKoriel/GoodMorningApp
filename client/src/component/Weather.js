@@ -41,25 +41,25 @@ const Weather = () => {
   const [dailyForcast, setDailyForcast] = useState(dummyData);
   const [weatherStatus, setWeatherStatus] = useState(true);
 
-  useEffect(() => {
-    setWeatherStatus(false);
-    fetch("/api/weather", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        city,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDailyForcast(data.data.current);
-        setWeatherStatus(true);
-      })
-      .catch((err) => {});
-  }, [city]);
+  // useEffect(() => {
+  //   setWeatherStatus(false);
+  //   fetch("/api/weather", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       city,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setDailyForcast(data.data.current);
+  //       setWeatherStatus(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [city]);
 
   return (
     <>

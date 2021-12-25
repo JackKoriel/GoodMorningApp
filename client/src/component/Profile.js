@@ -5,9 +5,11 @@ import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
 import styled from "styled-components";
 import { GiSpellBook } from "react-icons/gi";
+// import { useHistory } from "react-router-dom";
 
 const Profile = () => {
   const { handle } = useParams();
+  // let history = useHistory();
   const { user, update, setUpdate } = useContext(currentUserContext);
   const [userData, setUserData] = useState({});
   const [status, setStatus] = useState(false);
@@ -60,6 +62,11 @@ const Profile = () => {
     }
   };
 
+  //message a user
+  // const handleMessageClick = () => {
+  //   history.push(`/chat/${userData._id}`);
+  // };
+
   //change the text on the button after each click
   let followingFinalText;
   followingText
@@ -80,16 +87,22 @@ const Profile = () => {
           <div>
             <Banner src={userProfile?.bannerSrc} />
             <Avatar src={userProfile?.avatarSrc} />
+
             {userProfile?.handle !== user?.handle && (
-              <FollowButton
-                followingText={followingText}
-                onClick={(ev) => followingButtonHandle(ev)}
-              >
-                {followingFinalText}
-              </FollowButton>
+              <ButtonsContainer>
+                <FollowButton
+                  followingText={followingText}
+                  onClick={(ev) => followingButtonHandle(ev)}
+                >
+                  {followingFinalText}
+                </FollowButton>
+                {/* <MessageButton onClick={handleMessageClick}>
+                  Message
+                </MessageButton> */}
+              </ButtonsContainer>
             )}
           </div>
-          {/* usename and stuff */}
+          {/* username and stuff */}
           <TextSection>
             <NameSection>
               <Name>{userProfile?.displayName}</Name>
@@ -121,9 +134,6 @@ const Profile = () => {
                   <strong>{userProfile?.sign}</strong>
                 </Horoscope>
               </LocationTime>
-
-              {/* do it later after you fix the BE  */}
-
               <Followers>
                 <div>
                   following <Span>{userProfile?.followingIds.length}</Span>
@@ -196,7 +206,14 @@ const Avatar = styled.img`
   width: auto;
   border: 3.5px solid white;
 `;
-
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+  margin-left: auto;
+  /* margin-top: -20px; */
+  /* margin-right: 10px; */
+`;
 const FollowButton = styled.button`
   display: flex;
   color: var(--blue-color);
@@ -213,10 +230,28 @@ const FollowButton = styled.button`
   &&:active {
     transform: scale(0.8);
   }
-  z-index: -1;
-  margin-left: auto;
+  /* z-index: -1; */
+  /* margin-left: auto;
   margin-top: -20px;
-  margin-right: 10px;
+  margin-right: 10px; */
+`;
+
+const MessageButton = styled.button`
+  display: flex;
+  color: var(--blue-color);
+  font-weight: 900;
+  font-size: 14px;
+  border-radius: 30px;
+  padding: 7px 20px;
+  border: 2px solid #68359b;
+  transition: all 300ms ease-out;
+  &&:active {
+    transform: scale(0.8);
+  }
+  /* z-index: -1; */
+  /* margin-left: auto;
+  margin-top: -20px;
+  margin-right: 10px; */
 `;
 
 const NameSection = styled.div`

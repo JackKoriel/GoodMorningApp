@@ -6,6 +6,7 @@ import { BsStar } from "react-icons/bs";
 import { FiHome } from "react-icons/fi";
 import { FaGlasses } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { FiMessageSquare } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
 import PostBox from "./PostBox";
 import NavbarOptions from "./NavbarOptions";
@@ -38,6 +39,11 @@ const SideNavbar = () => {
       <NavbarOptions to="/favorite" Icon={BsStar} text="Favorite" />
       <NavbarOptions to="/reading-list" Icon={FaGlasses} text="Reading List" />
       <NavbarOptions to={`/${handle}`} Icon={FiUser} text="Profile" />
+      <NavbarOptions
+        to={`/chats-list/`}
+        Icon={FiMessageSquare}
+        text="Chat Rooms"
+      />
       <NavbarOptions to={`/settings`} Icon={FiSettings} text="Settings" />
       <NavbarOptions to={`/logout`} Icon={RiLogoutBoxLine} text="Logout" />
       {/* Button -> Tweet */}

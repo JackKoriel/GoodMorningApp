@@ -52,26 +52,26 @@ const Horoscope = () => {
       });
   };
 
-  useEffect(() => {
-    setNewsUpdated(false);
-    fetch("/api/horoscope", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        day: "today",
-        sign: sign,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDailyHoro(data.data);
-        setNewsUpdated(true);
-      })
-      .catch((err) => {});
-  }, [sign]);
+  // useEffect(() => {
+  //   setNewsUpdated(false);
+  //   fetch("/api/horoscope", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       day: "today",
+  //       sign: sign,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setDailyHoro(data.data);
+  //       setNewsUpdated(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [sign]);
 
   return (
     <>

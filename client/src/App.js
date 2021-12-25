@@ -23,6 +23,8 @@ import Settings from "./component/Settings";
 import PostDetails from "./component/PostDetails";
 import { currentUserContext } from "./component/CurrentUserContext";
 import CircularProgress from "@mui/material/CircularProgress";
+import ChatSys from "./component/chat-page/ChatSys";
+import ChatRooms from "./component/chat-page/ChatRooms";
 
 const App = () => {
   const { user } = useContext(currentUserContext);
@@ -56,6 +58,12 @@ const App = () => {
                 <Route path="/logout">
                   <LogOut />
                 </Route>
+                <Route path="/chat/:roomId">
+                  <ChatSys />
+                </Route>
+                <Route path="/chats-list/">
+                  <ChatRooms />
+                </Route>
                 <Route path="/settings">
                   <Settings />
                 </Route>
@@ -71,6 +79,7 @@ const App = () => {
                 <Route path="/:handle">
                   <Profile />
                 </Route>
+
                 <Route path="/horoscope">
                   <Horoscope />
                 </Route>

@@ -169,33 +169,25 @@ const News = () => {
   };
 
   // useEffect(() => {
-  //   if (!topNews.isReadingList || topNews.isReadingList === false) {
-  //     setReadingL(false);
-  //   } else if (topNews.isReadingList === false) {
-  //     setReadingL(true);
-  //   }
-  // }, [readingL]);
-
-  useEffect(() => {
-    setNewsUpdated(false);
-    fetch("/api/news", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        country,
-        lang: "en",
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTopNews(data.data);
-        setNewsUpdated(true);
-      })
-      .catch((err) => {});
-  }, [country]);
+  //   setNewsUpdated(false);
+  //   fetch("/api/news", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       country,
+  //       lang: "en",
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setTopNews(data.data);
+  //       setNewsUpdated(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [country]);
 
   return (
     <>
