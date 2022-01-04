@@ -9,7 +9,7 @@ const NavbarOptions = ({ to, exact, text, Icon }) => {
       to={to}
       exact={exact}
     >
-      <Icon style={iconStyle} />
+      <Icon size={22} style={iconStyle} />
       <Text>{text}</Text>
     </SidebarIcons>
   );
@@ -23,7 +23,7 @@ const SidebarIcons = styled(NavLink)`
   text-decoration: none;
   color: black;
   border-bottom: 1px solid var(--blue-color);
-
+  transition: 200ms ease-in;
   &&:hover {
     background-color: #e8f5fe;
     border-radius: 30px;
@@ -39,6 +39,6 @@ const Text = styled.h2`
 `;
 
 const iconStyle = {
-  padding: "20px",
+  padding: "15px 20px",
 };
 export default NavbarOptions;

@@ -18,13 +18,16 @@ const {
 
 /////////////////////////////////////////////////////////////////////////////
 // gets horoscopes
-router.post("/api/horoscope", authRequired, getHoroscope);
+// router.post("/api/horoscope", authRequired, getHoroscope);
+router.post("/api/horoscope", getHoroscope);
 
 // gets weather forcast
-router.post("/api/weather", authRequired, getWeather);
+// router.post("/api/weather", authRequired, getWeather);
+router.post("/api/weather", getWeather);
 
 // gets top news
-router.post("/api/news", authRequired, getNews);
+// router.post("/api/news", authRequired, getNews);
+router.post("/api/news", getNews);
 
 // add horoscope to favorite
 router.post("/api/favorite", authRequired, addToFav);

@@ -8,6 +8,7 @@ import { FaGlasses } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FiMessageSquare } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
+import { HiOutlineChatAlt2 } from "react-icons/hi";
 import PostBox from "./PostBox";
 import NavbarOptions from "./NavbarOptions";
 import styled from "styled-components";
@@ -40,7 +41,12 @@ const SideNavbar = () => {
       <NavbarOptions to="/reading-list" Icon={FaGlasses} text="Reading List" />
       <NavbarOptions to={`/${handle}`} Icon={FiUser} text="Profile" />
       <NavbarOptions
-        to={`/chats-list/`}
+        to={`/messenger/`}
+        Icon={HiOutlineChatAlt2}
+        text="Messenger"
+      />
+      <NavbarOptions
+        to={`/chats-rooms/`}
         Icon={FiMessageSquare}
         text="Chat Rooms"
       />
@@ -107,9 +113,5 @@ const Button = styled.button`
     height: calc(100% - 1px);
   }
 `;
-
-// const Tabs = styled(NavLink)`
-//   text-decoration: none;
-// `;
 
 export default SideNavbar;

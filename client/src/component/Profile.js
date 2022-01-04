@@ -5,11 +5,11 @@ import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
 import styled from "styled-components";
 import { GiSpellBook } from "react-icons/gi";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Profile = () => {
   const { handle } = useParams();
-  // let history = useHistory();
+  let history = useHistory();
   const { user, update, setUpdate } = useContext(currentUserContext);
   const [userData, setUserData] = useState({});
   const [status, setStatus] = useState(false);
@@ -63,9 +63,28 @@ const Profile = () => {
   };
 
   //message a user
-  // const handleMessageClick = () => {
-  //   history.push(`/chat/${userData._id}`);
-  // };
+  const handleMessageClick = () => {
+    console.log("click");
+    fetch(`/api/conversation`, {
+      method: "POST",
+      body: JSON.stringify({
+        senderId: user._id,
+        receiverId: userData._id,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.data);
+        if (res.status === 201 || res.status === 200) {
+          history.push(`/messenger`);
+        }
+      })
+      .catch((err) => {});
+  };
 
   //change the text on the button after each click
   let followingFinalText;
@@ -96,9 +115,9 @@ const Profile = () => {
                 >
                   {followingFinalText}
                 </FollowButton>
-                {/* <MessageButton onClick={handleMessageClick}>
+                <MessageButton onClick={() => handleMessageClick()}>
                   Message
-                </MessageButton> */}
+                </MessageButton>
               </ButtonsContainer>
             )}
           </div>

@@ -54,7 +54,8 @@ router.patch("/api/:handle/profile/unfollow", authRequired, removeFolower);
 router.get("/api/user", getUser);
 
 // gets current user friends in db
-router.get("/api/friends/handle", authRequired, getUserFriends);
+// router.get("/api/friends/handle", authRequired, getUserFriends);
+router.get("/api/friends/handle", getUserFriends);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////

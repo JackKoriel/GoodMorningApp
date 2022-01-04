@@ -56,7 +56,7 @@ const PostBox = () => {
           />
         </AvatarContainer>
 
-        <Button onClick={(ev) => handleClickUserBio(ev)}>
+        <Button type="submit" onClick={(ev) => handleClickUserBio(ev)}>
           {!moodButtonStatus ? (
             <i className="fas fa-ring fa-spin" />
           ) : (

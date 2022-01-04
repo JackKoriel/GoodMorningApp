@@ -25,6 +25,7 @@ import { currentUserContext } from "./component/CurrentUserContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChatSys from "./component/chat-page/ChatSys";
 import ChatRooms from "./component/chat-page/ChatRooms";
+import Messenger from "./component/chat-page/private-chat/Messenger";
 
 const App = () => {
   const { user } = useContext(currentUserContext);
@@ -61,8 +62,11 @@ const App = () => {
                 <Route path="/chat/:roomId">
                   <ChatSys />
                 </Route>
-                <Route path="/chats-list/">
+                <Route path="/chats-rooms/">
                   <ChatRooms />
+                </Route>
+                <Route path="/messenger/">
+                  <Messenger />
                 </Route>
                 <Route path="/settings">
                   <Settings />
@@ -79,7 +83,6 @@ const App = () => {
                 <Route path="/:handle">
                   <Profile />
                 </Route>
-
                 <Route path="/horoscope">
                   <Horoscope />
                 </Route>
@@ -101,6 +104,7 @@ const App = () => {
 };
 
 const MasterContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;

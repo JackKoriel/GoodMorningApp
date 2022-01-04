@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import Music from "./public-rooms/Music";
 import Gaming from "./public-rooms/Gaming";
 import Politics from "./public-rooms/Politics";
 
 const ChatRooms = () => {
-  const [privateValue, setPrivateValue] = useState("");
+  // const [privateValue, setPrivateValue] = useState("");
 
-  const handleChangePrivateValue = (ev) => {
-    setPrivateValue(ev.target.value);
-  };
+  // const handleChangePrivateValue = (ev) => {
+  //   setPrivateValue(ev.target.value);
+  // };
 
   return (
     <MasterContainer>
@@ -19,7 +19,7 @@ const ChatRooms = () => {
         <Gaming />
         <Politics />
       </PublicRooms>
-      <PrivateRooms>
+      {/* <PrivateRooms>
         <Text>Make your own private room and invite your friends</Text>
         <TextField
           onChange={(ev) => handleChangePrivateValue(ev)}
@@ -29,7 +29,7 @@ const ChatRooms = () => {
           style={{ width: "100%", background: "white", borderRadius: "5px" }}
           value={privateValue}
         />
-      </PrivateRooms>
+      </PrivateRooms> */}
     </MasterContainer>
   );
 };
@@ -45,7 +45,6 @@ const MasterContainer = styled.div`
   margin-bottom: 5px;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border: 1px blue solid;
 `;
 
 const PublicRooms = styled.div`
@@ -57,17 +56,16 @@ const PublicRooms = styled.div`
   /* gap: 20px; */
   width: 100%;
   height: 50%;
-  border: 1px solid red;
 `;
 
-const PrivateRooms = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 50%;
-  border: 1px solid green;
-`;
+// const PrivateRooms = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+//   height: 50%;
+//   border: 1px solid green;
+// `;
 
-const Text = styled.div``;
+// const Text = styled.div``;
 
 export default ChatRooms;

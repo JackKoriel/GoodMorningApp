@@ -51,7 +51,6 @@ function reducer(state, action) {
 
 export const CurrentUserProvider = ({ children }) => {
   const [user, dispatch] = useReducer(reducer, initialState);
-
   const [errorStatus, setErrorStatus] = useState(false);
   const [update, setUpdate] = useState(false);
 
@@ -79,6 +78,7 @@ export const CurrentUserProvider = ({ children }) => {
         }
       })
       .catch((err) => {
+        console.log(err);
         setErrorStatus(true);
         noAvailableUserStatus();
       });

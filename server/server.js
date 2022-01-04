@@ -9,6 +9,8 @@ const usersRouter = require("./routes/users");
 const postsRouter = require("./routes/posts");
 const apiRouter = require("./routes/api");
 const apiImage = require("./routes/image");
+const conversationRouter = require("./routes/conversation");
+const messageRouter = require("./routes/message");
 const { sessions } = require("./sessions");
 
 const PORT = 4000;
@@ -45,5 +47,11 @@ express()
 
   //using routers as middleware for images
   .use(apiImage)
+
+  //using routers as middleware for conversation
+  .use(conversationRouter)
+
+  //using routers as middleware for message
+  .use(messageRouter)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

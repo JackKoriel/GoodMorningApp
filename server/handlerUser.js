@@ -57,16 +57,18 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
   //express session after signing in
   let handle = req.session.handle;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current users
-    const user = await db.collection("users").findOne({ handle });
+    const user = await db
+      .collection("users")
+      .findOne({ handle: handle.toLowerCase() });
     // validations and user control
     user
       ? res.status(200).json({ status: 200, data: user })
@@ -399,7 +401,7 @@ const updateUser = async (req, res) => {
   }
   //declaring a value to use later with $set while updating the user
   let value = {
-    handle,
+    handle: handle.toLowerCase(),
     email,
     password: hashPassword,
     city,
@@ -451,7 +453,9 @@ const updateUser = async (req, res) => {
     //declair database in mongo
     const db = client.db("GoodMorningApp");
     //validating the handle availability
-    const userHandle = await db.collection("users").findOne({ handle });
+    const userHandle = await db
+      .collection("users")
+      .findOne({ handle: handle.toLowerCase() });
     if (userHandle) {
       return res.status(409).json({
         status: 409,

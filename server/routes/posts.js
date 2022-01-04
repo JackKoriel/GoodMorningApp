@@ -26,7 +26,8 @@ router.get("/api/post/:_id", getPostById);
 router.get("/api/:handle/feed", getUserPosts);
 
 //gets posts made by a user
-router.get("/api/:handle/friends-feed", authRequired, getUserFriendsPosts);
+// router.get("/api/:handle/friends-feed", authRequired, getUserFriendsPosts);
+router.get("/api/:handle/friends-feed", getUserFriendsPosts);
 
 //add new postsmade by signedin user
 router.post("/api/post", authRequired, addPost);

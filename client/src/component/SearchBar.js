@@ -9,9 +9,15 @@ const SearchBar = () => {
   const [allUsersArray, setAllUsersArray] = useState([]);
 
   useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => setAllUsersArray(data));
+    let isMounted = true;
+    if (isMounted) {
+      fetch("/api/users")
+        .then((res) => res.json())
+        .then((data) => setAllUsersArray(data));
+    }
+    return () => {
+      isMounted = false;
+    };
   }, [searchValue]);
 
   const handleClear = () => {

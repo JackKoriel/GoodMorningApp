@@ -119,7 +119,7 @@ const getUserPosts = async (req, res) => {
 const getUserFriendsPosts = async (req, res) => {
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { handle } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
