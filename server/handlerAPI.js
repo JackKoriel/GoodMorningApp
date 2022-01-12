@@ -136,7 +136,7 @@ const addToFav = async (req, res) => {
   let handle = req.session.handle;
   //get horoscope information form horoscope page using POST
   const { dailyHoro, email } = req.body;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
   //try catch finally function
@@ -145,7 +145,7 @@ const addToFav = async (req, res) => {
     const horoscopeId = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     // ------------------------------
     // find a horoscope with today's date has already been added to the horoscopes collection
@@ -236,13 +236,13 @@ const removeFav = async (req, res) => {
 const getFav = async (req, res) => {
   //get use's email from session
   const email = req.session.email;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all favorites
     const horoscopes = await db
@@ -273,13 +273,13 @@ const addToReading = async (req, res) => {
   let handle = req.session.handle;
   //get the article and email from front end
   const { article, email } = req.body;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     // ------------------------------
     // find if the same news has already been added
@@ -360,13 +360,13 @@ const removeArticleFromRL = async (req, res) => {
 const getRL = async (req, res) => {
   //get use's email from session
   const email = req.session.email;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all articles
     const news = await db.collection("news").find({ email }).toArray();

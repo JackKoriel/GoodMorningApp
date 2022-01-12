@@ -24,13 +24,13 @@ const options = {
 // GET all posts
 //***************************
 const getPosts = async (req, res) => {
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all users
     const posts = await db.collection("posts").find().toArray();
@@ -54,13 +54,13 @@ const getPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   //get post id from params with the patch
   const { _id } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find user's post
     const post = await db.collection("posts").findOne({ _id });
@@ -84,13 +84,13 @@ const getPostById = async (req, res) => {
 const getUserPosts = async (req, res) => {
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { handle } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all users
     const userPosts = await db
@@ -125,7 +125,7 @@ const getUserFriendsPosts = async (req, res) => {
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
@@ -172,7 +172,7 @@ const addPost = async (req, res) => {
   let handle = req.session.handle;
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { status, imageURL } = req.body;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
   //try catch finally function
@@ -181,7 +181,7 @@ const addPost = async (req, res) => {
     const _id = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
@@ -222,13 +222,13 @@ const addLike = async (req, res) => {
   const { _id } = req.params;
   //getting the boolean value from FE to use for keeping the button colored
   const { like } = req.body;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //update the like status by the user
     await db
@@ -270,7 +270,7 @@ const sharePost = async (req, res) => {
   //getting the boolean value from FE to use for keeping the button colored
   const { shared } = req.body;
 
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   let date = moment().format("MMM Do YY");
   //try catch finally function
@@ -279,7 +279,7 @@ const sharePost = async (req, res) => {
     const _id = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });

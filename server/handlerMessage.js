@@ -70,7 +70,7 @@ const addMessage = async (req, res) => {
     const _id = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
     // const user = await db.collection("users").findOne({ handle });

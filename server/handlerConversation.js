@@ -105,7 +105,7 @@ const addConversation = async (req, res) => {
     const _id = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find if a conversation already exist
     const conversation = await db

@@ -36,7 +36,7 @@ const postImage = async (req, res) => {
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //create a new post by signed in user
     const newImage = await db.collection("images").insertOne({

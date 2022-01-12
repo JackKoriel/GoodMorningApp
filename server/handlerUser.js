@@ -27,13 +27,13 @@ const options = {
 // GET all users
 //***************************
 const getUsers = async (req, res) => {
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all users
     const users = await db.collection("users").find().toArray();
@@ -89,13 +89,13 @@ const getUser = async (req, res) => {
 const getUserFriends = async (req, res) => {
   //express session after signing in
   let handle = req.session.handle;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
     const user = await db.collection("users").findOne({ handle });
@@ -126,13 +126,13 @@ const getUserFriends = async (req, res) => {
 const getUserByHandle = async (req, res) => {
   //get the handle from params
   const { handle } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find one user who has the handle
     const user = await db.collection("users").findOne({ handle });
@@ -156,13 +156,13 @@ const getUserByHandle = async (req, res) => {
 const getUserById = async (req, res) => {
   //get the handle from params
   const { _id } = req.params;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find one user who has the handle
     const oneUser = await db.collection("users").findOne({ _id: _id });
@@ -210,7 +210,7 @@ const getUsersByEmail = async (req, res) => {
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
 
     //find user in db based on email
@@ -326,7 +326,7 @@ const addUser = async (req, res) => {
     const _id = uuidv4();
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find if there is a user with same username/handle
     const user = await db.collection("users").findOne({ handle });
@@ -444,13 +444,13 @@ const updateUser = async (req, res) => {
       message: "Please provide a valid email address.",
     });
   }
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //validating the handle availability
     const userHandle = await db
@@ -485,14 +485,14 @@ const addFollower = async (req, res) => {
   const { handle: friendHandle } = req.params;
   //express session after signing in
   let userHandle = req.session.handle;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //updating the user's array with the friend added
     const user = await db
@@ -529,14 +529,14 @@ const removeFolower = async (req, res) => {
   const { handle: friendHandle } = req.params;
   //express session after signing in
   let userHandle = req.session.handle;
-  //declair client in mongo
+  //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
 
   //try catch finally function
   try {
     //connect client
     await client.connect();
-    //declair database in mongo
+    //declare database in mongo
     const db = client.db("GoodMorningApp");
     //updating the user's array with the friend added
     const user = await db
