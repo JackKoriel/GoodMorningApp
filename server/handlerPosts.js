@@ -119,6 +119,17 @@ const getUserPosts = async (req, res) => {
 const getUserFriendsPosts = async (req, res) => {
   //get a specific user handle from params >>> this fetch will happen at the user's feed
   const { handle } = req.params;
+
+  //declaring a variable to use in my res status
+  let displayedData;
+  //getting the queries from the user
+  let { start, limit } = req.query;
+  //we change to Numbers because queries come in string form
+  let startNum = Number(start);
+  let limitNum = Number(limit);
+  //this will be usefull for the calcs later
+  let bothLimits = Number(start) + Number(limit);
+
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -151,9 +162,37 @@ const getUserFriendsPosts = async (req, res) => {
       })
     );
 
-    updatedFriendsPosts.length !== 0
-      ? res.status(200).json({ status: 200, data: updatedFriendsPosts })
-      : res.status(404).json({ status: 404, message: "Posts not found" });
+    // updatedFriendsPosts.length !== 0
+    //   ? res.status(200).json({ status: 200, data: updatedFriendsPosts })
+    //   : res.status(404).json({ status: 404, message: "Posts not found" });
+
+    //   // validations and user control
+    if (updatedFriendsPosts.length === 0) {
+      res.status(404).json({ status: 404, message: "Posts not found" });
+    }
+    if (!limit && !start) {
+      displayedData = updatedFriendsPosts;
+    } else if (!limit) {
+      displayedData = updatedFriendsPosts.slice(startNum, startNum + 5);
+    } else if (!start) {
+      displayedData = updatedFriendsPosts.slice(0, limitNum);
+    } else if (startNum + limitNum > updatedFriendsPosts.length) {
+      displayedData = updatedFriendsPosts.slice(
+        startNum,
+        updatedFriendsPosts.length + 1
+      );
+    } else if (startNum > updatedFriendsPosts.length) {
+      return (displayedData = []);
+    } else {
+      displayedData = updatedFriendsPosts.slice(startNum, startNum + limitNum);
+    }
+
+    res.status(200).json({
+      status: 200,
+      length: displayedData.length,
+      message: "Success",
+      data: displayedData,
+    });
   } catch (err) {
     res.status(500).json({
       status: 500,
@@ -184,14 +223,16 @@ const addPost = async (req, res) => {
     //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find current user
-    const user = await db.collection("users").findOne({ handle });
+    const user = await db
+      .collection("users")
+      .findOne({ handle: handle.toLowerCase() });
     //create a new post by signed in user
     const newPost = await db.collection("posts").insertOne({
       status,
       author: user,
       media: [{ type: "img", url: imageURL }],
       _id,
-      authorHandle: handle,
+      authorHandle: handle.toLowerCase(),
       timestamp: moment().format(),
       sortedTimestamp: date,
       likedBy: [],

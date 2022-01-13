@@ -148,7 +148,7 @@ const Messenger = () => {
                         message={message}
                         own={message.sender === user._id}
                         userAvatar={user.avatarSrc}
-                        receiverAvatar={receiver.avatarSrc}
+                        receiverAvatar={receiver?.avatarSrc}
                       />
                     </div>
                   );

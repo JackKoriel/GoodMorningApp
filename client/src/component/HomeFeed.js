@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useCallback } from "react";
 import styled from "styled-components";
 // import PostBox from "./PostBox";
 import PostModal from "./PostModal";
@@ -23,7 +23,27 @@ const HomeFeed = () => {
     posts: { data, statusPost },
     modalStatus,
     setModalStatus,
+    setStart,
+    loading,
+    loadingError,
+    hasMore,
   } = useContext(PostContext);
+
+  // for infinit scrolling
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setStart((prevNumber) => prevNumber + 5);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
 
   const handleClickProfile = (ev, handleProfile) => {
     history.push(`/${handleProfile}`);
@@ -66,74 +86,167 @@ const HomeFeed = () => {
               <HeartSpinner color="var(--blue-color)" /> Loading...
             </Progress>
           ) : (
-            <div>
-              {data !== undefined &&
-                data.map((post) => {
-                  let handleProfile = post.author.handle;
-                  return (
-                    <APost
-                      tabIndex="0"
-                      key={post._id}
-                      onClick={(ev) => {
-                        handleClickPost(ev, post._id);
-                      }}
-                    >
-                      <ImageBigContainer>
-                        <Img src={post.author.avatarSrc} alt="profile" />
-                        {post.media?.map((src, index) =>
-                          src.url ? (
-                            <ImgBig key={index} src={src.url} alt="postImage" />
-                          ) : null
-                        )}
-                        <ActionBar
-                          postId={post._id}
-                          isLiked={post.isLiked}
-                          isShared={post.isShared}
-                          numLikes={post.numLikes}
-                          numShares={post.numShares}
-                          sharedArray={post.sharedBy}
-                        />
-                      </ImageBigContainer>
-
-                      <Status>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
+            <>
+              <div>
+                {data !== undefined &&
+                  data.map((post, index) => {
+                    let handleProfile = post.author.handle;
+                    if (data.length === index + 1) {
+                      return (
+                        <APost
+                          ref={lastPostElementRef}
+                          tabIndex="0"
+                          key={post._id}
+                          onClick={(ev) => {
+                            handleClickPost(ev, post._id);
+                          }}
                         >
-                          <NameHandl
-                            onClick={(ev) => {
-                              handleClickProfile(ev, handleProfile);
-                            }}
-                          >
-                            {post.author.displayName}
-                          </NameHandl>
-                          {post.reshareOf && (
-                            <SharedFrom
-                              onClick={(ev) => {
-                                handleSharedClick(ev, post.reshareOf);
+                          <ImageBigContainer>
+                            <Img src={post.author.avatarSrc} alt="profile" />
+                            {post.media?.map((src, index) =>
+                              src.url ? (
+                                <ImgBig
+                                  key={index}
+                                  src={src.url}
+                                  alt="postImage"
+                                />
+                              ) : null
+                            )}
+                            <ActionBar
+                              postId={post._id}
+                              isLiked={post.isLiked}
+                              isShared={post.isShared}
+                              numLikes={post.numLikes}
+                              numShares={post.numShares}
+                              sharedArray={post.sharedBy}
+                            />
+                          </ImageBigContainer>
+
+                          <Status>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
                               }}
                             >
-                              {" "}
-                              shared a post by @{post.originalAuthor}
-                            </SharedFrom>
-                          )}
-                        </div>
-                        <PostStatus>{post.status}</PostStatus>
-                        {post.reshareOf ? (
-                          <Span>
-                            @{post.originalAuthor} ·{" "}
-                            {moment(post.originalTimeStamp).format(" MMM Do")}
-                          </Span>
-                        ) : (
-                          <Span>
-                            @{post.author.handle} ·{" "}
-                            {moment(post.timestamp).format(" MMM Do")}
-                          </Span>
-                        )}
-                      </Status>
-                    </APost>
-                  );
-                })}
-            </div>
+                              <NameHandl
+                                onClick={(ev) => {
+                                  handleClickProfile(ev, handleProfile);
+                                }}
+                              >
+                                {post.author.displayName}
+                              </NameHandl>
+                              {post.reshareOf && (
+                                <SharedFrom
+                                  onClick={(ev) => {
+                                    handleSharedClick(ev, post.reshareOf);
+                                  }}
+                                >
+                                  {" "}
+                                  shared a post by @{post.originalAuthor}
+                                </SharedFrom>
+                              )}
+                            </div>
+                            <PostStatus>{post.status}</PostStatus>
+                            {post.reshareOf ? (
+                              <Span>
+                                @{post.originalAuthor} ·{" "}
+                                {moment(post.originalTimeStamp).format(
+                                  " MMM Do"
+                                )}
+                              </Span>
+                            ) : (
+                              <Span>
+                                @{post.author.handle} ·{" "}
+                                {moment(post.timestamp).format(" MMM Do")}
+                              </Span>
+                            )}
+                          </Status>
+                        </APost>
+                      );
+                    } else {
+                      return (
+                        <APost
+                          tabIndex="0"
+                          key={post._id}
+                          onClick={(ev) => {
+                            handleClickPost(ev, post._id);
+                          }}
+                        >
+                          <ImageBigContainer>
+                            <Img src={post.author.avatarSrc} alt="profile" />
+                            {post.media?.map((src, index) =>
+                              src.url ? (
+                                <ImgBig
+                                  key={index}
+                                  src={src.url}
+                                  alt="postImage"
+                                />
+                              ) : null
+                            )}
+                            <ActionBar
+                              postId={post._id}
+                              isLiked={post.isLiked}
+                              isShared={post.isShared}
+                              numLikes={post.numLikes}
+                              numShares={post.numShares}
+                              sharedArray={post.sharedBy}
+                            />
+                          </ImageBigContainer>
+                          <Status>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <NameHandl
+                                onClick={(ev) => {
+                                  handleClickProfile(ev, handleProfile);
+                                }}
+                              >
+                                {post.author.displayName}
+                              </NameHandl>
+                              {post.reshareOf && (
+                                <SharedFrom
+                                  onClick={(ev) => {
+                                    handleSharedClick(ev, post.reshareOf);
+                                  }}
+                                >
+                                  {" "}
+                                  shared a post by @{post.originalAuthor}
+                                </SharedFrom>
+                              )}
+                            </div>
+                            <PostStatus>{post.status}</PostStatus>
+                            {post.reshareOf ? (
+                              <Span>
+                                @{post.originalAuthor} ·{" "}
+                                {moment(post.originalTimeStamp).format(
+                                  " MMM Do"
+                                )}
+                              </Span>
+                            ) : (
+                              <Span>
+                                @{post.author.handle} ·{" "}
+                                {moment(post.timestamp).format(" MMM Do")}
+                              </Span>
+                            )}
+                          </Status>
+                        </APost>
+                      );
+                    }
+                  })}
+              </div>
+              <div>
+                {loading && (
+                  <Loading>
+                    <HeartSpinner color="var(--blue-color)" /> Loading...
+                  </Loading>
+                )}
+              </div>
+              <div>{loadingError && "Error while loading..."}</div>
+            </>
           )}
         </MasterContainer>
       )}
@@ -294,6 +407,17 @@ const Span = styled.span`
 const PostStatus = styled.p`
   font-weight: 400;
   word-break: break-word;
+`;
+
+const Loading = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  /* justify-content: center; */
+  align-items: center;
+  margin: 20px;
 `;
 
 export default HomeFeed;
