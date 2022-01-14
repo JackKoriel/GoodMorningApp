@@ -6,7 +6,6 @@ import Message from "./message/Message";
 import { RiMailSendLine } from "react-icons/ri";
 import { currentUserContext } from "../../CurrentUserContext";
 import { io } from "socket.io-client";
-import moment from "moment";
 
 const Messenger = () => {
   const { user } = useContext(currentUserContext);
@@ -31,7 +30,7 @@ const Messenger = () => {
           setReceiver(res.data);
         });
     }
-  }, [currentChat]);
+  }, [currentChat, user._id]);
 
   //for auto scrolll
   const scroll = useRef();

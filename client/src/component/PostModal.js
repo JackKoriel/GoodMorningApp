@@ -6,7 +6,12 @@ import { FiXCircle } from "react-icons/fi";
 import { PostContext } from "./PostContext";
 
 const PostModal = ({ modalStatus, setModalStatus }) => {
-  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
+  const {
+    actions: { clearFeed, addingPost },
+    setIsUpdatingPost,
+    isUpdatingPost,
+    setStart,
+  } = useContext(PostContext);
 
   //status states
   const [statusUpdate, setStatusUpdate] = useState("");
@@ -89,6 +94,9 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
   const closeModalHandle = (ev) => {
     ev.preventDefault();
     setModalStatus(false);
+    setStatusValue("");
+    setInputValue("");
+    setPreviewSource("");
   };
 
   const handleSubmitPost = (ev) => {
@@ -112,7 +120,11 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
       .then((data) => {
         setStatusValue("");
         setInputValue("");
-        setIsUpdatingPost(!isUpdatingPost);
+        setPreviewSource("");
+        setImageURL("");
+        clearFeed();
+        setStart(0);
+        // setIsUpdatingPost(!isUpdatingPost);
         setButtonStatePost(true);
       })
       .catch((err) => {});

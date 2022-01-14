@@ -16,13 +16,15 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "received-posts": {
+    case "RECEIVED-POSTS": {
       return {
         ...state,
         statusPost: "active",
         data: [...new Set([...state.data, ...action.data])],
-        // data: [...state.data, ...action.data],
       };
+    }
+    case "CLEAR-POSTS": {
+      return initialState;
     }
     default:
       throw new Error(`Unrecognized action: ${action.type}`);
@@ -45,24 +47,30 @@ export const PostProvider = ({ children }) => {
   const [hasMore, setHasMore] = useState(false);
 
   const checkingPosts = (data) => {
-    dispatch({ type: "received-posts", data });
+    dispatch({ type: "RECEIVED-POSTS", data });
+  };
+
+  const clearFeed = () => {
+    dispatch({ type: "CLEAR-POSTS" });
   };
 
   useEffect(() => {
-    setLoading(true);
-    setLoadingError(false);
     if (user.status === "active") {
-      fetch(`/api/${user.handle}/friends-feed?start=${start}&limit=5`)
-        .then((res) => res.json())
-        .then((data) => {
-          checkingPosts(data.data);
-          setHasMore(data.data.length > 0);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setLoadingError(true);
-          setErrorStatus(true);
-        });
+      setLoading(true);
+      setLoadingError(false);
+      if (user.status === "active") {
+        fetch(`/api/${user.handle}/friends-feed?start=${start}&limit=5`)
+          .then((res) => res.json())
+          .then((data) => {
+            checkingPosts(data.data);
+            setHasMore(data.data.length > 0);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setLoadingError(true);
+            setErrorStatus(true);
+          });
+      }
     }
   }, [isUpdatingPost, user, start]);
 
@@ -70,7 +78,7 @@ export const PostProvider = ({ children }) => {
     <PostContext.Provider
       value={{
         posts,
-        actions: { checkingPosts },
+        actions: { checkingPosts, clearFeed },
         errorStatus,
         isUpdatingPost,
         setIsUpdatingPost,

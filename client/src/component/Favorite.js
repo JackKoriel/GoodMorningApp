@@ -133,6 +133,7 @@ const Progress = styled.div`
 `;
 
 const MasterContainer = styled.div`
+  position: relative;
   background: var(--beige-color);
   max-width: 700px;
   position: relative;
@@ -151,13 +152,14 @@ const MasterContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  border: solid red 1px;
 `;
 
 const Background = styled.img`
-  /* position: relative; */
+  position: absolute;
   background-repeat: repeat-y;
-  width: inherit;
-  height: inherit;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   opacity: 0.8;
   border-radius: 10px;
@@ -165,10 +167,10 @@ const Background = styled.img`
 `;
 
 const HoroContainer = styled.div`
-  /* margin: 10px 0; */
+  margin: 10px 0;
   padding: 10px 20px;
   position: relative;
-  top: -990px;
+  /* top: -990px; */
   text-decoration: none;
   display: flex;
   flex-direction: column;

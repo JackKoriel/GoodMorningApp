@@ -42,7 +42,7 @@ const HomeFeed = () => {
       });
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore]
+    [loading, hasMore, setStart]
   );
 
   const handleClickProfile = (ev, handleProfile) => {
@@ -76,7 +76,6 @@ const HomeFeed = () => {
             />
             <Text>GOOD MORNINGS START HERE</Text>
           </Header>
-
           <PostModal
             modalStatus={modalStatus}
             setModalStatus={setModalStatus}

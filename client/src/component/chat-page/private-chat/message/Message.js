@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import moment from "moment";
-import { Avatar } from "@material-ui/core";
+// import { Avatar } from "@material-ui/core";
 
 const Message = ({ userAvatar, receiverAvatar, message, own }) => {
   return (
