@@ -7,10 +7,10 @@ import { PostContext } from "./PostContext";
 
 const PostModal = ({ modalStatus, setModalStatus }) => {
   const {
-    actions: { clearFeed, addingPost },
+    actions: { clearFeed },
+    setStart,
     setIsUpdatingPost,
     isUpdatingPost,
-    setStart,
   } = useContext(PostContext);
 
   //status states
@@ -124,7 +124,7 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
         setImageURL("");
         clearFeed();
         setStart(0);
-        // setIsUpdatingPost(!isUpdatingPost);
+        setIsUpdatingPost(!isUpdatingPost);
         setButtonStatePost(true);
       })
       .catch((err) => {});

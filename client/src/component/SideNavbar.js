@@ -25,7 +25,7 @@ const SideNavbar = () => {
 
   const onClickVisiblityHandle = () => {
     setModalStatus(true);
-    history.push(`/`);
+    history.push("/");
   };
 
   return (
@@ -41,17 +41,17 @@ const SideNavbar = () => {
       <NavbarOptions to="/reading-list" Icon={FaGlasses} text="Reading List" />
       <NavbarOptions to={`/${handle}`} Icon={FiUser} text="Profile" />
       <NavbarOptions
-        to={`/messenger/`}
+        to={"/messenger/"}
         Icon={HiOutlineChatAlt2}
         text="Messenger"
       />
       <NavbarOptions
-        to={`/chats-rooms/`}
+        to={"/chats-rooms/"}
         Icon={FiMessageSquare}
         text="Chat Rooms"
       />
-      <NavbarOptions to={`/settings`} Icon={FiSettings} text="Settings" />
-      <NavbarOptions to={`/logout`} Icon={RiLogoutBoxLine} text="Logout" />
+      <NavbarOptions to={"/settings"} Icon={FiSettings} text="Settings" />
+      <NavbarOptions to={"/logout"} Icon={RiLogoutBoxLine} text="Logout" />
       {/* Button -> Tweet */}
       <Button onClick={onClickVisiblityHandle}>DOODLE-DOO</Button>
     </SidebarContainer>

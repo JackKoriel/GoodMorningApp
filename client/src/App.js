@@ -54,43 +54,91 @@ const App = () => {
                   {user.status === "active" ? <Redirect to="/" /> : <SignIn />}
                 </Route>
                 <Route path="/signup">
-                  <SignUp />
+                  {user.status === "active" ? <Redirect to="/" /> : <SignUp />}
                 </Route>
                 <Route path="/logout">
-                  <LogOut />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <LogOut />
+                  )}
                 </Route>
                 <Route path="/chat/:roomId">
-                  <ChatSys />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <ChatSys />
+                  )}
                 </Route>
                 <Route path="/chats-rooms/">
-                  <ChatRooms />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <ChatRooms />
+                  )}
                 </Route>
                 <Route path="/messenger/">
-                  <Messenger />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Messenger />
+                  )}
                 </Route>
                 <Route path="/settings">
-                  <Settings />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Settings />
+                  )}
                 </Route>
                 <Route path="/favorite">
-                  <Favorite />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Favorite />
+                  )}
                 </Route>
                 <Route path="/reading-list">
-                  <ReadingList />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <ReadingList />
+                  )}
                 </Route>
                 <Route path="/post/:postId">
-                  <PostDetails />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <PostDetails />
+                  )}
                 </Route>
                 <Route path="/:handle">
-                  <Profile />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Profile />
+                  )}
                 </Route>
                 <Route path="/horoscope">
-                  <Horoscope />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Horoscope />
+                  )}
                 </Route>
                 <Route path="/weather">
-                  <Weather />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <Weather />
+                  )}
                 </Route>
                 <Route path="/news">
-                  <News />
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <News />
+                  )}
                 </Route>
               </Switch>
               {/* Widgest */}

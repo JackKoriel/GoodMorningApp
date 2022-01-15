@@ -121,7 +121,7 @@ const getUserFriendsPosts = async (req, res) => {
   const { handle } = req.params;
 
   //declaring a variable to use in my res status
-  let displayedData;
+  let displayedData = [];
   //getting the queries from the user
   let { start, limit } = req.query;
   //we change to Numbers because queries come in string form
@@ -168,7 +168,9 @@ const getUserFriendsPosts = async (req, res) => {
 
     //   // validations and user control
     if (updatedFriendsPosts.length === 0) {
-      res.status(404).json({ status: 404, message: "Posts not found" });
+      res
+        .status(404)
+        .json({ status: 404, data: displayedData, message: "Posts not found" });
     }
     if (!limit && !start) {
       displayedData = updatedFriendsPosts;

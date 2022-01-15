@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { currentUserContext } from "./CurrentUserContext";
+import { PostContext } from "./PostContext";
 import { useParams } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
@@ -11,11 +12,23 @@ const Profile = () => {
   const { handle } = useParams();
   let history = useHistory();
   const { user, update, setUpdate } = useContext(currentUserContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+    isUpdatingPost,
+    setIsUpdatingPost,
+  } = useContext(PostContext);
   const [userData, setUserData] = useState({});
   const [status, setStatus] = useState(false);
   const [followingText, setFollowingText] = useState(
     user.followingIds?.includes(handle)
   );
+
+  // console.log("followign IDs ", user.followingIds);
+  // console.log("the boolean", followingText);
+
+  //to render the following button
+  // const [update, setUpdate] = useState(false);
 
   //get user data from DB
   useEffect(() => {
@@ -42,7 +55,10 @@ const Profile = () => {
         .then((res) => res.json())
         .then((data) => {
           setFollowingText(false);
+          clearFeed();
+          setStart(0);
           setUpdate(!update);
+          // setIsUpdatingPost(!isUpdatingPost);
         })
         .catch((err) => {});
     } else {
@@ -56,7 +72,10 @@ const Profile = () => {
         .then((res) => res.json())
         .then((data) => {
           setFollowingText(true);
+          clearFeed();
+          setStart(0);
           setUpdate(!update);
+          // setIsUpdatingPost(!isUpdatingPost);
         })
         .catch((err) => {});
     }

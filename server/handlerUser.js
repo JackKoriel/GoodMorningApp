@@ -340,6 +340,8 @@ const addUser = async (req, res) => {
       const newUser = await db.collection("users").insertMany([
         {
           ...req.body,
+          handle: handle.toLowerCase(),
+          email: email.toLowerCase(),
           password: hashPassword,
           _id,
           joined: date,

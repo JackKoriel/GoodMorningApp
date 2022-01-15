@@ -27,6 +27,9 @@ const HomeFeed = () => {
     loading,
     loadingError,
     hasMore,
+    noPosts,
+    startLoading,
+    setStartLoading,
   } = useContext(PostContext);
 
   // for infinit scrolling
@@ -38,11 +41,12 @@ const HomeFeed = () => {
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
           setStart((prevNumber) => prevNumber + 5);
+          setStartLoading(!startLoading);
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore, setStart]
+    [loading, hasMore]
   );
 
   const handleClickProfile = (ev, handleProfile) => {
@@ -245,6 +249,12 @@ const HomeFeed = () => {
                 )}
               </div>
               <div>{loadingError && "Error while loading..."}</div>
+              <div>
+                <NoPosts>
+                  {noPosts &&
+                    "No posts available, write a post or follow some friends 😺"}
+                </NoPosts>
+              </div>
             </>
           )}
         </MasterContainer>
@@ -409,6 +419,17 @@ const PostStatus = styled.p`
 `;
 
 const Loading = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  /* justify-content: center; */
+  align-items: center;
+  margin: 20px;
+`;
+
+const NoPosts = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
