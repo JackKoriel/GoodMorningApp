@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { CurrentUserProvider } from "./component/CurrentUserContext";
-import { PostProvider } from "./component/PostContext";
+import { CurrentUserProvider } from "./component/contexts/CurrentUserContext";
+import { PostProvider } from "./component/contexts/PostContext";
 
 ReactDOM.render(
   <React.StrictMode>

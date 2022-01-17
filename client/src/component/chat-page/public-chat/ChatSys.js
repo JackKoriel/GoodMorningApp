@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { currentUserContext } from "../CurrentUserContext";
+import { currentUserContext } from "../../contexts/CurrentUserContext";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";

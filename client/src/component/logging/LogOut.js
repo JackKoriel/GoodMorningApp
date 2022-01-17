@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ImSad } from "react-icons/im";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 
 const LogOut = () => {
   let history = useHistory();

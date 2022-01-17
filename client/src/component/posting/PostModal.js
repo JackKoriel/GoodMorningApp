@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TextareaAutosize } from "@material-ui/core";
 import Axios from "axios";
 import { FiXCircle } from "react-icons/fi";
-import { PostContext } from "./PostContext";
+import { PostContext } from "../contexts/PostContext";
 
 const PostModal = ({ modalStatus, setModalStatus }) => {
   const {

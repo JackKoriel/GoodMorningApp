@@ -14,6 +14,9 @@ const Logo = styled.img`
   width: 30%;
   min-width: 100px;
   /* margin-left: 20px; */
+  @media (max-width: 820px) {
+    min-width: 60px;
+  }
 `;
 
 export default SuneriseLogo;

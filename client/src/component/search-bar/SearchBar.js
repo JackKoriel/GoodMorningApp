@@ -8,18 +8,27 @@ const SearchBar = () => {
   // stores all items from backend
   const [allUsersArray, setAllUsersArray] = useState([]);
 
+  // the controller, signal and the clean up function are all to remove the unmounted componenet error
+  // the reason is that everytime I type a letter a request is being sent to the backend, so I need to clean in a smart way
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted) {
-      fetch("/api/users")
-        .then((res) => res.json())
-        .then((data) => setAllUsersArray(data));
-    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetch("/api/users", { signal })
+      .then((res) => res.json())
+      .then((data) => {
+        setAllUsersArray(data);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          return;
+        }
+      });
     return () => {
-      isMounted = false;
+      controller.abort();
     };
   }, [searchValue]);
 
+  // to clear the search resultswith the button click
   const handleClear = () => {
     setSearchValue("");
   };

@@ -6,9 +6,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 import { useHistory } from "react-router";
-import ErrorMsg from "./ErrorMsg";
+import ErrorMsg from "../helpers/ErrorMsg";
 import { HeartSpinner } from "react-spinners-kit";
 
 const SignIn = () => {
@@ -22,6 +22,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  //to push to homepage without the unmounted componenet error
   const [readyToPush, setReadyToPush] = useState(false);
 
   useEffect(() => {
@@ -164,6 +165,7 @@ const Master = styled.div`
   justify-content: center;
   align-items: center;
   background-image: url("https://res.cloudinary.com/dhj5ncbxs/image/upload/v1639365072/wp5784428_ryak7y.jpg");
+  min-width: 300px;
 `;
 
 const Progress = styled.div`
@@ -189,9 +191,11 @@ const SignContainer = styled.div`
   padding: 50px;
   border-radius: 10px;
   border: 2px solid var(--gold-color);
-  width: 25%;
+  min-width: 25%;
   height: 25%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-right: 10px;
+  margin-left: 10px;
 `;
 const Button = styled.button`
   width: 100%;

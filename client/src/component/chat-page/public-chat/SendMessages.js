@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { db } from "../../utility/firebase";
+import { db } from "../../../utility/firebase";
 import { RiMailSendLine } from "react-icons/ri";
 
 const SendMessages = ({ user, scroll, roomId }) => {

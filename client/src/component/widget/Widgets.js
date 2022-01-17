@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Horoscope from "./Horoscope";
-import News from "./News";
-import Weather from "./Weather";
+import Horoscope from "../api-components/Horoscope";
+import News from "../api-components/News";
+import Weather from "../api-components/Weather";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Widgets = () => {
@@ -61,9 +61,10 @@ const Master = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 0.3;
-  width: 100%;
-  height: auto;
+  max-width: 310px;
+  /* flex: 0.3; */
+  /* width: 100%; */
+  height: 100%;
   background-color: var(--brown-color);
   border-left: 1px solid var(--yellow-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { HeartSpinner } from "react-spinners-kit";
 import { FiXCircle } from "react-icons/fi";
 import { FiMeh } from "react-icons/fi";
-import { currentUserContext } from "./CurrentUserContext";
-import { PostContext } from "./PostContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
+import { PostContext } from "../contexts/PostContext";
 
 const Favorite = () => {
   const { update, setUpdate } = useContext(currentUserContext);
@@ -13,13 +13,19 @@ const Favorite = () => {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
-    fetch(`/api/favorite`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFavList(data.data);
-        setStatus("active");
-      })
-      .catch((err) => {});
+    let isMounted = true;
+    if (isMounted) {
+      fetch(`/api/favorite`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFavList(data.data);
+          setStatus("active");
+        })
+        .catch((err) => {});
+    }
+    return () => {
+      isMounted = false;
+    };
   }, [status, horoStatus]);
 
   const handleRemove = (ev, _id, current_date) => {

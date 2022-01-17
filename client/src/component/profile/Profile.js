@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { currentUserContext } from "./CurrentUserContext";
-import { PostContext } from "./PostContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
+import { PostContext } from "../contexts/PostContext";
 import { useParams } from "react-router-dom";
 import { HeartSpinner } from "react-spinners-kit";
 import FeedRendering from "./FeedRendering";
@@ -83,7 +83,7 @@ const Profile = () => {
 
   //message a user
   const handleMessageClick = () => {
-    console.log("click");
+    // console.log("click");
     fetch(`/api/conversation`, {
       method: "POST",
       body: JSON.stringify({

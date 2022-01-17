@@ -6,26 +6,27 @@ import {
   Redirect,
 } from "react-router-dom";
 import styled from "styled-components";
-import Horoscope from "./component/Horoscope";
-import HomeFeed from "./component/HomeFeed";
-import Weather from "./component/Weather";
-import News from "./component/News";
-import GlobalStyles from "./component/GlobalStyles";
-import SideNavbar from "./component/SideNavbar";
-import Profile from "./component/Profile";
-import ReadingList from "./component/ReadingList";
-import Favorite from "./component/Favorite";
-import Widgets from "./component/Widgets";
-import SignIn from "./component/SignIn";
-import SignUp from "./component/SignUp";
-import LogOut from "./component/LogOut";
-import Settings from "./component/Settings";
-import PostDetails from "./component/PostDetails";
-import { currentUserContext } from "./component/CurrentUserContext";
+import Horoscope from "./component/api-components/Horoscope";
+import HomeFeed from "./component/home-feed/HomeFeed";
+import Weather from "./component/api-components/Weather";
+import News from "./component/api-components/News";
+import GlobalStyles from "./component/helpers/GlobalStyles";
+import SideNavbar from "./component/navbar/SideNavbar";
+import Profile from "./component/profile/Profile";
+import ReadingList from "./component/api-components/ReadingList";
+import Favorite from "./component/api-components/Favorite";
+import Widgets from "./component/widget/Widgets";
+import SignIn from "./component/logging/SignIn";
+import SignUp from "./component/logging/SignUp";
+import LogOut from "./component/logging/LogOut";
+import Settings from "./component/settings/Settings";
+import PostDetails from "./component/posts/PostDetails";
+import { currentUserContext } from "./component/contexts/CurrentUserContext";
 import CircularProgress from "@mui/material/CircularProgress";
-import ChatSys from "./component/chat-page/ChatSys";
-import ChatRooms from "./component/chat-page/ChatRooms";
+import ChatSys from "./component/chat-page/public-chat/ChatSys";
+import ChatRooms from "./component/chat-page/public-chat/ChatRooms";
 import Messenger from "./component/chat-page/private-chat/Messenger";
+import WidgetPage from "./component/widget/WidgetPage";
 
 const App = () => {
   const { user } = useContext(currentUserContext);
@@ -61,6 +62,13 @@ const App = () => {
                     <Redirect to="/signup" />
                   ) : (
                     <LogOut />
+                  )}
+                </Route>
+                <Route path="/widgets">
+                  {user.status === "idle" ? (
+                    <Redirect to="/signup" />
+                  ) : (
+                    <WidgetPage />
                   )}
                 </Route>
                 <Route path="/chat/:roomId">
@@ -142,7 +150,9 @@ const App = () => {
                 </Route>
               </Switch>
               {/* Widgest */}
-              {user.status === "active" && <Widgets />}
+              <WidgetContainer>
+                {user.status === "active" && <Widgets />}
+              </WidgetContainer>
             </MasterContainer>
           </Router>
         </>
@@ -179,6 +189,17 @@ const Progress = styled.div`
   position: absolute;
   left: calc(50% - (40% / 2));
   background-color: var(--beige-color);
+`;
+
+const WidgetContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0.3;
+  @media (max-width: 820px) {
+    display: none;
+  }
 `;
 
 export default App;

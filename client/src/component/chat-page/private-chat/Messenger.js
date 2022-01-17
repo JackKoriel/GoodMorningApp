@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import SideNavbar from "../../SideNavbar";
+import SideNavbar from "../../navbar/SideNavbar";
 import Conversations from "./conversations/Conversations";
 import Message from "./message/Message";
 import { RiMailSendLine } from "react-icons/ri";
-import { currentUserContext } from "../../CurrentUserContext";
+import { currentUserContext } from "../../contexts/CurrentUserContext";
 import { io } from "socket.io-client";
 
 const Messenger = () => {

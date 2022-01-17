@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
-import ActionBar from "./ActionBar";
+import ActionBar from "../helpers/ActionBar";
 
 const PostDetails = () => {
   let history = useHistory();

@@ -4,8 +4,8 @@ import moment from "moment";
 import { HeartSpinner } from "react-spinners-kit";
 import { FiXCircle } from "react-icons/fi";
 import { FiBookOpen } from "react-icons/fi";
-import { currentUserContext } from "./CurrentUserContext";
-import { PostContext } from "./PostContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
+import { PostContext } from "../contexts/PostContext";
 
 const ReadingList = () => {
   const { update, setUpdate } = useContext(currentUserContext);

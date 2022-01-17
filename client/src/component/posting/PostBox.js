@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Avatar } from "@material-ui/core";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 import { useHistory } from "react-router";
 
 const PostBox = () => {
@@ -13,7 +13,7 @@ const PostBox = () => {
   } = useContext(currentUserContext);
   const [userBio, setUserBio] = useState("");
   const [moodButtonStatus, setMoodButtonStatus] = useState(true);
-  let placeholderText = `How is your mood today ${handle}?`;
+  let placeholderText = `How is your mood ${handle}?`;
 
   const handleChangeUserBio = (ev) => {
     setUserBio(ev.target.value);
@@ -53,9 +53,10 @@ const PostBox = () => {
             type="text"
             onChange={(ev) => handleChangeUserBio(ev)}
             value={userBio}
+            rows="2"
+            cols="10"
           />
         </AvatarContainer>
-
         <Button type="submit" onClick={(ev) => handleClickUserBio(ev)}>
           {!moodButtonStatus ? (
             <i className="fas fa-ring fa-spin" />
@@ -70,7 +71,6 @@ const PostBox = () => {
 
 const MasterContainer = styled.div`
   padding-bottom: 10px;
-
   padding-right: 10px;
 `;
 
@@ -82,11 +82,20 @@ const Form = styled.form`
   /* border: 1px solid red; */
 `;
 
-const Input = styled.input`
+const Input = styled.textarea`
   width: 100%;
   border: none;
   border-radius: 30px;
   padding-left: 10px;
+  padding-top: 5px;
+  word-break: break-word;
+  @media (max-width: 820px) {
+    height: fit-content;
+    width: 100%;
+    padding: 5px;
+    margin-left: 10px;
+    height: 40px;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -95,6 +104,12 @@ const AvatarContainer = styled.div`
   gap: 10px;
   /* border: 1px solid green; */
   width: 100%;
+  @media (max-width: 820px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
 `;
 const Button = styled.button`
   margin-top: 40px;
@@ -138,6 +153,14 @@ const Button = styled.button`
     left: 4px;
     width: calc(100% - 1px);
     height: calc(100% - 1px);
+  }
+  @media (max-width: 820px) {
+    margin-top: 20px;
+    font-size: 13px;
+    max-width: 80px;
+    max-height: 80px;
+    padding: 10px 20px;
+    line-height: 10px;
   }
 `;
 export default PostBox;

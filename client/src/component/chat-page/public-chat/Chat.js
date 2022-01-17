@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { db } from "../../utility/firebase";
+import { db } from "../../../utility/firebase";
 import SendMessages from "./SendMessages";
 import moment from "moment";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
@@ -14,13 +14,19 @@ const Chat = ({ user, roomId }) => {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
-    db.collection(`roomId_${roomId}`)
-      .orderBy(`createdAt`, `desc`)
-      .limit(50)
-      .onSnapshot((snapshot) => {
-        setMessages(snapshot.docs.map((doc) => doc.data()));
-        setStatus("active");
-      });
+    let isMounted = true;
+    if (isMounted) {
+      db.collection(`roomId_${roomId}`)
+        .orderBy(`createdAt`, `desc`)
+        .limit(50)
+        .onSnapshot((snapshot) => {
+          setMessages(snapshot.docs.map((doc) => doc.data()));
+          setStatus("active");
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
   }, [roomId]);
 
   return (
@@ -39,30 +45,34 @@ const Chat = ({ user, roomId }) => {
           <MessagesContainer ref={scroll}>
             {messages.map(
               ({ id, text, photoURL, uid, displayName, createdAt }, index) => (
-                <div>
+                <React.Fragment key={index}>
                   {uid === user._id ? (
-                    <SentMessageContainer key={id}>
-                      <UserAvatar src={photoURL} alt="avatar" key={id} />
-                      <SentMessageDetails>
-                        <SentMessage key={id}>
-                          <Text>{text}</Text>
-                        </SentMessage>
-                        <Time>{moment(createdAt).calendar()}</Time>
-                      </SentMessageDetails>
-                    </SentMessageContainer>
+                    <React.Fragment>
+                      <SentMessageContainer key={id}>
+                        <UserAvatar src={photoURL} alt="avatar" key={id} />
+                        <SentMessageDetails key={id}>
+                          <SentMessage key={id}>
+                            <Text>{text}</Text>
+                          </SentMessage>
+                          <Time>{moment(createdAt).calendar()}</Time>
+                        </SentMessageDetails>
+                      </SentMessageContainer>
+                    </React.Fragment>
                   ) : (
-                    <ReceivedMessageContainer key={id}>
-                      <UserAvatar src={photoURL} alt="avatar" key={id} />
-                      <ReceivedMessageDetails>
-                        <Sender>{displayName}</Sender>
-                        <ReceivedMessage key={id}>
-                          <Text>{text}</Text>
-                        </ReceivedMessage>
-                        <Time>{moment(createdAt).calendar()}</Time>
-                      </ReceivedMessageDetails>
-                    </ReceivedMessageContainer>
+                    <React.Fragment>
+                      <ReceivedMessageContainer key={id}>
+                        <UserAvatar src={photoURL} alt="avatar" key={id} />
+                        <ReceivedMessageDetails key={id}>
+                          <Sender>{displayName}</Sender>
+                          <ReceivedMessage key={id}>
+                            <Text>{text}</Text>
+                          </ReceivedMessage>
+                          <Time>{moment(createdAt).calendar()}</Time>
+                        </ReceivedMessageDetails>
+                      </ReceivedMessageContainer>
+                    </React.Fragment>
                   )}
-                </div>
+                </React.Fragment>
               )
             )}
           </MessagesContainer>

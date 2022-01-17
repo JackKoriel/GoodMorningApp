@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-const NavbarOptions = ({ to, exact, text, Icon }) => {
+const NavbarOptions = ({ to, exact, text, Icon, mobile }) => {
   return (
     <SidebarIcons
       activeStyle={{ color: "var(--morning-color)" }}
       to={to}
       exact={exact}
+      className={mobile ? "own" : ""}
     >
-      <Icon size={22} style={iconStyle} />
+      <Icon style={iconStyle} />
       <Text>{text}</Text>
     </SidebarIcons>
   );
@@ -30,15 +31,28 @@ const SidebarIcons = styled(NavLink)`
     color: var(--morning-color);
     transition: color 100ms ease-out;
   }
+  &.own {
+    display: none;
+  }
+  @media (max-width: 820px) {
+    margin-top: 2px;
+    &.own {
+      display: block;
+    }
+  }
 `;
 
 const Text = styled.h2`
   font-size: 20px;
   font-weight: 700;
   margin-right: 20px;
+  @media (max-width: 820px) {
+    display: none;
+  }
 `;
 
 const iconStyle = {
-  padding: "15px 20px",
+  padding: "15px 15px",
+  fontSize: "22px",
 };
 export default NavbarOptions;

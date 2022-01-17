@@ -3,9 +3,9 @@ import { useHistory } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import styled from "styled-components";
-import ActionBar from "./ActionBar";
+import ActionBar from "../helpers/ActionBar";
 import { FiXCircle } from "react-icons/fi";
-import { PostContext } from "./PostContext";
+import { PostContext } from "../contexts/PostContext";
 
 const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
   let history = useHistory();

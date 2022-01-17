@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
-import { PostContext } from "./PostContext";
+import { PostContext } from "../contexts/PostContext";
 import { HeartSpinner } from "react-spinners-kit";
 
 const dummyData = {

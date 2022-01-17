@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 
@@ -13,6 +13,12 @@ const SuggestedSearch = ({ allUsersArray, searchValue, setSearchValue }) => {
   // pushes to selected item
   const history = useHistory();
 
+  // use it to avoid the unmounted componenet errro
+  const handleClickSearch = (userHandle) => {
+    // setSearchValue("");
+    history.push(`/${userHandle}`);
+  };
+
   return (
     <SearchList>
       {matchSuggestions.length === 0 ? (
@@ -23,8 +29,7 @@ const SuggestedSearch = ({ allUsersArray, searchValue, setSearchValue }) => {
             <div key={user._id}>
               <ListedItem
                 onClick={() => {
-                  setSearchValue("");
-                  history.push(`/${user.handle}`);
+                  handleClickSearch(user.handle);
                 }}
               >
                 <span>

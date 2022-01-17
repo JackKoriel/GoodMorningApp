@@ -238,7 +238,8 @@ const getUsersByEmail = async (req, res) => {
         message: "Incorrect username, please try again.",
       });
     } else {
-      req.session.handle = handle;
+      //added toLowerCase because the app is case sensitive, so all usenames should be with small letters
+      req.session.handle = handle.toLowerCase();
       req.session._id = user._id;
       req.session.email = email;
       res.status(200).json({ status: 200, data: user });

@@ -6,10 +6,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import SuneriseLogo from "./SuneriseLogo";
+import SuneriseLogo from "../navbar/SuneriseLogo";
 import Axios from "axios";
 import { useHistory } from "react-router";
-import ErrorMsg from "./ErrorMsg";
+import ErrorMsg from "../helpers/ErrorMsg";
 
 const SignUp = () => {
   let history = useHistory();
@@ -201,10 +201,10 @@ const SignUp = () => {
           }}
         >
           <SuneriseLogo />
-          <h1>
+          <h2 style={{ marginBottom: "10px" }}>
             Join the Good Morning Web App today and share your mood with your
             friends
-          </h1>
+          </h2>
           <div
             style={{
               width: "100%",
@@ -397,10 +397,21 @@ const Master = styled.div`
   flex-direction: row;
   justify-content: center;
   /* flex: 0.5; */
+  @media (max-width: 820px) {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+  }
 `;
 const Background = styled.img`
   z-index: 1;
   max-width: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  @media (max-width: 820px) {
+    max-height: 0%;
+  }
 `;
 const SignContainer = styled.div`
   /* width: 100%; */
@@ -413,6 +424,10 @@ const SignContainer = styled.div`
   gap: 5px;
   background: var(--beige-color);
   padding: 2% 2%;
+  @media (max-width: 820px) {
+    max-width: 100%;
+    height: 100%;
+  }
 `;
 
 const AvatarInput = styled.div`

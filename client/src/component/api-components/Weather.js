@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 import styled from "styled-components";
 import { HeartSpinner } from "react-spinners-kit";
 
@@ -150,12 +150,15 @@ const Temp = styled.div`
   flex-direction: row;
   gap: 20px;
   z-index: 2;
+  padding: 0 5px;
 `;
 const Actual = styled.div`
   font-weight: 700;
+  text-align: center;
 `;
 
 const FeelsLike = styled.div`
   font-weight: 700;
+  text-align: center;
 `;
 export default Weather;

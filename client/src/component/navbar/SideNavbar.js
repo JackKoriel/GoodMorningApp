@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { currentUserContext } from "./CurrentUserContext";
+import { currentUserContext } from "../contexts/CurrentUserContext";
 import SuneriseLogo from "./SuneriseLogo";
 import { FiUser } from "react-icons/fi";
 import { BsStar } from "react-icons/bs";
@@ -9,10 +9,11 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { FiMessageSquare } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
 import { HiOutlineChatAlt2 } from "react-icons/hi";
-import PostBox from "./PostBox";
+import { MdOutlineWidgets } from "react-icons/md";
+import PostBox from "../posting/PostBox";
 import NavbarOptions from "./NavbarOptions";
 import styled from "styled-components";
-import { PostContext } from "./PostContext";
+import { PostContext } from "../contexts/PostContext";
 import { useHistory } from "react-router-dom";
 
 const SideNavbar = () => {
@@ -31,9 +32,9 @@ const SideNavbar = () => {
   return (
     <SidebarContainer>
       {/* site icon */}
-      <div style={{ marginLeft: "calc(50% - (30% / 2))" }}>
+      <LogoStyler>
         <SuneriseLogo />
-      </div>
+      </LogoStyler>
       <PostBox avatarSrc={avatarSrc} />
       {/* sidebarOptions */}
       <NavbarOptions exact={true} to="/" Icon={FiHome} text="Home" />
@@ -50,6 +51,12 @@ const SideNavbar = () => {
         Icon={FiMessageSquare}
         text="Chat Rooms"
       />
+      <NavbarOptions
+        to="/widgets"
+        Icon={MdOutlineWidgets}
+        text="Widgets"
+        mobile={true}
+      />
       <NavbarOptions to={"/settings"} Icon={FiSettings} text="Settings" />
       <NavbarOptions to={"/logout"} Icon={RiLogoutBoxLine} text="Logout" />
       {/* Button -> Tweet */}
@@ -59,7 +66,7 @@ const SideNavbar = () => {
 };
 
 const SidebarContainer = styled.div`
-  min-width: 210px;
+  max-width: 310px;
   height: 100vh;
   border-right: 1px solid var(--yellow-color);
   padding-right: 25px;
@@ -67,6 +74,20 @@ const SidebarContainer = styled.div`
   flex: 0.3;
   background-color: var(--brown-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  @media (max-width: 820px) {
+    min-width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const LogoStyler = styled.div`
+  margin-left: calc(50% - (30% / 2));
+  @media (max-width: 820px) {
+    margin: 0;
+  }
 `;
 
 const Button = styled.button`
@@ -111,6 +132,14 @@ const Button = styled.button`
     left: 4px;
     width: calc(100% - 1px);
     height: calc(100% - 1px);
+  }
+  @media (max-width: 820px) {
+    margin-top: 20px;
+    font-size: 13px;
+    min-width: 80px;
+    max-height: 80px;
+    padding: 10px 20px;
+    line-height: 10px;
   }
 `;
 

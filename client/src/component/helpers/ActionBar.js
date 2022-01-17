@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { FiPlusSquare } from "react-icons/fi";
 import { FiHeart } from "react-icons/fi";
-import { PostContext } from "./PostContext";
+import { PostContext } from "../contexts/PostContext";
 import { useHistory } from "react-router-dom";
 
 const ActionBar = ({ postId, isLiked, sharedArray }) => {
