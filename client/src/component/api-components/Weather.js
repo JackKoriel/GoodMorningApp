@@ -3,6 +3,7 @@ import { currentUserContext } from "../contexts/CurrentUserContext";
 import styled from "styled-components";
 import { HeartSpinner } from "react-spinners-kit";
 
+//dummy data used for testing to not spam the limited API
 let dummyData = {
   last_updated_epoch: 1639165500,
   last_updated: 2021 - 12 - 10,
@@ -41,6 +42,7 @@ const Weather = () => {
   const [dailyForcast, setDailyForcast] = useState(dummyData);
   const [weatherStatus, setWeatherStatus] = useState(true);
 
+  //comment out when using dummy data
   // useEffect(() => {
   //   setWeatherStatus(false);
   //   fetch("/api/weather", {

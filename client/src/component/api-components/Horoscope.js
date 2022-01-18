@@ -5,6 +5,7 @@ import { FiStar } from "react-icons/fi";
 import { PostContext } from "../contexts/PostContext";
 import { HeartSpinner } from "react-spinners-kit";
 
+//dummy data used for testing to not spam the limited API
 const dummyData = {
   date_range: "Sep 23 - Oct 22",
   current_date: "December 10, 2021",
@@ -52,6 +53,7 @@ const Horoscope = () => {
       });
   };
 
+  //comment out when using dummy data
   // useEffect(() => {
   //   setNewsUpdated(false);
   //   fetch("/api/horoscope", {
@@ -144,8 +146,8 @@ const StarFav = styled.button`
   background: transparent;
   border: none;
   color: white;
-  bottom: 5px;
-  right: 10px;
+  bottom: 0px;
+  right: 0px;
   font-size: 30px;
   transition: all 400ms ease-in-out;
   z-index: 2;

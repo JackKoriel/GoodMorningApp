@@ -5,6 +5,7 @@ import { FiBookmark } from "react-icons/fi";
 import { PostContext } from "../contexts/PostContext";
 import { HeartSpinner } from "react-spinners-kit";
 
+//dummy data used for testing to not spam the limited API
 const dummyData = [
   {
     summary:
@@ -168,6 +169,7 @@ const News = () => {
       });
   };
 
+  //comment out when using dummy data
   // useEffect(() => {
   //   setNewsUpdated(false);
   //   fetch("/api/news", {

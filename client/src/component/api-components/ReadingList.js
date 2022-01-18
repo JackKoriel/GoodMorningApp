@@ -123,8 +123,8 @@ const MasterContainer = styled.div`
   display: flex;
   flex-direction: column;
   /* overflow: scroll; */
-  padding: 20px 10px;
   /* margin: 15px; */
+  padding: 20px 10px;
   gap: 20px;
   /* text-decoration: none; */
   overflow: scroll;
@@ -147,7 +147,6 @@ const Article = styled.a`
   transition: all 300ms ease-out;
   border-radius: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
   padding: 5px 5px;
   transition: all 300ms ease-out;
   &:hover {

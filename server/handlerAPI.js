@@ -248,6 +248,7 @@ const getFav = async (req, res) => {
     const horoscopes = await db
       .collection("horoscope")
       .find({ email })
+      .sort({ current_date: -1 })
       .toArray();
     // validations and user control
     horoscopes.length > 0
@@ -369,7 +370,11 @@ const getRL = async (req, res) => {
     //declare database in mongo
     const db = client.db("GoodMorningApp");
     //find all articles
-    const news = await db.collection("news").find({ email }).toArray();
+    const news = await db
+      .collection("news")
+      .find({ email })
+      .sort({ published_date: -1 })
+      .toArray();
     // validations and user control
     news.length > 0
       ? res.status(200).json({ status: 200, data: news })

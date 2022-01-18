@@ -67,10 +67,10 @@ const Favorite = () => {
         </Progress>
       ) : (
         <MasterContainer>
-          <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/a_90/v1639194354/wp4064809_kaomgc.jpg" />
           {favList.map((horoscope) => {
             return (
               <HoroContainer key={horoscope._id}>
+                <Background src="https://res.cloudinary.com/dhj5ncbxs/image/upload/a_90/v1639194354/wp4064809_kaomgc.jpg" />
                 <Desc>{horoscope.description}</Desc>
 
                 <LuckyNum>
@@ -139,17 +139,13 @@ const Progress = styled.div`
 `;
 
 const MasterContainer = styled.div`
-  position: relative;
   background: var(--beige-color);
   max-width: 700px;
   position: relative;
   display: flex;
   flex-direction: column;
   height: auto;
-  /* padding: 20px 10px; */
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-radius: 10px;
+  padding: 0 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   overflow: scroll;
   -ms-overflow-style: none; /*for IE*/
@@ -158,15 +154,14 @@ const MasterContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  border: solid red 1px;
 `;
 
 const Background = styled.img`
   position: absolute;
-  background-repeat: repeat-y;
+  object-fit: cover;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: -10;
   opacity: 0.8;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -185,6 +180,8 @@ const HoroContainer = styled.div`
   align-items: center;
   line-height: 35px;
   z-index: 1;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const ButtonRemove = styled.button`
