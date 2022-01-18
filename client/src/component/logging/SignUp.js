@@ -397,7 +397,7 @@ const Master = styled.div`
   flex-direction: row;
   justify-content: center;
   /* flex: 0.5; */
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
@@ -409,7 +409,7 @@ const Background = styled.img`
   max-width: 50%;
   background-repeat: no-repeat;
   background-size: cover;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     max-height: 0%;
   }
 `;
@@ -424,7 +424,7 @@ const SignContainer = styled.div`
   gap: 5px;
   background: var(--beige-color);
   padding: 2% 2%;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     max-width: 100%;
     height: 100%;
   }

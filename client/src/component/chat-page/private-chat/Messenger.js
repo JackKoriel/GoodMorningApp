@@ -135,78 +135,80 @@ const Messenger = () => {
   return (
     <MessengerContainer>
       <SideNavbar />
-      <ChatBox>
-        <ChatBoxWrapper>
-          {currentChat ? (
-            <>
-              <ChatBoxTop>
-                {messages.map((message) => {
-                  return (
-                    <div key={RandoId()} ref={scroll}>
-                      <Message
-                        message={message}
-                        own={message.sender === user._id}
-                        userAvatar={user.avatarSrc}
-                        receiverAvatar={receiver?.avatarSrc}
-                      />
-                    </div>
-                  );
-                })}
-              </ChatBoxTop>
-              <ChatBoxBottom>
-                <Input
-                  placeholder="Write a message..."
-                  type="text"
-                  value={newMessage}
-                  onChange={(ev) => setNewMessage(ev.target.value)}
-                />
-                <Button type="submit" onClick={(ev) => handleSubmit(ev)}>
-                  {!sendButtonStatus ? (
-                    <i className="fas fa-ring fa-spin" />
-                  ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span>Send</span>{" "}
+      <ChatContainer>
+        <ChatBox>
+          <ChatBoxWrapper>
+            {currentChat ? (
+              <>
+                <ChatBoxTop>
+                  {messages.map((message) => {
+                    return (
+                      <div key={RandoId()} ref={scroll}>
+                        <Message
+                          message={message}
+                          own={message.sender === user._id}
+                          userAvatar={user.avatarSrc}
+                          receiverAvatar={receiver?.avatarSrc}
+                        />
+                      </div>
+                    );
+                  })}
+                </ChatBoxTop>
+                <ChatBoxBottom>
+                  <Input
+                    placeholder="Write a message..."
+                    type="text"
+                    value={newMessage}
+                    onChange={(ev) => setNewMessage(ev.target.value)}
+                  />
+                  <Button type="submit" onClick={(ev) => handleSubmit(ev)}>
+                    {!sendButtonStatus ? (
+                      <i className="fas fa-ring fa-spin" />
+                    ) : (
                       <div
                         style={{
                           display: "flex",
+                          flexDirection: "row",
                           justifyContent: "center",
+                          gap: "10px",
                           alignItems: "center",
                         }}
                       >
-                        <RiMailSendLine size={20} />
+                        <span>Send</span>{" "}
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <RiMailSendLine size={20} />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </Button>
-              </ChatBoxBottom>
-            </>
-          ) : (
-            <NoConvo>Open a conversation to start a chat.</NoConvo>
-          )}
-        </ChatBoxWrapper>
-      </ChatBox>
-      <ChatMenu>
-        <ChatMenuWrapper>
-          <ChatMenuInput placeholder="Search for friends" />
-          <ConverstaionWrapper>
-            {conversations.map((convo) => {
-              return (
-                <div key={convo._id} onClick={() => setCurrentChat(convo)}>
-                  <Conversations conversation={convo} currentUser={user} />
-                </div>
-              );
-            })}
-          </ConverstaionWrapper>
-        </ChatMenuWrapper>
-      </ChatMenu>
+                    )}
+                  </Button>
+                </ChatBoxBottom>
+              </>
+            ) : (
+              <NoConvo>Open a conversation to start a chat.</NoConvo>
+            )}
+          </ChatBoxWrapper>
+        </ChatBox>
+        <ChatMenu>
+          <ChatMenuWrapper>
+            <ChatMenuInput placeholder="Search for friends" />
+            <ConverstaionWrapper>
+              {conversations.map((convo) => {
+                return (
+                  <div key={convo._id} onClick={() => setCurrentChat(convo)}>
+                    <Conversations conversation={convo} currentUser={user} />
+                  </div>
+                );
+              })}
+            </ConverstaionWrapper>
+          </ChatMenuWrapper>
+        </ChatMenu>
+      </ChatContainer>
     </MessengerContainer>
   );
 };
@@ -215,27 +217,50 @@ const MessengerContainer = styled.div`
   display: flex;
   flex-direction: row;
   position: absolute;
-  width: 76vw;
+  width: 74%;
   height: 100vh;
   z-index: 100;
   background-color: var(--beige-color);
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 10%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   overflow-y: hidden;
+  @media screen and (max-width: 1000px) {
+    width: 100%;
+  }
 `;
 
+const ChatContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  /* width: calc(100% - 310px); */
+`;
 const ChatBox = styled.div`
-  width: 700px;
-  flex: 0.6;
+  /* width: 700px; */
+  width: 75%;
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* flex: 0.6; */
+  @media screen and (max-width: 1000px) {
+    width: 88%;
+  }
 `;
 
 const ChatMenu = styled.div`
   /* width: 100%; */
-  flex: 0.3;
+  /* flex: 0.3; */
+  width: 25%;
+  min-width: 70px;
+  height: 100%;
   border-left: 1px solid var(--yellow-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   overflow-y: hidden;
+  margin-left: auto;
+  @media screen and (max-width: 1000px) {
+    width: 70px;
+  }
 `;
 
 const ChatMenuInput = styled.input`
@@ -244,12 +269,16 @@ const ChatMenuInput = styled.input`
   border: none;
   border-bottom: 1px solid gray;
   background-color: transparent;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `;
 
 const ChatBoxWrapper = styled.div`
   position: relative;
   padding: 10px;
   height: 90%;
+  width: 100%;
 `;
 
 const NoConvo = styled.span`
@@ -259,6 +288,7 @@ const NoConvo = styled.span`
   color: gray;
   text-align: center;
   cursor: default;
+  word-break: break-word;
 `;
 
 const ChatBoxTop = styled.div`
@@ -285,7 +315,10 @@ const ChatBoxBottom = styled.div`
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
   margin-top: 10px;
   margin-bottom: 15px;
-  margin-left: 25px;
+  margin-left: 1%;
+  margin-right: 1%;
+  @media screen and (max-width: 1000px) {
+  }
 `;
 
 const Input = styled.input`

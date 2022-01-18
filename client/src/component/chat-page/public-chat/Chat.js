@@ -97,8 +97,9 @@ const Progress = styled.div`
 `;
 
 const MasterWrapper = styled.div`
-  max-width: 700px;
-  width: 650px;
+  width: 100%;
+  min-width: 300px;
+  /* width: 650px; */
   display: flex;
   flex-direction: column;
   height: 99vh;

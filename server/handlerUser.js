@@ -385,6 +385,7 @@ const updateUser = async (req, res) => {
     displayName,
     bio,
   } = req.body;
+
   //get user handle from prams
   const { _id } = req.params;
   //verify user updating their profile and not other usersr
@@ -404,7 +405,7 @@ const updateUser = async (req, res) => {
   }
   //declaring a value to use later with $set while updating the user
   let value = {
-    handle: handle.toLowerCase(),
+    handle,
     email,
     password: hashPassword,
     city,
@@ -415,6 +416,7 @@ const updateUser = async (req, res) => {
     displayName,
     bio,
   };
+
   //the array will use foreach to check which element was provided by the user
   let array = [
     "handle",
@@ -434,6 +436,7 @@ const updateUser = async (req, res) => {
       delete value[element];
     }
   });
+
   if (Object.keys(value).length === 0) {
     return res.status(400).json({
       status: 400,
@@ -455,16 +458,16 @@ const updateUser = async (req, res) => {
     await client.connect();
     //declare database in mongo
     const db = client.db("GoodMorningApp");
+
     //validating the handle availability
-    const userHandle = await db
-      .collection("users")
-      .findOne({ handle: handle.toLowerCase() });
+    const userHandle = await db.collection("users").findOne({ handle });
     if (userHandle) {
       return res.status(409).json({
         status: 409,
         data: "Username already exist, please try a different username",
       });
     }
+
     //update the user with the provided values
     const updatedUser = await db
       .collection("users")

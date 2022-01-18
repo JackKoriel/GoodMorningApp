@@ -197,7 +197,7 @@ const WidgetContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex: 0.3;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 1000px) {
     display: none;
   }
 `;

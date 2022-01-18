@@ -121,6 +121,10 @@ const Progress = styled.div`
 const PostObj = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 700px) {
+    flex-direction: column;
+    gap: 0px;
+  }
 `;
 
 const APost = styled.div`
@@ -195,6 +199,9 @@ const Status = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  @media screen and (max-width: 700px) {
+    margin: 15px;
+  }
 `;
 
 const Span = styled.span`

@@ -74,8 +74,8 @@ const SidebarContainer = styled.div`
   flex: 0.3;
   background-color: var(--brown-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  @media (max-width: 820px) {
-    min-width: 50px;
+  @media screen and (max-width: 820px) {
+    max-width: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -85,7 +85,7 @@ const SidebarContainer = styled.div`
 
 const LogoStyler = styled.div`
   margin-left: calc(50% - (30% / 2));
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     margin: 0;
   }
 `;
@@ -133,7 +133,7 @@ const Button = styled.button`
     width: calc(100% - 1px);
     height: calc(100% - 1px);
   }
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     margin-top: 20px;
     font-size: 13px;
     min-width: 80px;

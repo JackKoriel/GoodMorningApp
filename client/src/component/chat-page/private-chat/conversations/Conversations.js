@@ -67,11 +67,15 @@ const ConversationImg = styled.img`
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 `;
 
 const ConversationName = styled.span`
   font-weight: 500;
+  margin-left: 10px;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `;
 
 export default Conversations;

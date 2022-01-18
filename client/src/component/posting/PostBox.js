@@ -89,7 +89,7 @@ const Input = styled.textarea`
   padding-left: 10px;
   padding-top: 5px;
   word-break: break-word;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     height: fit-content;
     width: 100%;
     padding: 5px;
@@ -104,7 +104,7 @@ const AvatarContainer = styled.div`
   gap: 10px;
   /* border: 1px solid green; */
   width: 100%;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -154,7 +154,7 @@ const Button = styled.button`
     width: calc(100% - 1px);
     height: calc(100% - 1px);
   }
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     margin-top: 20px;
     font-size: 13px;
     max-width: 80px;

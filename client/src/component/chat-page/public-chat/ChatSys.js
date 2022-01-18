@@ -49,6 +49,7 @@ const slideIn = keyframes`
 `;
 
 const Wrapper = styled.div`
+  width: 700px;
   background: var(--beige-color);
   height: auto;
   animation: ${slideIn} 0.4s ease-out both;

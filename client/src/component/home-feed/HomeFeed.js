@@ -304,7 +304,7 @@ const Video = styled.video`
 `;
 const Text = styled.h1`
   position: relative;
-  top: -150px;
+  top: -175px;
   color: white;
   font-weight: 900;
   text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000,
@@ -312,6 +312,9 @@ const Text = styled.h1`
   font-size: 35px;
   font-style: italic;
   z-index: 3;
+  @media screen and (max-width: 610px) {
+    text-align: center;
+  }
 `;
 
 const Progress = styled.div`
@@ -343,6 +346,10 @@ const APost = styled.div`
     background: var(--yellow-color);
     border-radius: 20px;
     cursor: pointer;
+  }
+  @media screen and (max-width: 700px) {
+    flex-direction: column;
+    gap: 0px;
   }
 `;
 const ImageBigContainer = styled.div`
@@ -406,6 +413,9 @@ const Status = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  @media screen and (max-width: 700px) {
+    margin: 15px;
+  }
 `;
 
 const Span = styled.span`

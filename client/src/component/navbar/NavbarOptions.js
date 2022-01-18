@@ -8,7 +8,7 @@ const NavbarOptions = ({ to, exact, text, Icon, mobile }) => {
       activeStyle={{ color: "var(--morning-color)" }}
       to={to}
       exact={exact}
-      className={mobile ? "own" : ""}
+      className={mobile ? "mobile" : ""}
     >
       <Icon style={iconStyle} />
       <Text>{text}</Text>
@@ -31,13 +31,19 @@ const SidebarIcons = styled(NavLink)`
     color: var(--morning-color);
     transition: color 100ms ease-out;
   }
-  &.own {
+  &.mobile {
     display: none;
   }
-  @media (max-width: 820px) {
+  @media screen and (max-width: 1000px) {
+    margin-top: 10px;
+    &.mobile {
+      display: flex;
+    }
+  }
+  @media screen and (max-width: 820px) {
     margin-top: 2px;
-    &.own {
-      display: block;
+    &.mobile {
+      display: flex;
     }
   }
 `;
@@ -46,7 +52,7 @@ const Text = styled.h2`
   font-size: 20px;
   font-weight: 700;
   margin-right: 20px;
-  @media (max-width: 820px) {
+  @media screen and (max-width: 820px) {
     display: none;
   }
 `;

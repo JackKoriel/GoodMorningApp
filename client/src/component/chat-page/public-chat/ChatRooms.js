@@ -56,6 +56,9 @@ const PublicRooms = styled.div`
   /* gap: 20px; */
   width: 100%;
   height: 50%;
+  @media screen and (max-width: 580px) {
+    height: 90%;
+  }
 `;
 
 // const PrivateRooms = styled.div`

@@ -153,7 +153,7 @@ const Settings = () => {
     fetch(`/api/profile/${_id}`, {
       method: "POST",
       body: JSON.stringify({
-        handle: username,
+        handle: username.toLocaleLowerCase(),
         password,
         email,
         displayName,
@@ -404,6 +404,9 @@ const SignContainer = styled.div`
   gap: 5px;
   background: var(--beige-color);
   padding: 50px 100px;
+  @media screen and (max-width: 600px) {
+    padding: 30px 30px;
+  }
 `;
 
 const AvatarInput = styled.div`
