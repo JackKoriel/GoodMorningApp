@@ -68,7 +68,7 @@ const Master = styled.div`
   background-color: var(--brown-color);
   border-left: 1px solid var(--yellow-color);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 25px;
+  padding: 10px 20px;
   overflow-y: scroll;
   -ms-overflow-style: none; /*for IE*/
   scrollbar-width: none; /*for Firefox*/
@@ -79,15 +79,16 @@ const Master = styled.div`
 `;
 
 const ComponentsList = styled.ul`
-  margin-top: 15px;
+  margin: 10px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
   list-style-type: none;
+  height: 100%;
 `;
 
 const ComponentItem = styled.li`
-  height: 100%;
+  height: auto;
   width: auto;
 `;
 export default Widgets;

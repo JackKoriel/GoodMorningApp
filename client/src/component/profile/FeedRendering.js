@@ -9,7 +9,12 @@ import { PostContext } from "../contexts/PostContext";
 
 const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
   let history = useHistory();
-  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+    setIsUpdatingPost,
+    isUpdatingPost,
+  } = useContext(PostContext);
   const [posts, setPosts] = useState();
   const [postStatus, setPostStatus] = useState(false);
 
@@ -55,6 +60,10 @@ const FeedRendering = ({ handle, name, userHandle, currentUser, friend }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        //to update homefeed so it doesn't create dupes due to the infinite scroll
+        clearFeed();
+        setStart(0);
+        //to update the posts in post context
         setIsUpdatingPost(!isUpdatingPost);
       })
       .catch((err) => {});

@@ -122,10 +122,11 @@ const PostModal = ({ modalStatus, setModalStatus }) => {
         setInputValue("");
         setPreviewSource("");
         setImageURL("");
+        setButtonStatePost(true);
+        //to update homefeed so it doesn't create dupes due to the infinite scroll
         clearFeed();
         setStart(0);
         setIsUpdatingPost(!isUpdatingPost);
-        setButtonStatePost(true);
       })
       .catch((err) => {});
     setCounter(280);

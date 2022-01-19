@@ -19,7 +19,12 @@ const dummyData = {
 };
 
 const Horoscope = () => {
-  const { horoStatus, setHoroStatus } = useContext(PostContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+    horoStatus,
+    setHoroStatus,
+  } = useContext(PostContext);
   const {
     user: { email, favorite, sign },
     update,
@@ -47,6 +52,10 @@ const Horoscope = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {
+          //to update homefeed so it doesn't create dupes due to the user update
+          clearFeed();
+          setStart(0);
+          //to update the favorite list
           setUpdate(!update);
           setHoroStatus(!horoStatus);
         }
@@ -54,26 +63,26 @@ const Horoscope = () => {
   };
 
   //comment out when using dummy data
-  // useEffect(() => {
-  //   setNewsUpdated(false);
-  //   fetch("/api/horoscope", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       day: "today",
-  //       sign: sign,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setDailyHoro(data.data);
-  //       setNewsUpdated(true);
-  //     })
-  //     .catch((err) => {});
-  // }, [sign]);
+  useEffect(() => {
+    setNewsUpdated(false);
+    fetch("/api/horoscope", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        day: "today",
+        sign: sign,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDailyHoro(data.data);
+        setNewsUpdated(true);
+      })
+      .catch((err) => {});
+  }, [sign]);
 
   return (
     <>

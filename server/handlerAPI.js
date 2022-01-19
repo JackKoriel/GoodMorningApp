@@ -236,6 +236,16 @@ const removeFav = async (req, res) => {
 const getFav = async (req, res) => {
   //get use's email from session
   const email = req.session.email;
+  //declaring a variable to use in my res status
+  let displayedData = [];
+  //getting the queries from the user
+  let { start, limit } = req.query;
+  //we change to Numbers because queries come in string form
+  let startNum = Number(start);
+  let limitNum = Number(limit);
+  //this will be usefull for the calcs later
+  let bothLimits = Number(start) + Number(limit);
+
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -251,11 +261,41 @@ const getFav = async (req, res) => {
       .sort({ current_date: -1 })
       .toArray();
     // validations and user control
-    horoscopes.length > 0
-      ? res.status(200).json({ status: 200, data: horoscopes })
-      : res
-          .status(404)
-          .json({ status: 404, message: "Favorite Horoscopes not found" });
+    //I can use below if I don't want pagination
+    // horoscopes.length > 0
+    //   ? res.status(200).json({ status: 200, data: horoscopes })
+    //   : res
+    //       .status(404)
+    //       .json({ status: 404, message: "Favorite Horoscopes not found" });
+
+    //   // validations and user control
+    // everything below is for pagination
+    if (horoscopes.length === 0) {
+      return res.status(404).json({
+        status: 404,
+        data: displayedData,
+        message: "Favorite Horoscopes not found",
+      });
+    }
+    if (!limit && !start) {
+      displayedData = horoscopes;
+    } else if (!limit) {
+      displayedData = horoscopes.slice(startNum, startNum + 3);
+    } else if (!start) {
+      displayedData = horoscopes.slice(0, limitNum);
+    } else if (startNum + limitNum > horoscopes.length) {
+      displayedData = horoscopes.slice(startNum, horoscopes.length + 1);
+    } else if (startNum > horoscopes.length) {
+      return (displayedData = []);
+    } else {
+      displayedData = horoscopes.slice(startNum, startNum + limitNum);
+    }
+    res.status(200).json({
+      status: 200,
+      length: displayedData.length,
+      message: "Success",
+      data: displayedData,
+    });
   } catch (err) {
     res.status(500).json({
       status: 500,
@@ -361,6 +401,16 @@ const removeArticleFromRL = async (req, res) => {
 const getRL = async (req, res) => {
   //get use's email from session
   const email = req.session.email;
+  //declaring a variable to use in my res status
+  let displayedData = [];
+  //getting the queries from the user
+  let { start, limit } = req.query;
+  //we change to Numbers because queries come in string form
+  let startNum = Number(start);
+  let limitNum = Number(limit);
+  //this will be usefull for the calcs later
+  let bothLimits = Number(start) + Number(limit);
+
   //declare client in mongo
   const client = new MongoClient(MONGO_URI, options);
   //try catch finally function
@@ -375,12 +425,42 @@ const getRL = async (req, res) => {
       .find({ email })
       .sort({ published_date: -1 })
       .toArray();
-    // validations and user control
-    news.length > 0
-      ? res.status(200).json({ status: 200, data: news })
-      : res
-          .status(404)
-          .json({ status: 404, message: "Reading list is empty." });
+    // validations and user control.
+    //I can use below if I don't want pagination
+    // news.length > 0
+    //   ? res.status(200).json({ status: 200, data: news })
+    //   : res
+    //       .status(404)
+    //       .json({ status: 404, message: "Reading list is empty." });
+
+    //   // validations and user control
+    // everything below is for pagination
+    if (news.length === 0) {
+      return res.status(404).json({
+        status: 404,
+        data: displayedData,
+        message: "Reading list is empty",
+      });
+    }
+    if (!limit && !start) {
+      displayedData = news;
+    } else if (!limit) {
+      displayedData = news.slice(startNum, startNum + 2);
+    } else if (!start) {
+      displayedData = news.slice(0, limitNum);
+    } else if (startNum + limitNum > news.length) {
+      displayedData = news.slice(startNum, news.length + 1);
+    } else if (startNum > news.length) {
+      return (displayedData = []);
+    } else {
+      displayedData = news.slice(startNum, startNum + limitNum);
+    }
+    res.status(200).json({
+      status: 200,
+      length: displayedData.length,
+      message: "Success",
+      data: displayedData,
+    });
   } catch (err) {
     res.status(500).json({
       status: 500,

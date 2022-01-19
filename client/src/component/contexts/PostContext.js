@@ -54,7 +54,6 @@ export const PostProvider = ({ children }) => {
 
   const clearFeed = () => {
     dispatch({ type: "CLEAR-POSTS" });
-    // setStart(0);
   };
 
   useEffect(() => {

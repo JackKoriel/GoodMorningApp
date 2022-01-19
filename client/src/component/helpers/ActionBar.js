@@ -7,7 +7,12 @@ import { useHistory } from "react-router-dom";
 
 const ActionBar = ({ postId, isLiked, sharedArray }) => {
   let history = useHistory();
-  const { setIsUpdatingPost, isUpdatingPost } = useContext(PostContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+    setIsUpdatingPost,
+    isUpdatingPost,
+  } = useContext(PostContext);
   const [likes, setLikes] = useState(isLiked);
   const [shared, setShared] = useState(sharedArray?.length > 0 ? true : false);
 
@@ -28,6 +33,10 @@ const ActionBar = ({ postId, isLiked, sharedArray }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
+          //to update homefeed so it doesn't create dupes due to the infinite scroll
+          clearFeed();
+          setStart(0);
+          //to update the like functionality
           setLikes(!likes);
           setIsUpdatingPost(!isUpdatingPost);
         }
@@ -52,6 +61,10 @@ const ActionBar = ({ postId, isLiked, sharedArray }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
+          //to update homefeed so it doesn't create dupes due to the infinite scroll
+          clearFeed();
+          setStart(0);
+          //to update the share functionality
           setShared(sharedArray?.length > 0 ? true : false);
           setIsUpdatingPost(!isUpdatingPost);
           history.push(`/`);

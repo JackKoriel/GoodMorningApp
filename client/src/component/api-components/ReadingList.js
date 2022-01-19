@@ -6,23 +6,59 @@ import { FiXCircle } from "react-icons/fi";
 import { FiBookOpen } from "react-icons/fi";
 import { currentUserContext } from "../contexts/CurrentUserContext";
 import { PostContext } from "../contexts/PostContext";
+import { MdArrowBackIosNew } from "react-icons/md";
+import { MdArrowForwardIos } from "react-icons/md";
 
 const ReadingList = () => {
   const { update, setUpdate } = useContext(currentUserContext);
-  const { newsStatus } = useContext(PostContext);
+  const {
+    actions: { clearFeed },
+    newsStatus,
+    setStart,
+  } = useContext(PostContext);
   const [readingList, setReadingList] = useState([]);
   const [status, setStatus] = useState("idle");
 
-  useEffect(() => {
-    fetch(`/api/reading-list`)
-      .then((res) => res.json())
-      .then((data) => {
-        setReadingList(data.data);
-        setStatus("active");
-      })
-      .catch((err) => {});
-  }, [status, newsStatus]);
+  //for pagination
+  const [listStatus, setListStatus] = useState("idle");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [startList, setStartList] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
+  useEffect(() => {
+    setListStatus("loading");
+    let isMounted = true;
+    if (isMounted) {
+      fetch(`/api/reading-list?start=${startList}&limit=2`)
+        .then((res) => res.json())
+        .then((data) => {
+          setReadingList(data.data);
+          setStatus("active");
+          setHasMore(data.data.length > 0);
+          setListStatus("active");
+        })
+        .catch((err) => {});
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [status, newsStatus, startList]);
+
+  const handleNextPageClick = () => {
+    if (hasMore) {
+      setPageNumber(pageNumber + 1);
+      setStartList(startList + 2);
+    }
+  };
+
+  const handleLastPageClick = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+      setStartList(startList - 2);
+    }
+  };
+
+  // to remove from reading list
   const handleRemove = (ev, _id) => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -38,9 +74,14 @@ const ReadingList = () => {
       .then((data) => {
         setStatus("deleted");
         setUpdate(!update);
+        //to update homefeed so it doesn't create dupes due to the user update
+        setStart(0);
+        clearFeed();
       })
       .catch((err) => {});
   };
+
+  // when the reading list is empty
   if (readingList === undefined) {
     return (
       <Empty>
@@ -59,45 +100,82 @@ const ReadingList = () => {
         </Progress>
       ) : (
         <MasterContainer>
-          {readingList.map((article) => {
-            return (
-              <Article href={article.link} key={article._id}>
-                <Image src={article.media} />
-                <TextContainer>
-                  <Title>{article.title}</Title>
-                  <Summary>{article.summary}</Summary>
-                  <Author>By {article.author}</Author>
-                  <Date>
-                    Published on{" "}
-                    {moment(article.published_date).format(" MMM Do")}
-                  </Date>
-                </TextContainer>
-                <ButtonRemove
-                  onClick={(ev) => {
-                    handleRemove(ev, article._id);
-                  }}
-                >
-                  <FiXCircle
-                    onMouseOver={({ target }) =>
-                      (target.style.fill = "var(--blue-color)")
-                    }
-                    onMouseOut={({ target }) => (target.style.fill = "white")}
-                  />
-                </ButtonRemove>
-              </Article>
-            );
-          })}
+          {listStatus === "loading" ? (
+            <ReadingLoading>
+              <HeartSpinner color="var(--blue-color)" /> Loading...
+            </ReadingLoading>
+          ) : (
+            <>
+              {hasMore === false ? (
+                <Empty>
+                  No articles{" "}
+                  <FiBookOpen
+                    style={{ marginRight: "10px", marginLeft: "10px" }}
+                  />{" "}
+                  here 😺
+                </Empty>
+              ) : (
+                <ArticleWrapper>
+                  {readingList.map((article) => {
+                    return (
+                      <Article href={article.link} key={article._id}>
+                        <Image src={article.media} />
+                        <TextContainer>
+                          <Title>{article.title}</Title>
+                          <Summary>{article.summary}</Summary>
+                          <Author>By {article.author}</Author>
+                          <Date>
+                            Published on{" "}
+                            {moment(article.published_date).format(" MMM Do")}
+                          </Date>
+                        </TextContainer>
+                        <ButtonRemove
+                          onClick={(ev) => {
+                            handleRemove(ev, article._id);
+                          }}
+                        >
+                          <FiXCircle
+                            onMouseOver={({ target }) =>
+                              (target.style.fill = "var(--blue-color)")
+                            }
+                            onMouseOut={({ target }) =>
+                              (target.style.fill = "white")
+                            }
+                          />
+                        </ButtonRemove>
+                      </Article>
+                    );
+                  })}
+                </ArticleWrapper>
+              )}
+            </>
+          )}
+          <Pages>
+            Pages:{" "}
+            <ArrowLeft
+              onClick={handleLastPageClick}
+              onKeyPress={handleLastPageClick}
+              tabIndex="0"
+            />{" "}
+            {pageNumber}{" "}
+            <ArrowRight
+              onClick={handleNextPageClick}
+              onKeyPress={handleNextPageClick}
+              tabIndex="0"
+            />
+          </Pages>
         </MasterContainer>
       )}
     </>
   );
 };
 
-const Empty = styled.div`
+const Empty = styled.h1`
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   margin-top: 0;
+  text-align: center;
   max-width: 700px;
   width: 700px;
   background-color: var(--beige-color);
@@ -116,15 +194,30 @@ const Progress = styled.div`
   align-items: center;
 `;
 
+const ReadingLoading = styled.div`
+  background-color: var(--beige-color);
+  width: 650px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50%;
+`;
+
 const MasterContainer = styled.div`
+  position: relative;
   background: var(--beige-color);
   max-width: 700px;
   height: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
   /* overflow: scroll; */
   /* margin: 15px; */
-  padding: 20px 10px;
+  padding: 20px 0;
   gap: 20px;
   /* text-decoration: none; */
   overflow: scroll;
@@ -134,6 +227,24 @@ const MasterContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const ArticleWrapper = styled.div`
+  background: var(--beige-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 90%;
+  gap: 10px;
+  overflow: scroll;
+  -ms-overflow-style: none; /*for IE*/
+  scrollbar-width: none; /*for Firefox*/
+  /*for Chrome*/
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  border-radius: 10px;
 `;
 
 const Article = styled.a`
@@ -145,14 +256,15 @@ const Article = styled.a`
   justify-content: center;
   align-items: center;
   transition: all 300ms ease-out;
-  border-radius: 20px;
+  border-radius: 10px;
+  margin: 5px 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 5px 5px;
+  /* padding: 20px 20px; */
   transition: all 300ms ease-out;
   &:hover {
     transform: scale(1.02);
     background: var(--yellow-color);
-    border-radius: 20px;
+    border-radius: 10px;
     cursor: pointer;
   }
 `;
@@ -204,6 +316,33 @@ const Author = styled.div`
 const Date = styled.div`
   font-size: 10px;
   color: #222;
+`;
+
+const Pages = styled.div`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  padding: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  font-size: 40px;
+  z-index: 10;
+`;
+
+const ArrowRight = styled(MdArrowForwardIos)`
+  cursor: pointer;
+`;
+
+const ArrowLeft = styled(MdArrowBackIosNew)`
+  cursor: pointer;
+  &:disabled {
+    filter: grayscale(100%);
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 export default ReadingList;

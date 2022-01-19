@@ -133,7 +133,12 @@ const dummyData = [
 ];
 
 const News = () => {
-  const { newsStatus, setNewsStatus } = useContext(PostContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+    newsStatus,
+    setNewsStatus,
+  } = useContext(PostContext);
   const {
     user: { country, email, readingList },
     update,
@@ -162,6 +167,10 @@ const News = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {
+          //to update homefeed so it doesn't create dupes due to the user update
+          clearFeed();
+          setStart(0);
+          //to update the reading list
           // setReadingL(true);
           setUpdate(!update);
           setNewsStatus(!newsStatus);
@@ -170,26 +179,26 @@ const News = () => {
   };
 
   //comment out when using dummy data
-  // useEffect(() => {
-  //   setNewsUpdated(false);
-  //   fetch("/api/news", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       country,
-  //       lang: "en",
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setTopNews(data.data);
-  //       setNewsUpdated(true);
-  //     })
-  //     .catch((err) => {});
-  // }, [country]);
+  useEffect(() => {
+    setNewsUpdated(false);
+    fetch("/api/news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        country,
+        lang: "en",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTopNews(data.data);
+        setNewsUpdated(true);
+      })
+      .catch((err) => {});
+  }, [country]);
 
   return (
     <>

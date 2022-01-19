@@ -161,14 +161,15 @@ const getUserFriendsPosts = async (req, res) => {
         return post;
       })
     );
-
+    //I can use below if I don't want the infinite scroll
     // updatedFriendsPosts.length !== 0
     //   ? res.status(200).json({ status: 200, data: updatedFriendsPosts })
     //   : res.status(404).json({ status: 404, message: "Posts not found" });
 
     //   // validations and user control
+    // everything below is for the infinite scroll
     if (updatedFriendsPosts.length === 0) {
-      res
+      return res
         .status(404)
         .json({ status: 404, data: displayedData, message: "Posts not found" });
     }

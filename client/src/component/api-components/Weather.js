@@ -43,25 +43,25 @@ const Weather = () => {
   const [weatherStatus, setWeatherStatus] = useState(true);
 
   //comment out when using dummy data
-  // useEffect(() => {
-  //   setWeatherStatus(false);
-  //   fetch("/api/weather", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       city,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setDailyForcast(data.data.current);
-  //       setWeatherStatus(true);
-  //     })
-  //     .catch((err) => {});
-  // }, [city]);
+  useEffect(() => {
+    setWeatherStatus(false);
+    fetch("/api/weather", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        city,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDailyForcast(data.data.current);
+        setWeatherStatus(true);
+      })
+      .catch((err) => {});
+  }, [city]);
 
   return (
     <>
@@ -109,7 +109,6 @@ const MasterContainer = styled.div`
   flex-direction: column;
   align-items: center;
   border: 2px solid var(--yellow-color);
-
   padding-bottom: 20px;
   flex: 0.2;
   border-radius: 5px;

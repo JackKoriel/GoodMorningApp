@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { currentUserContext } from "../contexts/CurrentUserContext";
+import { PostContext } from "../contexts/PostContext";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
@@ -16,6 +17,10 @@ const Settings = () => {
     update,
     setUpdate,
   } = useContext(currentUserContext);
+  const {
+    actions: { clearFeed },
+    setStart,
+  } = useContext(PostContext);
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -171,6 +176,10 @@ const Settings = () => {
       .then((res) => res.json())
       .then((json) => {
         if (json.status === 200) {
+          //to update homefeed so it doesn't create dupes due to the user update and infinite scroll
+          clearFeed();
+          setStart(0);
+          //to update the user info
           setUpdate(!update);
           setConfirmState(true);
           setSubStatus("idle");

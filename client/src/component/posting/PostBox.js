@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Avatar } from "@material-ui/core";
 import { currentUserContext } from "../contexts/CurrentUserContext";
+import { PostContext } from "../contexts/PostContext";
 import { useHistory } from "react-router";
 
 const PostBox = () => {
@@ -11,12 +12,26 @@ const PostBox = () => {
     update,
     setUpdate,
   } = useContext(currentUserContext);
+  const {
+    actions: { clearFeed },
+  } = useContext(PostContext);
   const [userBio, setUserBio] = useState("");
   const [moodButtonStatus, setMoodButtonStatus] = useState(true);
+  const [buttonState, setButtonState] = useState(true);
+  const [counter, setCounter] = useState(0);
   let placeholderText = `How is your mood ${handle}?`;
+
+  useEffect(() => {
+    if (counter > 0) {
+      setButtonState(false);
+    } else {
+      setButtonState(true);
+    }
+  }, [counter]);
 
   const handleChangeUserBio = (ev) => {
     setUserBio(ev.target.value);
+    setCounter(ev.target.value.length);
   };
 
   const handleClickUserBio = (ev) => {
@@ -35,6 +50,9 @@ const PostBox = () => {
       .then((resP) => resP.json())
       .then((jsonP) => {
         if (jsonP.status === 200) {
+          //to update homefeed so it doesn't create dupes due to the user update
+          clearFeed();
+          //to update the user profile
           history.push(`/${handle}`);
           setMoodButtonStatus(true);
           setUserBio("");
@@ -57,7 +75,11 @@ const PostBox = () => {
             cols="10"
           />
         </AvatarContainer>
-        <Button type="submit" onClick={(ev) => handleClickUserBio(ev)}>
+        <Button
+          disabled={buttonState}
+          type="submit"
+          onClick={(ev) => handleClickUserBio(ev)}
+        >
           {!moodButtonStatus ? (
             <i className="fas fa-ring fa-spin" />
           ) : (
@@ -154,6 +176,12 @@ const Button = styled.button`
     width: calc(100% - 1px);
     height: calc(100% - 1px);
   }
+  background-color: ${({ disabled }) => {
+    return disabled && "gray";
+  }};
+  cursor: ${({ disabled }) => {
+    return disabled && "no-drop";
+  }};
   @media screen and (max-width: 820px) {
     margin-top: 20px;
     font-size: 13px;
