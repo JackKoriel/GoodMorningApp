@@ -5,34 +5,33 @@ import { HeartSpinner } from "react-spinners-kit";
 
 //dummy data used for testing to not spam the limited API
 let dummyData = {
-  last_updated_epoch: 1639165500,
-  last_updated: 2021 - 12 - 10,
-  14: 45,
-  temp_c: -5.8,
-  temp_f: 21.6,
+  last_updated_epoch: 1642612500,
+  last_updated: "2022-01-19 12:15",
+  temp_c: -16.1,
+  temp_f: 3,
   is_day: 1,
   condition: {
     text: "Sunny",
     icon: "//cdn.weatherapi.com/weather/64x64/day/113.png",
     code: 1000,
   },
-  wind_mph: 6.9,
-  wind_kph: 11.2,
-  wind_degree: 30,
+  wind_mph: 9.4,
+  wind_kph: 15.1,
+  wind_degree: 20,
   wind_dir: "NNE",
-  pressure_mb: 1018,
-  pressure_in: 30.05,
-  precip_mm: 0.1,
-  precip_in: 0,
-  humidity: 84,
+  pressure_mb: 1009,
+  pressure_in: 29.8,
+  precip_mm: 4,
+  precip_in: 0.16,
+  humidity: 80,
   cloud: 0,
-  feelslike_c: -10.5,
-  feelslike_f: 13.1,
-  vis_km: 10,
-  vis_miles: 6,
+  feelslike_c: -23.1,
+  feelslike_f: -9.7,
+  vis_km: 2,
+  vis_miles: 1,
   uv: 1,
-  gust_mph: 9.2,
-  gust_kph: 14.8,
+  gust_mph: 10.7,
+  gust_kph: 17.3,
 };
 
 const Weather = () => {
@@ -43,25 +42,25 @@ const Weather = () => {
   const [weatherStatus, setWeatherStatus] = useState(true);
 
   //comment out when using dummy data
-  useEffect(() => {
-    setWeatherStatus(false);
-    fetch("/api/weather", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        city,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDailyForcast(data.data.current);
-        setWeatherStatus(true);
-      })
-      .catch((err) => {});
-  }, [city]);
+  // useEffect(() => {
+  //   setWeatherStatus(false);
+  //   fetch("/api/weather", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       city,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setDailyForcast(data.data.current);
+  //       setWeatherStatus(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [city]);
 
   return (
     <>

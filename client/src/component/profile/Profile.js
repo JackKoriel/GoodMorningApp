@@ -97,7 +97,6 @@ const Profile = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         if (res.status === 201 || res.status === 200) {
           history.push(`/messenger`);
         }

@@ -9,126 +9,172 @@ import { HeartSpinner } from "react-spinners-kit";
 const dummyData = [
   {
     summary:
-      "The text contains the error Comment Send Selected text is too large, select smaller text.",
-    country: "unknown",
-    author: "{[authorName]} {[authorPost]}",
-    link: "http://infobrics.org",
-    language: "en",
-    media: "http://infobrics.org/media/russia/maxim/India-Ros.jpg",
-    title: "India-Russia Ties",
-    media_content: [
-      "http://infobrics.org/media/russia/maxim/India-Ros.jpg",
-      "http://infobrics.org/img/footer/cabinet/cabinet_en.png",
-      "http://infobrics.org/img/footer/logo/footer-logo.png",
-      "http://infobrics.org/{[photo]}",
-      "http://infobrics.org/img/logo_south.png",
-      "https://mc.yandex.ru/watch/42378879",
-      "http://infobrics.org/{[logo]}",
-    ],
-    clean_url: "infobrics.org",
-    rights: "Inforos Co., Ltd",
-    rank: 278568,
-    topic: "news",
-    published_date: "2021-12-13 07:22:54",
-    _id: "35d042a15bdba851588e9c442a5c8ec1",
-  },
-  {
-    summary:
-      "U.S. liquefied natural gas export capacity will become the world's largest by the end of 2022 as new and expanded Gulf Coast facilities come online, the federal Energy Information Administration (EIA) said this month.Why it matters: The milestone underscores U.S. emergence as a major crude oil and natural gas exporter as production from shale fields has boomed and crude export restrictions were lifted in 2015.The big picture: Last year the U.S. became the world's third-largest LNG exporter behind Australia and Qatar, EIA notes, and now appears to have already pulled even with Qatar.",
-    country: "US",
-    author: "Ben Geman",
-    link: "https://www.axios.com/lng-export-capacity-energy-milestone-d0f9e3bd-931f-4d39-82c7-00fff542b3e7.html",
+      "The issue appeared to impact the Boeing 777, a long-range, wide-body aircraft used by carriers across the world. Two Japanese airlines directly named the aircraft as being particularly affected by the 5G signals as they announced cancellations and changes to their schedules. Dubai-based Emirates, a key carrier for East-West travel, announced it would halt flights to Boston, Chicago, Dallas-Fort Worth, Houston, Miami, Newark, New Jersey, Orlando, Florida, San Francisco and Seattle over the issue beginning Wednesday.",
+    country: "CA",
+    author: "Zone Économie - ICI.Radio-Canada.ca",
+    link: "https://ici.radio-canada.ca/rci/en/news/1855528/airlines-worldwide-rush-to-change-flights-over-u-s-5g-dispute",
     language: "en",
     media:
-      "https://images.axios.com/nZi9W9SGwEwhRFVC0oKsGv7wfjI=/0x306:4000x2556/1366x768/2021/12/10/1639140494893.jpg",
-    title: "A looming energy milestone for the U.S.",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/5g-airlines.png",
+    title: "Airlines worldwide rush to change flights over U.S. 5G dispute",
     media_content: [
-      "https://images.axios.com/nZi9W9SGwEwhRFVC0oKsGv7wfjI=/0x306:4000x2556/1366x768/2021/12/10/1639140494893.jpg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-en.svg",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/cbc-listen.svg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-colors-en.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/health-coronavirus-canada-vaccine.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-prague.svg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-cbc-src-white.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/infolettres/17x6/rci-radio-canada-international-anglais-infolettre-promo.jpg",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/swiss-info.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/school-assignment.png",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/melanie-joly-85061.png",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/5g-airlines.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-romania.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/covid-sask-2021.png",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/ohdio.svg",
+      "https://images.radio-canada.ca/q_auto,w_700/v1/ici-info/16x9/faa-planes-5g-interference.png",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/pandemic-response-unit.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/polskie-radio.svg",
     ],
-    clean_url: "axios.com",
-    rights: "axios.com",
-    rank: 1239,
+    clean_url: "radio-canada.ca",
+    rights: "radio-canada.ca",
+    rank: 3299,
     topic: "news",
-    published_date: "2021-12-13 12:54:18",
-    _id: "311a67f9914304842c416854063273b2",
+    published_date: "2022-01-19 20:52:00",
+    _id: "0f6a7806a624d6cfcfee76bc414ec371",
   },
   {
     summary:
-      "The Identity, Authentication, and Access (IAA) market is set to grow by 13.4% in revenues in 2021 reaching $28.9bn, according to Omdia's latest Identity Authentication Access Market Tracker. During 2021, the increasing number of security breaches and attacks has brought into even sharper focus the need for strong identity, authentication, and access technology. Identity has never been more important for cybersecurity than now. In this sense, COVID-19 merely turbocharged a tendency that had been underway for several years, i.",
-    country: "unknown",
-    author: "Don TaitSenior Analyst, Omdia",
-    link: "https://www.darkreading.com/omdia/identity-authentication-access-market-set-to-hit-28-9b-in-2021",
+      "These contracts (new window) for synthetic rubber medical gloves, worth over $222 million, were part of the $8 billion push led by former procurement minister Anita Anand to equip Canadian health care workers with the personal protective equipment they needed during the COVID-19 pandemic. In November, the department announced that deliveries from this company were being held (new window) until the government could review the results of an independent audit of Supermax's operations. Based on the seriousness of the allegations and expected timelines for the final audit results, the Government of Canada has decided, and Supermax Healthcare Canada has agreed, to terminate by mutual consent the two existing contracts for the supply of nitrile gloves, the department told CBC News in an email Tuesday, confirming an earlier report from Reuters that Canada's contract with the Malaysian supplier had ended.",
+    country: "CA",
+    author: "Zone Politique - ICI.Radio-Canada.ca",
+    link: "https://ici.radio-canada.ca/rci/en/news/1855522/canada-terminates-222m-ppe-contract-following-forced-labour-probe",
     language: "en",
     media:
-      "https://eu-images.contentstack.com/v3/assets/blt66983808af36a8ef/blt2370149aa096adb9/61b38ac689fca95dc5b45fc0/Tait_211213_Featured_Image.png",
-    title: "Identity Authentication Access Market Set to Hit $28.9B in 2021",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/covid-sask-2021.png",
+    title: "Canada terminates $222M PPE contract following forced labour probe",
     media_content: [
-      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+",
-      "https://eu-images.contentstack.com/v3/assets/blt66983808af36a8ef/blt3edeb23396a4b5dc/60b1ea7a9afdef577986633e/Whitelogo_1.png",
-      "https://www.darkreading.com/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fpublic%2Fimages%2Firibbon-logo.61822a6f728dd50c5ab494ce9936bac3.png&w=256&q=75",
-      "https://eu-images.contentstack.com/v3/assets/blt66983808af36a8ef/blt2370149aa096adb9/61b38ac689fca95dc5b45fc0/Tait_211213_Featured_Image.png?quality=80&format=jpg&width=690",
-      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-      "https://eu-images.contentstack.com/v3/assets/blt66983808af36a8ef/blt2370149aa096adb9/61b38ac689fca95dc5b45fc0/Tait_211213_Featured_Image.png",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-colors-en.svg",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/cbc-listen.svg",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/ohdio.svg",
+      "https://images.radio-canada.ca/q_auto,w_700/v1/ici-info/16x9/healthcare-workers-in-ppe.png",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/health-coronavirus-canada-vaccine.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-prague.svg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-cbc-src-white.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/pandemic-response-unit.png",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/melanie-joly-85061.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/swiss-info.svg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-en.svg",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/polskie-radio.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/covid-sask-2021.png",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/premier-ministre-alberta-jason-kenney.JPG",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-romania.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/school-assignment.png",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/infolettres/17x6/rci-radio-canada-international-anglais-infolettre-promo.jpg",
     ],
-    clean_url: "darkreading.com",
-    rights: "Copyright (C) 2000-2021 Dark Reading - All rights reserved.",
-    rank: 3783,
-    topic: "tech",
-    published_date: "2021-12-13 09:00:00",
-    _id: "9caae65dd1c27019e8395fb4117dbc76",
-    isReadingList: true,
+    clean_url: "radio-canada.ca",
+    rights: "radio-canada.ca",
+    rank: 3299,
+    topic: "news",
+    published_date: "2022-01-19 20:12:00",
+    _id: "446e1b0782863515383a197e76239421",
   },
   {
     summary:
-      "The text contains the error Comment Send Selected text is too large, select smaller text.",
-    country: "unknown",
-    author: "{[authorName]} {[authorPost]}",
-    link: "http://infobrics.org",
+      "Average sea surface temperatures in October and November were the highest in 40 years Issue appears to affect the Boeing 777, used by carriers around the world U.S. authorities banned disposable gloves manufactured by Supermax in Malaysia on Oct. 21 No decision yet on whether to supply Kyiv with weapons, foreign minister says19 hours agoInternational Textbook exercise offers anti-immigration arguments, such as 'some immigrants draw on social welfare programs'",
+    country: "CA",
+    author: "Zone Économie - ICI.Radio-Canada.ca",
+    link: "https://ici.radio-canada.ca/rci/en/news/1855511/canadas-inflation-rate-rises-to-new-30-year-high-of-4-8-",
     language: "en",
-    media: "http://infobrics.org/media/russia/maxim/Putin-Modi.jpg",
-    title:
-      "Banking on Each Other: India, Russia and the New Era of Global Politics",
+    media:
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/health-coronavirus-canada-vaccine.png",
+    title: "Canada's inflation rate rises to new 30-year high of 4.8%",
     media_content: [
-      "http://infobrics.org/img/logo_south.png",
-      "http://infobrics.org/img/footer/logo/footer-logo.png",
-      "http://infobrics.org/{[logo]}",
-      "http://infobrics.org/media/russia/maxim/Putin-Modi.jpg",
-      "http://infobrics.org/img/footer/cabinet/cabinet_en.png",
-      "https://mc.yandex.ru/watch/42378879",
-      "http://infobrics.org/{[photo]}",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-en.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/covid-sask-2021.png",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/melanie-joly-85061.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-romania.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/premier-ministre-alberta-jason-kenney.JPG",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/swiss-info.svg",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-cbc-src-white.svg",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/cbc-listen.svg",
+      "https://images.radio-canada.ca/q_auto,w_700/v1/ici-info/16x9/inflation-soaring.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/polskie-radio.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/ici-info/16x9/health-coronavirus-canada-vaccine.png",
+      "https://ici.radio-canada.ca/rci/svg/audio-offer/ohdio.svg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/pandemic-response-unit.png",
+      "https://ici.radio-canada.ca/rci/svg/logos/logo-rci-colors-en.svg",
+      "https://images.radio-canada.ca/q_auto,w_635/v1/infolettres/17x6/rci-radio-canada-international-anglais-infolettre-promo.jpg",
+      "https://images.radio-canada.ca/q_auto,w_160/v1/ici-info/1x1/school-assignment.png",
+      "https://ici.radio-canada.ca/rci/svg/partners-logos/radio-prague.svg",
     ],
-    clean_url: "infobrics.org",
-    rights: "Inforos Co., Ltd",
-    rank: 278568,
+    clean_url: "radio-canada.ca",
+    rights: "radio-canada.ca",
+    rank: 3299,
     topic: "news",
-    published_date: "2021-12-13 07:27:31",
-    _id: "19f4939090e176495fe639502dabe6c8",
+    published_date: "2022-01-19 19:12:00",
+    _id: "a1513ac3eb6c5e279385a37db853296f",
   },
   {
     summary:
-      "The text contains the error Comment Send Selected text is too large, select smaller text.",
-    country: "unknown",
-    author: "{[authorName]} {[authorPost]}",
-    link: "http://infobrics.org",
+      "Retirement. It's the dream we all work for. We work away at a job we may not even like for the majority of our lives, all to reach that end goal. But what if this was the year? What if 2022 was the year you decided it was time to retire? © Provided by The Motley Fool Retirement Well, guess what. You can! And frankly, it doesn't matter what age you are. You could be 75, you could 35. If you want a retirement lifestyle, it's really up to you. All you have to do is follow these tips. Create an emergency fund Emergencies happen.",
+    country: "CA",
+    author: "Not available",
+    link: "https://www.fool.ca/2022/01/19/make-2022-the-year-you-retire-with-these-tips/?source=cts401cs0010001",
     language: "en",
-    media: "http://infobrics.org/media/russia/maxim/India-Ros.jpg",
-    title:
-      "India-Russia Ties Multifaceted, but More Ballast Is Needed on the Economic Front",
+    media:
+      "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AALby1D.img?h=315&w=600&m=6&q=60&o=t&l=f&f=jpg",
+    title: "Make 2022 the Year You Retire With These Tips",
     media_content: [
-      "http://infobrics.org/media/russia/maxim/India-Ros.jpg",
-      "http://infobrics.org/img/footer/cabinet/cabinet_en.png",
-      "http://infobrics.org/img/footer/logo/footer-logo.png",
-      "http://infobrics.org/{[photo]}",
-      "http://infobrics.org/img/logo_south.png",
-      "https://mc.yandex.ru/watch/42378879",
-      "http://infobrics.org/{[logo]}",
+      "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AALby1D.img?h=315&w=600&m=6&q=60&o=t&l=f&f=jpg",
+      "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB16ZpNs.img?h=40&w=138&m=6&q=60&o=f&l=f&f=png",
+      "https://sb.scorecardresearch.com/p?c1=2&c2=3000001&cs_ucfr=1&rn=637782089064918238&c7=https%253A%252F%252Fwww.msn.com%252Fen-ca%252Fmoney%252Ftopstories%252Fmake-2022-the-year-you-retire-with-these-tips%252Far-AASWqg4&c8=&c9=",
+      "https://c.msn.com/c.gif?udc=true&rid=2d6b283396304c1daa561677154a8485&rnd=637782089064918238&rf=&tp=https%253A%252F%252Fwww.msn.com%252Fen-ca%252Fmoney%252Ftopstories%252Fmake-2022-the-year-you-retire-with-these-tips%252Far-AASWqg4&di=789&lng=en-ca&activityId=2d6b283396304c1daa561677154a8485&d.dgk=tmx.pc.webkit.chrome&d.imd=0&st.dpt=finance-top-stories&st.sdpt=&subcvs=finance&pg.n=articleflex&pg.t=article&pg.c=&pg.p=prime&anoncknm=&issso=0&aadState=0",
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+      "https://static-entertainment-eus-s-msn-com.akamaized.net/sc/9b/e151e5.gif",
     ],
-    clean_url: "infobrics.org",
-    rights: "Inforos Co., Ltd",
-    rank: 278568,
+    clean_url: "fool.ca",
+    rights: "msn.com",
+    rank: 54743,
+    topic: "finance",
+    published_date: "2022-01-19 17:00:00",
+    _id: "13c20fb4169efba77ed583f2e825a844",
+  },
+  {
+    summary:
+      "View image in full screen Dr. Joss Reimer, medical lead for Manitoba's vaccine rollout, speaks about COVID-19 vaccination initiatives and answers media questions during a news conference at the Manitoba legislature in Winnipeg on Wednesday, March 17, 2020. Manitoba is allowing two groups to receive their booster shots ahead of the recommended six-month wait time. THE CANADIAN PRESS/John Woods. JGW Manitoba health officials will update the province Wednesday on the latest COVID-19 and vaccination numbers.",
+    country: "CA",
+    author: "Elisha Dacey",
+    link: "https://globalnews.ca/news/8523590/manitoba-health-officials-to-give-covid-19-vaccination-update",
+    language: "en",
+    media:
+      "https://globalnews.ca/wp-content/uploads/2021/12/2021121017124-61b3cf73a0f75bc8eaa83f4fjpeg-1.jpg?quality=85&strip=all&w=720&h=379&crop=1",
+    title: "Manitoba health officials to give COVID-19, vaccination update",
+    media_content: [
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/alert.png",
+      "https://globalnews.ca/wp-content/uploads/2021/12/2021121017124-61b3cf73a0f75bc8eaa83f4fjpeg-1.jpg?quality=85&strip=all&w=720&h=379&crop=1",
+      "https://sb.scorecardresearch.com/p?c1=2&c2=3005670&c3=&c4=&c5=&c6=&c15=&cv=2.0&cj=1",
+      "https://globalnews.ca/wp-content/uploads/2022/01/GlobalAMRadio_1000x230_Logo-on-Light-BK_680CJOB.png?w=320",
+      "https://globalnews.ca/wp-content/uploads/2018/07/elisha-dacey-1-e1582730598365.jpg?quality=85&strip=all&w=136&h=136&crop=1",
+      "https://d21y75miwcfqoq.cloudfront.net/70c8fc80",
+      "https://globalnews.ca/wp-content/uploads/2022/01/GlobalAMRadio_200x200_Square-Logo_680CJOB.png?w=200",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/ad-choices.png",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/logo-morty.svg",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/shield.png",
+      "https://globalnews.ca/wp-content/uploads/2018/04/680-CJOB_300x300_HalAnderson_v1.png?w=200&h=200&crop=1",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/logo-mobile.svg",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/logo-text.svg",
+      "https://globalnews.ca/wp-content/uploads/2021/12/2021121017124-61b3cf73a0f75bc8eaa83f4fjpeg-1.jpg?quality=85&strip=all",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/shield-blue.png",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/alert-red.png",
+      "https://globalnews.ca/wp-content/themes/shaw-globalnews/assets/dist/images/morty.svg",
+    ],
+    clean_url: "globalnews.ca",
+    rights: "globalnews.ca",
+    rank: 890,
     topic: "news",
-    published_date: "2021-12-13 07:22:54",
-    _id: "35d042a15bdba851588e9c442a5c8e",
+    published_date: "2022-01-19 16:59:53",
+    _id: "2c358cd7db8090abf00f6ee31aa64fa2",
   },
 ];
 
@@ -178,27 +224,27 @@ const News = () => {
       });
   };
 
-  //comment out when using dummy data
-  useEffect(() => {
-    setNewsUpdated(false);
-    fetch("/api/news", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        country,
-        lang: "en",
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTopNews(data.data);
-        setNewsUpdated(true);
-      })
-      .catch((err) => {});
-  }, [country]);
+  //comment out when using dummy data to not spam API while testing
+  // useEffect(() => {
+  //   setNewsUpdated(false);
+  //   fetch("/api/news", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       country,
+  //       lang: "en",
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setTopNews(data.data);
+  //       setNewsUpdated(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [country]);
 
   return (
     <>

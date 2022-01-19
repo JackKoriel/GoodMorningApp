@@ -8,14 +8,14 @@ import { HeartSpinner } from "react-spinners-kit";
 //dummy data used for testing to not spam the limited API
 const dummyData = {
   date_range: "Sep 23 - Oct 22",
-  current_date: "December 10, 2021",
+  current_date: "January 19, 2022",
   description:
-    "Anything that begins now won't be going anywhere -- so if you're not interested, don't turn on that lethal charm. This stuff is easier to get going than to shut down.",
-  compatibility: "Aquarius",
-  mood: "Tolerance",
-  color: "Purple",
-  lucky_number: "12",
-  lucky_time: "6pm",
+    "The astrological outlook for your career looks promising right now -- to say the very least. Talk over those petty, aggravating details with a higher-up. You'll be pleasantly surprised.",
+  compatibility: "Taurus",
+  mood: "Hopeful",
+  color: "Green",
+  lucky_number: "83",
+  lucky_time: "2am",
 };
 
 const Horoscope = () => {
@@ -63,26 +63,26 @@ const Horoscope = () => {
   };
 
   //comment out when using dummy data
-  useEffect(() => {
-    setNewsUpdated(false);
-    fetch("/api/horoscope", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        day: "today",
-        sign: sign,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDailyHoro(data.data);
-        setNewsUpdated(true);
-      })
-      .catch((err) => {});
-  }, [sign]);
+  // useEffect(() => {
+  //   setNewsUpdated(false);
+  //   fetch("/api/horoscope", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       day: "today",
+  //       sign: sign,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setDailyHoro(data.data);
+  //       setNewsUpdated(true);
+  //     })
+  //     .catch((err) => {});
+  // }, [sign]);
 
   return (
     <>
