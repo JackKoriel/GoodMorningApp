@@ -15,8 +15,6 @@ const Profile = () => {
   const {
     actions: { clearFeed },
     setStart,
-    isUpdatingPost,
-    setIsUpdatingPost,
   } = useContext(PostContext);
   const [userData, setUserData] = useState({});
   const [status, setStatus] = useState(false);
