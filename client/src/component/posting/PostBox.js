@@ -63,7 +63,7 @@ const PostBox = () => {
 
   return (
     <MasterContainer>
-      <Form>
+      <Form onSubmit={(ev) => handleClickUserBio(ev)}>
         <AvatarContainer>
           <Avatar src={avatarSrc} />
           <Input
@@ -75,11 +75,7 @@ const PostBox = () => {
             cols="10"
           />
         </AvatarContainer>
-        <Button
-          disabled={buttonState}
-          type="submit"
-          onClick={(ev) => handleClickUserBio(ev)}
-        >
+        <Button disabled={buttonState} type="submit">
           {!moodButtonStatus ? (
             <i className="fas fa-ring fa-spin" />
           ) : (

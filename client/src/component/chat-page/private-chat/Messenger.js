@@ -154,14 +154,14 @@ const Messenger = () => {
                     );
                   })}
                 </ChatBoxTop>
-                <ChatBoxBottom>
+                <ChatBoxBottom onSubmit={(ev) => handleSubmit(ev)}>
                   <Input
                     placeholder="Write a message..."
                     type="text"
                     value={newMessage}
                     onChange={(ev) => setNewMessage(ev.target.value)}
                   />
-                  <Button type="submit" onClick={(ev) => handleSubmit(ev)}>
+                  <Button type="submit">
                     {!sendButtonStatus ? (
                       <i className="fas fa-ring fa-spin" />
                     ) : (
@@ -302,7 +302,7 @@ const ChatBoxTop = styled.div`
   }
 `;
 
-const ChatBoxBottom = styled.div`
+const ChatBoxBottom = styled.form`
   bottom: 0;
   display: flex;
   flex-direction: row;

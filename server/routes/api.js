@@ -18,16 +18,16 @@ const {
 
 /////////////////////////////////////////////////////////////////////////////
 // gets horoscopes
-// router.post("/api/horoscope", authRequired, getHoroscope);
-router.post("/api/horoscope", getHoroscope);
+router.post("/api/horoscope", authRequired, getHoroscope);
+// router.post("/api/horoscope", getHoroscope);
 
 // gets weather forcast
-// router.post("/api/weather", authRequired, getWeather);
-router.post("/api/weather", getWeather);
+router.post("/api/weather", authRequired, getWeather);
+// router.post("/api/weather", getWeather);
 
 // gets top news
-// router.post("/api/news", authRequired, getNews);
-router.post("/api/news", getNews);
+router.post("/api/news", authRequired, getNews);
+// router.post("/api/news", getNews);
 
 // add horoscope to favorite
 router.post("/api/favorite", authRequired, addToFav);
@@ -36,7 +36,7 @@ router.post("/api/favorite", authRequired, addToFav);
 router.delete("/api/favorite/:horoId", authRequired, removeFav);
 
 // get all favorites
-router.get("/api/favorite", getFav);
+router.get("/api/favorite", authRequired, getFav);
 
 // add article to reading list
 router.post("/api/reading-list", authRequired, addToReading);
@@ -45,7 +45,7 @@ router.post("/api/reading-list", authRequired, addToReading);
 router.delete("/api/reading-list/:_id", authRequired, removeArticleFromRL);
 
 // get all articles in reading list
-router.get("/api/reading-list", getRL);
+router.get("/api/reading-list", authRequired, getRL);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////

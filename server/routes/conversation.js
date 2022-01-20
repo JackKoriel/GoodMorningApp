@@ -12,13 +12,17 @@ const {
 
 /////////////////////////////////////////////////////////////////////////////
 // post a new conversation in db
-router.post("/api/conversation", addConversation);
+router.post("/api/conversation", authRequired, addConversation);
 
 // gets user's conversations
-router.get("/api/conversation/:userId", getConversation);
+router.get("/api/conversation/:userId", authRequired, getConversation);
 
 // gets a specific conversation
-router.get("/api/conversation/:userId/:friendId", getCouplesConversation);
+router.get(
+  "/api/conversation/:userId/:friendId",
+  authRequired,
+  getCouplesConversation
+);
 
 module.exports = router;
 /////////////////////////////////////////////////////////////////////////////

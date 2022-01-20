@@ -24,7 +24,7 @@ const {
 router.get("/api/bacon", getBacon);
 
 // gets all users in db
-router.get("/api/users", getUsers);
+router.get("/api/users", authRequired, getUsers);
 
 // gets one user from the server by using the handle
 router.get("/api/users/:handle", getUserByHandle);
