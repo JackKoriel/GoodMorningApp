@@ -2,6 +2,9 @@
 
 A social media app with user login and authentication protocols, password hashing with bycrypt. Users are able to search & add friends, send posts and messages.
 
+note:
+this project was created for the purpose of learning new technologies, therefore, you might notice a mix of several methods.
+
 ## initial setup:
 
 after cloning the repo on your local machine using a program such as VScode, there should be 3 sub-folders:
