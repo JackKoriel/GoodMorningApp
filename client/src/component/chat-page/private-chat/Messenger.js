@@ -42,7 +42,6 @@ const Messenger = () => {
     socket.current = io("ws://localhost:8900");
 
     socket.current.on("getMessage", (data) => {
-      // console.log("data from socket: ", data);
       setReceivedMessage({
         sender: data.senderId,
         text: data.text,

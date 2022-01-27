@@ -22,9 +22,6 @@ const Profile = () => {
     user.followingIds?.includes(handle)
   );
 
-  // console.log("followign IDs ", user.followingIds);
-  // console.log("the boolean", followingText);
-
   //to render the following button
   // const [update, setUpdate] = useState(false);
 
@@ -81,7 +78,6 @@ const Profile = () => {
 
   //message a user
   const handleMessageClick = () => {
-    // console.log("click");
     fetch(`/api/conversation`, {
       method: "POST",
       body: JSON.stringify({
